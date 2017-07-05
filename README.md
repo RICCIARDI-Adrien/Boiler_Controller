@@ -2,7 +2,7 @@
 
 ## Hardware
 Schematics have been drawn using Eagle 7.5.
-![Main board schematics](https://github.com/RICCIARDI-Adrien/Boiler_Controller/blob/master/Hardware/Main_Board_Schematics.png)
+![Main board schematics](https://github.com/RICCIARDI-Adrien/Boiler_Controller/blob/master/Hardware/Main_Board_Schematics.png)  
 
 ## Components
 * [Single pole 16A relay with 5V coil](http://fr.farnell.com/oeg-te-connectivity/omih-ss-105lm-300/relais-spst-no-250vac-30vdc-16a/dp/1891727)
