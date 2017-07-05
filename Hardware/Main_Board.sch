@@ -74,11 +74,11 @@
 <text x="-2.54" y="-2.54" size="1.778" layer="96">&gt;VALUE</text>
 <pin name="GND" x="0" y="2.54" visible="off" length="short" direction="sup" rot="R270"/>
 </symbol>
-<symbol name="VCC">
+<symbol name="+3V3">
 <wire x1="1.27" y1="-1.905" x2="0" y2="0" width="0.254" layer="94"/>
 <wire x1="0" y1="0" x2="-1.27" y2="-1.905" width="0.254" layer="94"/>
-<text x="-2.54" y="-2.54" size="1.778" layer="96" rot="R90">&gt;VALUE</text>
-<pin name="VCC" x="0" y="-2.54" visible="off" length="short" direction="sup" rot="R90"/>
+<text x="-2.54" y="-5.08" size="1.778" layer="96" rot="R90">&gt;VALUE</text>
+<pin name="+3V3" x="0" y="-2.54" visible="off" length="short" direction="sup" rot="R90"/>
 </symbol>
 </symbols>
 <devicesets>
@@ -95,10 +95,10 @@
 </device>
 </devices>
 </deviceset>
-<deviceset name="VCC" prefix="P+">
+<deviceset name="+3V3" prefix="+3V3">
 <description>&lt;b&gt;SUPPLY SYMBOL&lt;/b&gt;</description>
 <gates>
-<gate name="VCC" symbol="VCC" x="0" y="0"/>
+<gate name="G$1" symbol="+3V3" x="0" y="0"/>
 </gates>
 <devices>
 <device name="">
@@ -13927,22 +13927,22 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 <parts>
 <part name="R1" library="resistor" deviceset="R-EU_" device="0207/10" value="39 1%"/>
 <part name="PAD3" library="wirepad" deviceset="WIREPAD" device="SMD5-2,5"/>
-<part name="P+1" library="supply1" deviceset="VCC" device=""/>
+<part name="P+1" library="supply1" deviceset="+3V3" device=""/>
 <part name="U$1" library="MCP3428" deviceset="MCP3428-E/SL" device=""/>
 <part name="PAD5" library="wirepad" deviceset="WIREPAD" device="SMD5-2,5"/>
-<part name="R2" library="resistor" deviceset="R-EU_" device="0207/10" value="78 1%"/>
-<part name="P+2" library="supply1" deviceset="VCC" device=""/>
+<part name="R2" library="resistor" deviceset="R-EU_" device="0207/10" value="82 1%"/>
+<part name="P+2" library="supply1" deviceset="+3V3" device=""/>
 <part name="PAD4" library="wirepad" deviceset="WIREPAD" device="SMD5-2,5"/>
 <part name="GND2" library="supply1" deviceset="GND" device=""/>
 <part name="PAD2" library="wirepad" deviceset="WIREPAD" device="SMD5-2,5"/>
 <part name="PAD1" library="wirepad" deviceset="WIREPAD" device="SMD5-2,5"/>
 <part name="GND3" library="supply1" deviceset="GND" device=""/>
 <part name="R3" library="resistor" deviceset="R-EU_" device="0207/10" value="560 1%"/>
-<part name="P+3" library="supply1" deviceset="VCC" device=""/>
+<part name="P+3" library="supply1" deviceset="+3V3" device=""/>
 <part name="GND4" library="supply1" deviceset="GND" device=""/>
-<part name="P+4" library="supply1" deviceset="VCC" device=""/>
+<part name="P+4" library="supply1" deviceset="+3V3" device=""/>
 <part name="R4" library="resistor" deviceset="R-EU_" device="0207/10" value="330 1%"/>
-<part name="P+5" library="supply1" deviceset="VCC" device=""/>
+<part name="P+5" library="supply1" deviceset="+3V3" device=""/>
 <part name="PAD6" library="wirepad" deviceset="WIREPAD" device="SMD5-2,5"/>
 <part name="PAD7" library="wirepad" deviceset="WIREPAD" device="SMD5-2,5"/>
 <part name="GND5" library="supply1" deviceset="GND" device=""/>
@@ -13962,22 +13962,22 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 <instances>
 <instance part="R1" gate="G$1" x="-17.78" y="124.46"/>
 <instance part="PAD3" gate="G$1" x="-43.18" y="124.46"/>
-<instance part="P+1" gate="VCC" x="-7.62" y="124.46" rot="R270"/>
+<instance part="P+1" gate="G$1" x="-7.62" y="124.46" rot="R270"/>
 <instance part="U$1" gate="A" x="68.58" y="139.7"/>
 <instance part="PAD5" gate="G$1" x="-43.18" y="154.94"/>
 <instance part="R2" gate="G$1" x="-17.78" y="154.94"/>
-<instance part="P+2" gate="VCC" x="-7.62" y="154.94" rot="R270"/>
+<instance part="P+2" gate="G$1" x="-7.62" y="154.94" rot="R270"/>
 <instance part="PAD4" gate="G$1" x="-43.18" y="139.7"/>
 <instance part="GND2" gate="1" x="-7.62" y="139.7" rot="R90"/>
 <instance part="PAD2" gate="G$1" x="-43.18" y="109.22"/>
 <instance part="PAD1" gate="G$1" x="-43.18" y="93.98"/>
 <instance part="GND3" gate="1" x="-7.62" y="109.22" rot="R90"/>
 <instance part="R3" gate="G$1" x="-17.78" y="93.98"/>
-<instance part="P+3" gate="VCC" x="-7.62" y="93.98" rot="R270"/>
+<instance part="P+3" gate="G$1" x="-7.62" y="93.98" rot="R270"/>
 <instance part="GND4" gate="1" x="48.26" y="109.22"/>
-<instance part="P+4" gate="VCC" x="48.26" y="198.12"/>
+<instance part="P+4" gate="G$1" x="48.26" y="198.12"/>
 <instance part="R4" gate="G$1" x="-17.78" y="170.18"/>
-<instance part="P+5" gate="VCC" x="-7.62" y="170.18" rot="R270"/>
+<instance part="P+5" gate="G$1" x="-7.62" y="170.18" rot="R270"/>
 <instance part="PAD6" gate="G$1" x="-43.18" y="170.18"/>
 <instance part="PAD7" gate="G$1" x="-43.18" y="185.42"/>
 <instance part="GND5" gate="1" x="-7.62" y="185.42" rot="R90"/>
@@ -14048,22 +14048,22 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </net>
 <net name="VCC" class="0">
 <segment>
-<pinref part="P+1" gate="VCC" pin="VCC"/>
+<pinref part="P+1" gate="G$1" pin="+3V3"/>
 <pinref part="R1" gate="G$1" pin="2"/>
 <wire x1="-10.16" y1="124.46" x2="-12.7" y2="124.46" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<pinref part="P+2" gate="VCC" pin="VCC"/>
+<pinref part="P+2" gate="G$1" pin="+3V3"/>
 <pinref part="R2" gate="G$1" pin="2"/>
 <wire x1="-10.16" y1="154.94" x2="-12.7" y2="154.94" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<pinref part="P+3" gate="VCC" pin="VCC"/>
+<pinref part="P+3" gate="G$1" pin="+3V3"/>
 <pinref part="R3" gate="G$1" pin="2"/>
 <wire x1="-10.16" y1="93.98" x2="-12.7" y2="93.98" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<pinref part="P+4" gate="VCC" pin="VCC"/>
+<pinref part="P+4" gate="G$1" pin="+3V3"/>
 <wire x1="48.26" y1="195.58" x2="48.26" y2="190.5" width="0.1524" layer="91"/>
 <pinref part="U$1" gate="A" pin="VDD"/>
 <wire x1="48.26" y1="190.5" x2="48.26" y2="175.26" width="0.1524" layer="91"/>
@@ -14078,7 +14078,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </segment>
 <segment>
 <pinref part="R4" gate="G$1" pin="2"/>
-<pinref part="P+5" gate="VCC" pin="VCC"/>
+<pinref part="P+5" gate="G$1" pin="+3V3"/>
 <wire x1="-12.7" y1="170.18" x2="-10.16" y2="170.18" width="0.1524" layer="91"/>
 </segment>
 </net>
