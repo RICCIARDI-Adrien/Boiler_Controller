@@ -18,4 +18,4 @@ Schematics have been drawn using Eagle 7.5.
 * [330ohm resistor](http://fr.farnell.com/welwyn/mfr3-330rfc/resistance-330r-1-0-4w-axial/dp/1565304)
 * [560ohm resistor](http://fr.farnell.com/welwyn/mfr3-560rfc/resistance-0-4w-1-560r/dp/1565320)
 * [Fuseholder](http://www.farnell.com/datasheets/2020897.pdf)
-
+* [Terminal](http://fr.farnell.com/camdenboss/ctb0708-4/bornier-standard-4-voies-30-12awg/dp/2315275)
