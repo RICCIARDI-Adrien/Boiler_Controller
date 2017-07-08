@@ -8120,7 +8120,7 @@ general purpose rectifier, 1 A</description>
 <part name="U2" library="REF3020AIDBZT" deviceset="REF3020AIDBZT" device=""/>
 <part name="C1" library="rcl" deviceset="C-EU" device="050-035X075" value="100n"/>
 <part name="GND1" library="supply1" deviceset="GND" device=""/>
-<part name="C2" library="rcl" deviceset="C-EU" device="050-035X075" value="100n"/>
+<part name="C2" library="rcl" deviceset="C-EU" device="050-035X075" value="470n"/>
 <part name="GND4" library="supply1" deviceset="GND" device=""/>
 <part name="GND14" library="supply1" deviceset="GND" device=""/>
 <part name="Q7" library="special" deviceset="XTAL/S" device="" value="3.6864MHz"/>
