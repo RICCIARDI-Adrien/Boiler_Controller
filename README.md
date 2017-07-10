@@ -2,8 +2,16 @@
 
 ## Hardware
 Schematics have been drawn using Eagle 7.5.  
+
+### Power board
+This board contains the AC/DC converter, the relays and the connector to the wall housing.
   
-![Main board schematics](https://github.com/RICCIARDI-Adrien/Boiler_Controller/blob/master/Hardware/Main_Board_Schematics.png)
+![Power board schematics](https://github.com/RICCIARDI-Adrien/Boiler_Controller/blob/master/Hardware/Power_Board_Schematics.png)
+
+### Controller board
+This board holds the microcontroller and the WiFi to UART bridge.
+  
+![Controller board schematics](https://github.com/RICCIARDI-Adrien/Boiler_Controller/blob/master/Hardware/Controller_Board_Schematics.png)
 
 ## Components
 * [Single pole 16A relay with 5V coil](http://fr.farnell.com/oeg-te-connectivity/omih-ss-105lm-300/relais-spst-no-250vac-30vdc-16a/dp/1891727)
