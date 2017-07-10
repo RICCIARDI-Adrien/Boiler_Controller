@@ -347,7 +347,6 @@ UsedLibrary="/opt/eagle-7.5.0/lbr/xilinx-xcv.lbr"
 UsedLibrary="/opt/eagle-7.5.0/lbr/zetex.lbr"
 UsedLibrary="/opt/eagle-7.5.0/lbr/zilog.lbr"
 UsedLibrary="BD135.lbr"
-UsedLibrary="MCP3428.lbr"
 
 [Win_1]
 Type="Control Panel"
