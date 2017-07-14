@@ -20,9 +20,10 @@ This board holds the microcontroller and the WiFi to UART bridge.
 * [15pF ceramic capacitor](http://fr.farnell.com/multicomp/mc0805n150j101a2-54mm/condensateur-mlcc-c0g-np0-15pf/dp/2112750)
 * [100nF ceramic capacitor](http://fr.farnell.com/multicomp/mc0805b104k500a5-08mm/condensateur-mlcc-0-1uf-50v-x7r/dp/2395773)
 * [470nF ceramic capacitor](http://fr.farnell.com/kemet/c330c474k5r5ta/condensateur-mlcc-x7r-470nf-50v/dp/1457703)
-* [5V 2A AC/DC power supply](http://fr.farnell.com/xp-power/ecl10us05-e/psu-10w-5v-encaps-pcb-mount/dp/1435356)
+* [5V 2A AC/DC power supply](http://fr.farnell.com/vigortronix/vtx-214-010-205/alimentation-ac-dc-5v-2a/dp/2464685)
 * [91ohm resistor](http://fr.farnell.com/multicomp/mf12-91r/resistance-0-125w-1-91r/dp/9343652)
 * [160ohm resistor](http://fr.farnell.com/multicomp/mf12-160r/resistance-0-125w-1-160r/dp/9342672)
+* [330ohm resistor](http://fr.farnell.com/multicomp/mcf-0-25w-330r/resistance-couche-carbon-330r/dp/9339418)
 * [750ohm resistor](http://fr.farnell.com/multicomp/mf12-750r/resistance-0-125w-1-750r/dp/9343512)
 * [1Kohm resistor](http://fr.farnell.com/multicomp/mcf-0-25w-1k/resistance-couche-carbon-1k-0/dp/9339051)
 * [1.3Kohm resistor](http://fr.farnell.com/multicomp/mf12-1k3/resistance-0-125w-1-1k3/dp/9342575)
@@ -31,6 +32,11 @@ This board holds the microcontroller and the WiFi to UART bridge.
 * [Atmega328p microcontroller](http://fr.farnell.com/microchip/atmega328p-pu/micro-8-bits-avr-32k-flash-28pdip/dp/1715487)
 * [2.048V precision voltage reference](http://fr.farnell.com/texas-instruments/ref3020aidbzt/ref-de-tension-series-2-048v-sot/dp/1470323)
 * [3.6864MHz crystal](http://fr.farnell.com/iqd-frequency-products/lfxtal003263/quartz-3-686400mhz/dp/9712909)
+* [WiFi to UART bridge](https://www.gotronic.fr/art-module-wifi-uart-grove-113020010-23827.htm)
+* [4-pin PCB male connector](https://www.gotronic.fr/art-connecteur-s004-5858.htm)
+* [4-pin PCB female connector](https://www.gotronic.fr/art-connecteur-p004-5867.htm)
+* [10-pin PCB male connector](https://www.gotronic.fr/art-connecteur-s010-15367.htm)
+* [10-pin PCB female connector](https://www.gotronic.fr/art-connecteur-p010-15370.htm)
 
 ## Analog signals characteristics
 * Day trimmer : resistance variation from 50 to 110ohm.
