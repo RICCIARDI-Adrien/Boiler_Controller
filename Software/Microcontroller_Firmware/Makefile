@@ -1,15 +1,17 @@
 CC = avr-gcc
 CCFLAGS = -W -Wall -mmcu=atmega328p -DF_CPU=3686400UL
 
+PATH_INCLUDES = Includes
 PATH_SOURCES = Sources
 
 BINARY = Boiler_Controller_Firmware.elf
-SOURCES = $(PATH_SOURCES)/Main.c
+INCLUDES = -I$(PATH_INCLUDES)
+SOURCES = $(PATH_SOURCES)/Main.c $(PATH_SOURCES)/Protocol.c
 
-PROGRAMMER_SERIAL_PORT = /dev/ttyACM0
+PROGRAMMER_SERIAL_PORT ?= /dev/ttyACM0
 
 all:
-	$(CC) $(CCFLAGS) $(SOURCES) -o $(BINARY)
+	$(CC) $(CCFLAGS) $(INCLUDES) $(SOURCES) -o $(BINARY)
 
 clean:
 	rm -f $(BINARY)

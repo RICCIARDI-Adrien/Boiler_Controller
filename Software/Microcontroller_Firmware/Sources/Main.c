@@ -3,6 +3,7 @@
  * @author Adrien RICCIARDI
  */
 #include <avr/io.h>
+#include <Protocol.h>
 #include <util/delay.h>
 
 //-------------------------------------------------------------------------------------------------
@@ -21,6 +22,9 @@ FUSES =
 //-------------------------------------------------------------------------------------------------
 int main(void) // Can't use void return type because it triggers a warning
 {
+	// Initialize modules
+	ProtocolInitialize();
+	
 	// TEST
 	DDRD = 0x04;
 	while (1)
