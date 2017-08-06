@@ -45,6 +45,27 @@ static void ProtocolUARTWriteStringNoInterrupt(char *String)
 		String++;
 	}
 }
+
+/** Wait for a specific string from the ESP8266 module (terminating "\r\n" are automatically added, no need to provide them in string).
+ * @param String_Expected_Answer The expected string.
+ */
+static void ProtocolESP8266WaitForAnswer(char *String_Expected_Answer)
+{
+	unsigned char Received_Byte, i = 0;
+	
+	// Wait for all string characters
+	while (String_Expected_Answer[i] != 0)
+	{
+		Received_Byte = ProtocolUARTReadByteNoInterrupt();
+		if (Received_Byte != String_Expected_Answer[i]) i = 0;
+		else i++;
+	}
+	
+	// Wait for terminating "\r\n"
+	if (ProtocolUARTReadByteNoInterrupt() != '\r') return 1;
+	if (ProtocolUARTReadByteNoInterrupt() != '\n') return 1;
+}
+
 //-------------------------------------------------------------------------------------------------
 // Public functions
 //-------------------------------------------------------------------------------------------------
@@ -58,4 +79,37 @@ void ProtocolInitialize(void)
 	UCSR0A = 0; // Do not double the UART transmission speed (is is useless here and non-doubled speed works better)
 	UCSR0C = 0x06; // Select asynchronous UART, disable parity mode, select 1 stop bit, select 8-bit character size
 	UCSR0B = 0x18; // Enable reception and transmission TODO enable interrupts later
+	
+	// ESP8266 will send a lot of binary data followed by the string "ready"
+	ProtocolESP8266WaitForAnswer("ready");
+	
+	// Set WiFi mode to access point + station, it's mandatory for the transparent mode to work
+	ProtocolUARTWriteStringNoInterrupt("AT+CWMODE_CUR=3\r\n");
+	ProtocolESP8266WaitForAnswer("\r\nOK");
+	
+	// Try to connect to access point
+	ProtocolUARTWriteStringNoInterrupt("AT+CWJAP_CUR=\"");
+	ProtocolUARTWriteStringNoInterrupt(CONFIGURATION_PROTOCOL_WIFI_ACCESS_POINT_SSID);
+	ProtocolUARTWriteStringNoInterrupt("\",\"");
+	ProtocolUARTWriteStringNoInterrupt(CONFIGURATION_PROTOCOL_WIFI_ACCESS_POINT_PASSWORD);
+	ProtocolUARTWriteStringNoInterrupt("\"\r\n");
+	ProtocolESP8266WaitForAnswer("WIFI CONNECTED");
+	ProtocolESP8266WaitForAnswer("WIFI GOT IP");
+	ProtocolESP8266WaitForAnswer("\r\nOK");
+	
+	// Try to connect to server
+	ProtocolUARTWriteStringNoInterrupt("AT+CIPSTART=\"TCP\",\"");
+	ProtocolUARTWriteStringNoInterrupt(CONFIGURATION_PROTOCOL_WIFI_SERVER_ADDRESS);
+	ProtocolUARTWriteStringNoInterrupt("\",");
+	ProtocolUARTWriteStringNoInterrupt(CONFIGURATION_PROTOCOL_WIFI_SERVER_PORT);
+	ProtocolUARTWriteStringNoInterrupt("\r\n");
+	ProtocolESP8266WaitForAnswer("CONNECT");
+	ProtocolESP8266WaitForAnswer("\r\nOK");
+	
+	// Set connection mode to "transparent bridge" to directly transmit what is written to the ESP8266 UART
+	ProtocolUARTWriteStringNoInterrupt("AT+CIPMODE=1\r\n");
+	ProtocolESP8266WaitForAnswer("\r\nOK");
+	
+	ProtocolUARTWriteStringNoInterrupt("AT+CIPSEND\r\n");
+	ProtocolESP8266WaitForAnswer("\r\nOK");
 }
