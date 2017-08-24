@@ -2,6 +2,7 @@
  * @see Protocol.h for description.
  * @author Adrien RICCIARDI
  */
+#include <ADC.h>
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <Configuration.h>
@@ -14,7 +15,7 @@
 #define PROTOCOL_MAGIC_NUMBER 0xA5
 
 /** The biggest command payload size. */
-#define PROTOCOL_PAYLOAD_MAXIMUM_SIZE 3 // TODO set when all commands are decided
+#define PROTOCOL_PAYLOAD_MAXIMUM_SIZE 4 // TODO set when all commands are decided
 
 //-------------------------------------------------------------------------------------------------
 // Private types
@@ -34,6 +35,7 @@ typedef enum
 typedef enum
 {
 	PROTOCOL_COMMAND_GET_FIRMWARE_VERSION,
+	PROTOCOL_COMMAND_GET_TEMPERATURES,
 	PROTOCOL_COMMANDS_COUNT
 } TProtocolCommand;
 
@@ -115,11 +117,21 @@ static void ProtocolESP8266WaitForAnswer(char *String_Expected_Answer)
 /** Execute a fully received command. */
 static void ProtocolExecuteCommand(void)
 {
+	unsigned short *Pointer_Word;
+	
 	switch (Protocol_Command)
 	{
 		case PROTOCOL_COMMAND_GET_FIRMWARE_VERSION:
 			Protocol_Command_Payload_Buffer[0] = CONFIGURATION_FIRMWARE_VERSION;
 			Protocol_Command_Payload_Size = 1;
+			break;
+			
+		case PROTOCOL_COMMAND_GET_TEMPERATURES:
+			Pointer_Word = (unsigned short *) Protocol_Command_Payload_Buffer;
+			*Pointer_Word = ADCGetLastSampledValue(ADC_CHANNEL_ID_EXTERNAL_THERMISTOR);
+			Pointer_Word++;
+			*Pointer_Word = ADCGetLastSampledValue(ADC_CHANNEL_ID_INTERNAL_THERMISTOR);
+			Protocol_Command_Payload_Size = 4;
 			break;
 			
 		// Unknown command, should not get here
@@ -139,6 +151,7 @@ ISR(USART_RX_vect)
 	static unsigned char Received_Command_Payload[PROTOCOL_COMMANDS_COUNT] =
 	{
 		0, // PROTOCOL_COMMAND_GET_FIRMWARE_VERSION
+		0, // PROTOCOL_COMMAND_GET_TEMPERATURES
 	};
 	unsigned char Byte;
 	

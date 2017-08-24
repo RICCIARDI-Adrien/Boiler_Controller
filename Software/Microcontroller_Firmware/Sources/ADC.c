@@ -58,3 +58,12 @@ void ADCTask(void)
 		PROTOCOL_ENABLE_INTERRUPTS();
 	}
 }
+
+unsigned short ADCGetLastSampledValue(TADCChannelID Channel_ID)
+{
+	// Make sure the provided channel is existing
+	if (Channel_ID >= ADC_CHANNEL_IDS_COUNT) return 0;
+	
+	// No need for a "mutex" here because the function is called by Protocol module (this call is protected by a mutex yet) or by main(), which also calls the ADC sampling task, so everything is synchronized
+	return ADC_Sampled_Values[Channel_ID];
+}

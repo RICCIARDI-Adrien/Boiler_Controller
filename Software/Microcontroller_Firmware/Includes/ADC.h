@@ -27,4 +27,11 @@ void ADCInitialize(void);
 /** Sample all channels. Must be called periodically. */
 void ADCTask(void);
 
+/** Get a specific channel last sampled value.
+ * @param Channel_ID The channel to get value from.
+ * @return The last sampled value, in 10-bit raw ADC units,
+ * @return 0 if the provided channel does not exist.
+ */
+unsigned short ADCGetLastSampledValue(TADCChannelID Channel_ID);
+
 #endif
