@@ -3,6 +3,7 @@
  * @author Adrien RICCIARDI
  */
 #include <avr/io.h>
+#include <avr/interrupt.h>
 #include <Protocol.h>
 #include <util/delay.h>
 
@@ -25,14 +26,18 @@ int main(void) // Can't use void return type because it triggers a warning
 	// Initialize modules
 	ProtocolInitialize();
 	
+	// Enable interrupts
+	sei();
+	
 	// TEST
 	DDRD = 0x04;
-	while (1)
+	/*while (1)
 	{
 		PORTD |= 0x04;
 		_delay_ms(1000);
 		
 		PORTD &= ~0x04;
 		_delay_ms(1000);
-	}
+	}*/
+	while (1);
 }

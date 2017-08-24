@@ -1,4 +1,5 @@
 CC = avr-gcc
+# Do not enable compiler optimizations to avoid harmful instructions reordering
 CCFLAGS = -W -Wall -mmcu=atmega328p -DF_CPU=3686400UL
 
 PATH_INCLUDES = Includes

@@ -14,8 +14,11 @@
 #define CONFIGURATION_PROTOCOL_WIFI_ACCESS_POINT_PASSWORD "password"
 
 /** The server to connect to IP address. */
-#define CONFIGURATION_PROTOCOL_WIFI_SERVER_ADDRESS "192.168.1.26"
+#define CONFIGURATION_PROTOCOL_WIFI_SERVER_ADDRESS "192.168.1.39"
 /** The server to connect to port. */
 #define CONFIGURATION_PROTOCOL_WIFI_SERVER_PORT "1234"
+
+/** The current firmware version. */
+#define CONFIGURATION_FIRMWARE_VERSION 1
 
 #endif
