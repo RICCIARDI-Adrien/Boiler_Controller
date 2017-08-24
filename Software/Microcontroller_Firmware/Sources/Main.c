@@ -1,7 +1,8 @@
 /** @file Main.c
- * Boiler controller entry point.
+ * Boiler controller entry point and main loop.
  * @author Adrien RICCIARDI
  */
+#include <ADC.h>
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <Protocol.h>
@@ -24,9 +25,10 @@ FUSES =
 int main(void) // Can't use void return type because it triggers a warning
 {
 	// Initialize modules
+	ADCInitialize();
 	ProtocolInitialize();
 	
-	// Enable interrupts
+	// Enable interrupts now that all modules have been configured
 	sei();
 	
 	// TEST
@@ -39,5 +41,15 @@ int main(void) // Can't use void return type because it triggers a warning
 		PORTD &= ~0x04;
 		_delay_ms(1000);
 	}*/
-	while (1);
+	while (1)
+	{
+		ADCTask(); // TODO execute this every second but without blocking all other tasks
+		
+		// TEST
+		_delay_ms(1000);
+		
+		// TEST
+		if (PIND & 0x04) PORTD &= ~0x04;
+		else PORTD |= 0x04;
+	}
 }

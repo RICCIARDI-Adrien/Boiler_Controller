@@ -5,6 +5,16 @@
 #ifndef H_PROTOCOL_H
 #define H_PROTOCOL_H
 
+#include <avr/io.h>
+
+//-------------------------------------------------------------------------------------------------
+// Constants and macros
+//-------------------------------------------------------------------------------------------------
+/** Enable UART interrupts. */
+#define PROTOCOL_ENABLE_INTERRUPTS() UCSR0B |= 0xC0 // Enable "receive complete" and "transmit complete" interrupts
+/** Disable UART interrupts. */
+#define PROTOCOL_DISABLE_INTERRUPTS() UCSR0B &= ~0xC0 // Disable "receive complete" and "transmit complete" interrupts
+
 //-------------------------------------------------------------------------------------------------
 // Functions
 //-------------------------------------------------------------------------------------------------

@@ -120,10 +120,6 @@ static void ProtocolExecuteCommand(void)
 		case PROTOCOL_COMMAND_GET_FIRMWARE_VERSION:
 			Protocol_Command_Payload_Buffer[0] = CONFIGURATION_FIRMWARE_VERSION;
 			Protocol_Command_Payload_Size = 1;
-			
-			if (PIND & 0x04) PORTD &= ~0x04;
-			else PORTD |= 0x04;
-			
 			break;
 			
 		// Unknown command, should not get here
@@ -262,5 +258,5 @@ void ProtocolInitialize(void)
 	ProtocolESP8266WaitForAnswer("\r\nOK");
 	
 	// Enable interrupts now that the WiFi bridge has been initialized
-	UCSR0B |= 0xC0; // Enable "receive complete" and "transmit complete" interrupts
+	PROTOCOL_ENABLE_INTERRUPTS();
 }
