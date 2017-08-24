@@ -1,5 +1,7 @@
 #!/usr/bin/python
-
+## @file Main.py
+## Send commands to the controller board to check if everything is fine.
+## @author Adrien RICCIARDI
 import socket
 
 #--------------------------------------------------------------------------------------------------
@@ -10,10 +12,10 @@ SERVER_PORT = 1234
 
 ## The magic number preceding all protocol commands transmission and reception.
 PROTOCOL_MAGIC_NUMBER = [0xA5]
-## Maximum payload sent by the biggest protocol command.
-PROTOCOL_MAXIMUM_PAYLOAD_SIZE = 10
 ## "Get firmware version" command code.
 PROTOCOL_COMMAND_GET_FIRMWARE_VERSION = 0
+## "Get temperatures" command code.
+PROTOCOL_COMMAND_GET_TEMPERATURES = 1
 
 #--------------------------------------------------------------------------------------------------
 # Private functions
@@ -62,5 +64,17 @@ clientSocket, clientAddress = serverSocket.accept()
 print "Client connected with address", clientAddress
 
 # Get firmware version
-version = sendCommand([PROTOCOL_COMMAND_GET_FIRMWARE_VERSION], 1)
-print "Firmware version :", version[0]
+answerPayload = sendCommand([PROTOCOL_COMMAND_GET_FIRMWARE_VERSION], 1)
+firmwareVersion = answerPayload[0]
+print "Firmware version :", firmwareVersion
+if firmwareVersion != 1:
+	print "Error : bad firmware version."
+	exit(-1)
+
+# Get temperatures
+answerPayload = sendCommand([PROTOCOL_COMMAND_GET_TEMPERATURES], 4)
+externalThermistorTemperature = (answerPayload[1] << 8) | answerPayload[0] # Data are sent in little endian
+internalThermistorTemperature = (answerPayload[3] << 8) | answerPayload[2]
+print "Raw external temperature :", hex(externalThermistorTemperature), ", raw internal temperature :", hex(internalThermistorTemperature)
+
+print "\033[32mAll tests succeeded.\033[0m"
