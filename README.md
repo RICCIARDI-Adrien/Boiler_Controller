@@ -1,7 +1,7 @@
 # Boiler Controller
 
 ## Hardware
-Schematics have been drawn using Eagle 7.5.  
+Schematics have been drawn using Eagle 8.3.1.  
 
 ### Power board
 This board contains the AC/DC converter, the relays and the connector to the wall housing.
@@ -45,3 +45,6 @@ This board holds the microcontroller and the WiFi to UART bridge.
 * External thermistor : resistance variation from 340 (+40°C) to 480ohm (-10°C).
   
 Microcontroller uses a 2V precision voltage reference for the ADC module to gain more precision with small variation signals. All voltage dividers must be calculated as the highest variable resistance value results in a 2V maximum voltage on the ADC pin.
+
+## Software
+Use avr-gcc to build the microcontroller firmware.

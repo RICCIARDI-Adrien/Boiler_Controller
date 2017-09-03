@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE eagle SYSTEM "eagle.dtd">
-<eagle version="7.5.0">
+<eagle version="8.3.1">
 <drawing>
 <settings>
 <setting alwaysvectorfont="no"/>
+<setting keepoldvectorfont="yes"/>
 <setting verticaltext="down"/>
 </settings>
-<grid distance="0.1" unitdist="inch" unit="inch" style="lines" multiple="1" display="yes" altdistance="0.01" altunitdist="inch" altunit="inch"/>
+<grid distance="0.1" unitdist="inch" unit="inch" style="dots" multiple="1" display="yes" altdistance="0.01" altunitdist="inch" altunit="inch"/>
 <layers>
 <layer number="1" name="Top" color="4" fill="1" visible="no" active="no"/>
 <layer number="16" name="Bottom" color="1" fill="1" visible="no" active="no"/>
@@ -4523,6 +4524,54 @@ Source: http://www.mouser.com/ds/2/392/products_18-2245.pdf</description>
 </deviceset>
 </devicesets>
 </library>
+<library name="VTX-214-010-205">
+<packages>
+<package name="VTX-214-010-205">
+<wire x1="0" y1="0" x2="47" y2="0" width="0.127" layer="21"/>
+<wire x1="47" y1="0" x2="47" y2="30" width="0.127" layer="21"/>
+<wire x1="47" y1="30" x2="0" y2="30" width="0.127" layer="21"/>
+<wire x1="0" y1="30" x2="0" y2="0" width="0.127" layer="21"/>
+<pad name="LIVE" x="3.25" y="9" drill="2" diameter="5.08"/>
+<pad name="NEUTRAL" x="3.25" y="21" drill="2" diameter="5.08"/>
+<pad name="GND" x="42.25" y="14" drill="2" diameter="5.08"/>
+<pad name="+5V" x="42.25" y="21" drill="2" diameter="5.08"/>
+</package>
+</packages>
+<symbols>
+<symbol name="VTX-214-010-205">
+<wire x1="-27.94" y1="-17.78" x2="-27.94" y2="17.78" width="0.254" layer="94"/>
+<wire x1="-27.94" y1="17.78" x2="27.94" y2="17.78" width="0.254" layer="94"/>
+<wire x1="27.94" y1="17.78" x2="27.94" y2="-17.78" width="0.254" layer="94"/>
+<wire x1="27.94" y1="-17.78" x2="-27.94" y2="-17.78" width="0.254" layer="94"/>
+<pin name="NEUTRAL" x="-33.02" y="10.16" length="middle" direction="pwr"/>
+<pin name="LIVE" x="-33.02" y="-10.16" length="middle" direction="pwr"/>
+<pin name="+5V" x="33.02" y="10.16" length="middle" direction="pwr" rot="R180"/>
+<pin name="GND" x="33.02" y="0" length="middle" direction="pwr" rot="R180"/>
+<text x="-27.94" y="20.32" size="1.778" layer="95">&gt;NAME</text>
+</symbol>
+</symbols>
+<devicesets>
+<deviceset name="VTX-214-010-205">
+<description>Vigortronix AC/DC converter 230V to 5V@2A. Eagle part made by Adrien RICCIARDI.</description>
+<gates>
+<gate name="G$1" symbol="VTX-214-010-205" x="0" y="0"/>
+</gates>
+<devices>
+<device name="" package="VTX-214-010-205">
+<connects>
+<connect gate="G$1" pin="+5V" pad="+5V"/>
+<connect gate="G$1" pin="GND" pad="GND"/>
+<connect gate="G$1" pin="LIVE" pad="LIVE"/>
+<connect gate="G$1" pin="NEUTRAL" pad="NEUTRAL"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+</devicesets>
+</library>
 </libraries>
 <attributes>
 </attributes>
@@ -4588,6 +4637,9 @@ Source: http://www.mouser.com/ds/2/392/products_18-2245.pdf</description>
 <part name="R4" library="resistor" deviceset="R-EU_" device="0207/10" value="1K"/>
 <part name="R5" library="resistor" deviceset="R-EU_" device="0207/10" value="1K"/>
 <part name="R6" library="resistor" deviceset="R-EU_" device="0207/10" value="1K"/>
+<part name="U$1" library="VTX-214-010-205" deviceset="VTX-214-010-205" device=""/>
+<part name="GND4" library="supply1" deviceset="GND" device=""/>
+<part name="P+1" library="supply1" deviceset="VCC" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -4677,6 +4729,9 @@ Source: http://www.mouser.com/ds/2/392/products_18-2245.pdf</description>
 <instance part="R4" gate="G$1" x="297.18" y="226.06"/>
 <instance part="R5" gate="G$1" x="297.18" y="195.58"/>
 <instance part="R6" gate="G$1" x="297.18" y="165.1"/>
+<instance part="U$1" gate="G$1" x="35.56" y="332.74"/>
+<instance part="GND4" gate="1" x="73.66" y="327.66"/>
+<instance part="P+1" gate="VCC" x="76.2" y="342.9" rot="R270"/>
 </instances>
 <busses>
 </busses>
@@ -4738,6 +4793,12 @@ Source: http://www.mouser.com/ds/2/392/products_18-2245.pdf</description>
 <wire x1="124.46" y1="142.24" x2="109.22" y2="142.24" width="0.1524" layer="91"/>
 <pinref part="GND1" gate="1" pin="GND"/>
 <wire x1="109.22" y1="142.24" x2="109.22" y2="149.86" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="U$1" gate="G$1" pin="GND"/>
+<wire x1="68.58" y1="332.74" x2="73.66" y2="332.74" width="0.1524" layer="91"/>
+<pinref part="GND4" gate="1" pin="GND"/>
+<wire x1="73.66" y1="332.74" x2="73.66" y2="330.2" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="VCC" class="0">
@@ -4812,6 +4873,11 @@ Source: http://www.mouser.com/ds/2/392/products_18-2245.pdf</description>
 <wire x1="124.46" y1="144.78" x2="116.84" y2="144.78" width="0.1524" layer="91"/>
 <pinref part="P+4" gate="VCC" pin="VCC"/>
 <wire x1="116.84" y1="144.78" x2="116.84" y2="149.86" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="U$1" gate="G$1" pin="+5V"/>
+<pinref part="P+1" gate="VCC" pin="VCC"/>
+<wire x1="68.58" y1="342.9" x2="73.66" y2="342.9" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="PIN4" class="0">
@@ -4905,7 +4971,8 @@ Source: http://www.mouser.com/ds/2/392/products_18-2245.pdf</description>
 <wire x1="-5.08" y1="248.92" x2="-5.08" y2="243.84" width="0.1524" layer="91"/>
 <wire x1="-5.08" y1="243.84" x2="-53.34" y2="243.84" width="0.1524" layer="91"/>
 <junction x="-53.34" y="243.84"/>
-<wire x1="-35.56" y1="304.8" x2="195.58" y2="304.8" width="0.1524" layer="91"/>
+<wire x1="-35.56" y1="304.8" x2="-5.08" y2="304.8" width="0.1524" layer="91"/>
+<wire x1="-5.08" y1="304.8" x2="195.58" y2="304.8" width="0.1524" layer="91"/>
 <wire x1="195.58" y1="304.8" x2="195.58" y2="243.84" width="0.1524" layer="91"/>
 <junction x="-35.56" y="304.8"/>
 <wire x1="195.58" y1="243.84" x2="195.58" y2="182.88" width="0.1524" layer="91"/>
@@ -4916,6 +4983,10 @@ Source: http://www.mouser.com/ds/2/392/products_18-2245.pdf</description>
 <pinref part="K6" gate="2" pin="P"/>
 <wire x1="213.36" y1="187.96" x2="213.36" y2="182.88" width="0.1524" layer="91"/>
 <wire x1="213.36" y1="182.88" x2="195.58" y2="182.88" width="0.1524" layer="91"/>
+<wire x1="-5.08" y1="304.8" x2="-5.08" y2="322.58" width="0.1524" layer="91"/>
+<pinref part="U$1" gate="G$1" pin="LIVE"/>
+<wire x1="-5.08" y1="322.58" x2="2.54" y2="322.58" width="0.1524" layer="91"/>
+<junction x="-5.08" y="304.8"/>
 </segment>
 </net>
 <net name="N$12" class="0">
@@ -5057,13 +5128,18 @@ Source: http://www.mouser.com/ds/2/392/products_18-2245.pdf</description>
 <wire x1="190.5" y1="213.36" x2="190.5" y2="152.4" width="0.1524" layer="91"/>
 <wire x1="-35.56" y1="279.4" x2="-40.64" y2="279.4" width="0.1524" layer="91"/>
 <wire x1="-35.56" y1="287.02" x2="-35.56" y2="279.4" width="0.1524" layer="91"/>
-<wire x1="-35.56" y1="287.02" x2="190.5" y2="287.02" width="0.1524" layer="91"/>
+<wire x1="-35.56" y1="287.02" x2="-10.16" y2="287.02" width="0.1524" layer="91"/>
 <junction x="-35.56" y="287.02"/>
+<wire x1="-10.16" y1="287.02" x2="190.5" y2="287.02" width="0.1524" layer="91"/>
 <wire x1="-35.56" y1="294.64" x2="-35.56" y2="287.02" width="0.1524" layer="91"/>
 <pinref part="PAD11" gate="G$1" pin="P"/>
 <wire x1="-40.64" y1="294.64" x2="-35.56" y2="294.64" width="0.1524" layer="91"/>
 <wire x1="213.36" y1="213.36" x2="190.5" y2="213.36" width="0.1524" layer="91"/>
 <junction x="190.5" y="213.36"/>
+<wire x1="-10.16" y1="287.02" x2="-10.16" y2="342.9" width="0.1524" layer="91"/>
+<pinref part="U$1" gate="G$1" pin="NEUTRAL"/>
+<wire x1="-10.16" y1="342.9" x2="2.54" y2="342.9" width="0.1524" layer="91"/>
+<junction x="-10.16" y="287.02"/>
 </segment>
 </net>
 <net name="N$30" class="0">
@@ -5120,6 +5196,11 @@ Source: http://www.mouser.com/ds/2/392/products_18-2245.pdf</description>
 </nets>
 </sheet>
 </sheets>
+<errors>
+<approved hash="104,1,2.54,342.9,U$1,NEUTRAL,N$31,,,"/>
+<approved hash="104,1,2.54,322.58,U$1,LIVE,N$10,,,"/>
+<approved hash="104,1,68.58,342.9,U$1,+5V,VCC,,,"/>
+</errors>
 </schematic>
 </drawing>
 </eagle>
