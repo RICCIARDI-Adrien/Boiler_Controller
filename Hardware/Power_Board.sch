@@ -10,6 +10,8 @@
 <grid distance="0.1" unitdist="inch" unit="inch" style="dots" multiple="1" display="yes" altdistance="0.01" altunitdist="inch" altunit="inch"/>
 <layers>
 <layer number="1" name="Top" color="4" fill="1" visible="no" active="no"/>
+<layer number="2" name="Route2" color="1" fill="3" visible="no" active="no"/>
+<layer number="15" name="Route15" color="4" fill="6" visible="no" active="no"/>
 <layer number="16" name="Bottom" color="1" fill="1" visible="no" active="no"/>
 <layer number="17" name="Pads" color="2" fill="1" visible="no" active="no"/>
 <layer number="18" name="Vias" color="2" fill="1" visible="no" active="no"/>
@@ -564,6 +566,35 @@ Grid 5.08 mm&lt;p&gt;
 <text x="0.635" y="1.27" size="1.27" layer="51" ratio="10">3</text>
 <text x="5.7658" y="1.2192" size="1.27" layer="51" ratio="10">4</text>
 </package>
+<package name="W237-132">
+<description>&lt;b&gt;WAGO SREW CLAMP&lt;/b&gt;</description>
+<wire x1="-3.5306" y1="-1.651" x2="-1.524" y2="0.3556" width="0.254" layer="51"/>
+<wire x1="1.6256" y1="-1.6764" x2="3.5306" y2="0.3556" width="0.254" layer="51"/>
+<wire x1="-5.08" y1="4.191" x2="5.08" y2="4.191" width="0.1524" layer="21"/>
+<wire x1="5.08" y1="-4.826" x2="5.08" y2="-2.413" width="0.1524" layer="21"/>
+<wire x1="5.08" y1="-4.826" x2="-5.08" y2="-4.826" width="0.1524" layer="21"/>
+<wire x1="-5.08" y1="4.191" x2="-5.08" y2="-2.413" width="0.1524" layer="21"/>
+<wire x1="-5.08" y1="-2.413" x2="-3.429" y2="-2.413" width="0.1524" layer="21"/>
+<wire x1="-3.429" y1="-2.413" x2="-1.651" y2="-2.413" width="0.1524" layer="51"/>
+<wire x1="-1.651" y1="-2.413" x2="1.651" y2="-2.413" width="0.1524" layer="21"/>
+<wire x1="3.429" y1="-2.413" x2="5.08" y2="-2.413" width="0.1524" layer="21"/>
+<wire x1="-5.08" y1="-2.413" x2="-5.08" y2="-4.826" width="0.1524" layer="21"/>
+<wire x1="5.08" y1="-2.413" x2="5.08" y2="4.191" width="0.1524" layer="21"/>
+<wire x1="-5.08" y1="4.191" x2="-5.08" y2="4.445" width="0.1524" layer="21"/>
+<wire x1="-5.08" y1="4.445" x2="5.08" y2="4.445" width="0.1524" layer="21"/>
+<wire x1="5.08" y1="4.191" x2="5.08" y2="4.445" width="0.1524" layer="21"/>
+<wire x1="1.651" y1="-2.413" x2="3.429" y2="-2.413" width="0.1524" layer="51"/>
+<circle x="-2.54" y="-0.635" radius="1.4986" width="0.1524" layer="51"/>
+<circle x="-2.54" y="2.8448" radius="0.508" width="0.1524" layer="21"/>
+<circle x="2.54" y="-0.635" radius="1.4986" width="0.1524" layer="51"/>
+<circle x="2.54" y="2.8448" radius="0.508" width="0.1524" layer="21"/>
+<pad name="1" x="-2.54" y="-0.635" drill="1.1938" shape="long" rot="R90"/>
+<pad name="2" x="2.54" y="-0.635" drill="1.1938" shape="long" rot="R90"/>
+<text x="-4.445" y="1.27" size="1.27" layer="51" ratio="10">1</text>
+<text x="0.6858" y="1.2192" size="1.27" layer="51" ratio="10">2</text>
+<text x="-3.81" y="-6.985" size="1.27" layer="27" ratio="10">&gt;VALUE</text>
+<text x="-3.81" y="-4.318" size="1.27" layer="25" ratio="10">&gt;NAME</text>
+</package>
 </packages>
 <symbols>
 <symbol name="KL">
@@ -596,6 +627,29 @@ Grid 5.08 mm&lt;p&gt;
 <connect gate="-2" pin="KL" pad="2"/>
 <connect gate="-3" pin="KL" pad="3"/>
 <connect gate="-4" pin="KL" pad="4"/>
+</connects>
+<technologies>
+<technology name="">
+<attribute name="MF" value="" constant="no"/>
+<attribute name="MPN" value="" constant="no"/>
+<attribute name="OC_FARNELL" value="unknown" constant="no"/>
+<attribute name="OC_NEWARK" value="unknown" constant="no"/>
+</technology>
+</technologies>
+</device>
+</devices>
+</deviceset>
+<deviceset name="W237-02P" prefix="X" uservalue="yes">
+<description>&lt;b&gt;WAGO SREW CLAMP&lt;/b&gt;</description>
+<gates>
+<gate name="-1" symbol="KL" x="0" y="0" addlevel="always"/>
+<gate name="-2" symbol="KL+V" x="0" y="-5.08" addlevel="always"/>
+</gates>
+<devices>
+<device name="" package="W237-132">
+<connects>
+<connect gate="-1" pin="KL" pad="1"/>
+<connect gate="-2" pin="KL" pad="2"/>
 </connects>
 <technologies>
 <technology name="">
@@ -4640,6 +4694,7 @@ Source: http://www.mouser.com/ds/2/392/products_18-2245.pdf</description>
 <part name="U$1" library="VTX-214-010-205" deviceset="VTX-214-010-205" device=""/>
 <part name="GND4" library="supply1" deviceset="GND" device=""/>
 <part name="P+1" library="supply1" deviceset="VCC" device=""/>
+<part name="X1" library="con-wago-508" deviceset="W237-02P" device="" value="230V"/>
 </parts>
 <sheets>
 <sheet>
@@ -4650,12 +4705,14 @@ Source: http://www.mouser.com/ds/2/392/products_18-2245.pdf</description>
 <text x="-35.56" y="175.26" size="1.778" layer="91">External thermistor</text>
 <text x="-35.56" y="231.14" size="1.778" layer="91">Mixing valve colder</text>
 <text x="-35.56" y="261.62" size="1.778" layer="91">Mixing valve hotter</text>
-<text x="99.06" y="246.38" size="1.778" layer="91">Pump phase</text>
+<text x="99.06" y="246.38" size="1.778" layer="91">Pump live</text>
 <text x="99.06" y="241.3" size="1.778" layer="91">Pump neutral</text>
-<text x="99.06" y="236.22" size="1.778" layer="91">Gas burner phase</text>
+<text x="99.06" y="236.22" size="1.778" layer="91">Gas burner live</text>
 <text x="99.06" y="231.14" size="1.778" layer="91">Gas burner neutral</text>
-<text x="-35.56" y="314.96" size="1.778" layer="91">Phase</text>
+<text x="-35.56" y="314.96" size="1.778" layer="91">Live</text>
 <text x="-35.56" y="299.72" size="1.778" layer="91">Neutral</text>
+<text x="198.12" y="294.64" size="1.778" layer="91">Live</text>
+<text x="180.34" y="294.64" size="1.778" layer="91">Neutral</text>
 </plain>
 <instances>
 <instance part="PAD3" gate="G$1" x="-43.18" y="124.46"/>
@@ -4729,9 +4786,16 @@ Source: http://www.mouser.com/ds/2/392/products_18-2245.pdf</description>
 <instance part="R4" gate="G$1" x="297.18" y="226.06"/>
 <instance part="R5" gate="G$1" x="297.18" y="195.58"/>
 <instance part="R6" gate="G$1" x="297.18" y="165.1"/>
-<instance part="U$1" gate="G$1" x="35.56" y="332.74"/>
-<instance part="GND4" gate="1" x="73.66" y="327.66"/>
-<instance part="P+1" gate="VCC" x="76.2" y="342.9" rot="R270"/>
+<instance part="U$1" gate="G$1" x="35.56" y="314.96"/>
+<instance part="GND4" gate="1" x="73.66" y="309.88"/>
+<instance part="P+1" gate="VCC" x="76.2" y="325.12" rot="R270"/>
+<instance part="X1" gate="-1" x="195.58" y="294.64" smashed="yes" rot="R270">
+<attribute name="NAME" x="196.469" y="295.91" size="1.778" layer="95" rot="R90"/>
+</instance>
+<instance part="X1" gate="-2" x="190.5" y="294.64" smashed="yes" rot="R270">
+<attribute name="VALUE" x="190.5" y="302.26" size="1.778" layer="96"/>
+<attribute name="NAME" x="191.389" y="295.91" size="1.778" layer="95" rot="R90"/>
+</instance>
 </instances>
 <busses>
 </busses>
@@ -4796,9 +4860,9 @@ Source: http://www.mouser.com/ds/2/392/products_18-2245.pdf</description>
 </segment>
 <segment>
 <pinref part="U$1" gate="G$1" pin="GND"/>
-<wire x1="68.58" y1="332.74" x2="73.66" y2="332.74" width="0.1524" layer="91"/>
+<wire x1="68.58" y1="314.96" x2="73.66" y2="314.96" width="0.1524" layer="91"/>
 <pinref part="GND4" gate="1" pin="GND"/>
-<wire x1="73.66" y1="332.74" x2="73.66" y2="330.2" width="0.1524" layer="91"/>
+<wire x1="73.66" y1="314.96" x2="73.66" y2="312.42" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="VCC" class="0">
@@ -4877,7 +4941,7 @@ Source: http://www.mouser.com/ds/2/392/products_18-2245.pdf</description>
 <segment>
 <pinref part="U$1" gate="G$1" pin="+5V"/>
 <pinref part="P+1" gate="VCC" pin="VCC"/>
-<wire x1="68.58" y1="342.9" x2="73.66" y2="342.9" width="0.1524" layer="91"/>
+<wire x1="68.58" y1="325.12" x2="73.66" y2="325.12" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="PIN4" class="0">
@@ -4971,22 +5035,9 @@ Source: http://www.mouser.com/ds/2/392/products_18-2245.pdf</description>
 <wire x1="-5.08" y1="248.92" x2="-5.08" y2="243.84" width="0.1524" layer="91"/>
 <wire x1="-5.08" y1="243.84" x2="-53.34" y2="243.84" width="0.1524" layer="91"/>
 <junction x="-53.34" y="243.84"/>
-<wire x1="-35.56" y1="304.8" x2="-5.08" y2="304.8" width="0.1524" layer="91"/>
-<wire x1="-5.08" y1="304.8" x2="195.58" y2="304.8" width="0.1524" layer="91"/>
-<wire x1="195.58" y1="304.8" x2="195.58" y2="243.84" width="0.1524" layer="91"/>
+<wire x1="-35.56" y1="304.8" x2="2.54" y2="304.8" width="0.1524" layer="91"/>
 <junction x="-35.56" y="304.8"/>
-<wire x1="195.58" y1="243.84" x2="195.58" y2="182.88" width="0.1524" layer="91"/>
-<pinref part="K4" gate="2" pin="P"/>
-<wire x1="213.36" y1="248.92" x2="213.36" y2="243.84" width="0.1524" layer="91"/>
-<wire x1="213.36" y1="243.84" x2="195.58" y2="243.84" width="0.1524" layer="91"/>
-<junction x="195.58" y="243.84"/>
-<pinref part="K6" gate="2" pin="P"/>
-<wire x1="213.36" y1="187.96" x2="213.36" y2="182.88" width="0.1524" layer="91"/>
-<wire x1="213.36" y1="182.88" x2="195.58" y2="182.88" width="0.1524" layer="91"/>
-<wire x1="-5.08" y1="304.8" x2="-5.08" y2="322.58" width="0.1524" layer="91"/>
 <pinref part="U$1" gate="G$1" pin="LIVE"/>
-<wire x1="-5.08" y1="322.58" x2="2.54" y2="322.58" width="0.1524" layer="91"/>
-<junction x="-5.08" y="304.8"/>
 </segment>
 </net>
 <net name="N$12" class="0">
@@ -5116,32 +5167,6 @@ Source: http://www.mouser.com/ds/2/392/products_18-2245.pdf</description>
 <junction x="309.88" y="226.06"/>
 </segment>
 </net>
-<net name="N$31" class="0">
-<segment>
-<pinref part="K3" gate="2" pin="P"/>
-<wire x1="213.36" y1="218.44" x2="213.36" y2="213.36" width="0.1524" layer="91"/>
-<pinref part="K5" gate="2" pin="P"/>
-<wire x1="213.36" y1="157.48" x2="213.36" y2="152.4" width="0.1524" layer="91"/>
-<wire x1="213.36" y1="152.4" x2="190.5" y2="152.4" width="0.1524" layer="91"/>
-<wire x1="190.5" y1="287.02" x2="190.5" y2="213.36" width="0.1524" layer="91"/>
-<pinref part="PAD10" gate="G$1" pin="P"/>
-<wire x1="190.5" y1="213.36" x2="190.5" y2="152.4" width="0.1524" layer="91"/>
-<wire x1="-35.56" y1="279.4" x2="-40.64" y2="279.4" width="0.1524" layer="91"/>
-<wire x1="-35.56" y1="287.02" x2="-35.56" y2="279.4" width="0.1524" layer="91"/>
-<wire x1="-35.56" y1="287.02" x2="-10.16" y2="287.02" width="0.1524" layer="91"/>
-<junction x="-35.56" y="287.02"/>
-<wire x1="-10.16" y1="287.02" x2="190.5" y2="287.02" width="0.1524" layer="91"/>
-<wire x1="-35.56" y1="294.64" x2="-35.56" y2="287.02" width="0.1524" layer="91"/>
-<pinref part="PAD11" gate="G$1" pin="P"/>
-<wire x1="-40.64" y1="294.64" x2="-35.56" y2="294.64" width="0.1524" layer="91"/>
-<wire x1="213.36" y1="213.36" x2="190.5" y2="213.36" width="0.1524" layer="91"/>
-<junction x="190.5" y="213.36"/>
-<wire x1="-10.16" y1="287.02" x2="-10.16" y2="342.9" width="0.1524" layer="91"/>
-<pinref part="U$1" gate="G$1" pin="NEUTRAL"/>
-<wire x1="-10.16" y1="342.9" x2="2.54" y2="342.9" width="0.1524" layer="91"/>
-<junction x="-10.16" y="287.02"/>
-</segment>
-</net>
 <net name="N$30" class="0">
 <segment>
 <wire x1="91.44" y1="256.54" x2="91.44" y2="139.7" width="0.1524" layer="91"/>
@@ -5193,13 +5218,56 @@ Source: http://www.mouser.com/ds/2/392/products_18-2245.pdf</description>
 <wire x1="292.1" y1="256.54" x2="289.56" y2="256.54" width="0.1524" layer="91"/>
 </segment>
 </net>
+<net name="N$25" class="0">
+<segment>
+<pinref part="K4" gate="2" pin="P"/>
+<wire x1="195.58" y1="289.56" x2="195.58" y2="243.84" width="0.1524" layer="91"/>
+<wire x1="213.36" y1="248.92" x2="213.36" y2="243.84" width="0.1524" layer="91"/>
+<wire x1="213.36" y1="243.84" x2="195.58" y2="243.84" width="0.1524" layer="91"/>
+<junction x="195.58" y="243.84"/>
+<wire x1="195.58" y1="243.84" x2="195.58" y2="182.88" width="0.1524" layer="91"/>
+<pinref part="K6" gate="2" pin="P"/>
+<wire x1="213.36" y1="187.96" x2="213.36" y2="182.88" width="0.1524" layer="91"/>
+<wire x1="213.36" y1="182.88" x2="195.58" y2="182.88" width="0.1524" layer="91"/>
+<pinref part="X1" gate="-1" pin="KL"/>
+</segment>
+</net>
+<net name="N$27" class="0">
+<segment>
+<pinref part="U$1" gate="G$1" pin="NEUTRAL"/>
+<wire x1="-10.16" y1="325.12" x2="2.54" y2="325.12" width="0.1524" layer="91"/>
+<wire x1="-10.16" y1="287.02" x2="-10.16" y2="325.12" width="0.1524" layer="91"/>
+<pinref part="PAD10" gate="G$1" pin="P"/>
+<wire x1="-35.56" y1="279.4" x2="-40.64" y2="279.4" width="0.1524" layer="91"/>
+<wire x1="-35.56" y1="287.02" x2="-35.56" y2="279.4" width="0.1524" layer="91"/>
+<wire x1="-35.56" y1="287.02" x2="-10.16" y2="287.02" width="0.1524" layer="91"/>
+<junction x="-35.56" y="287.02"/>
+<wire x1="-35.56" y1="294.64" x2="-35.56" y2="287.02" width="0.1524" layer="91"/>
+<pinref part="PAD11" gate="G$1" pin="P"/>
+<wire x1="-40.64" y1="294.64" x2="-35.56" y2="294.64" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="N$28" class="0">
+<segment>
+<pinref part="K3" gate="2" pin="P"/>
+<wire x1="213.36" y1="218.44" x2="213.36" y2="213.36" width="0.1524" layer="91"/>
+<pinref part="K5" gate="2" pin="P"/>
+<wire x1="213.36" y1="157.48" x2="213.36" y2="152.4" width="0.1524" layer="91"/>
+<wire x1="213.36" y1="152.4" x2="190.5" y2="152.4" width="0.1524" layer="91"/>
+<wire x1="190.5" y1="289.56" x2="190.5" y2="213.36" width="0.1524" layer="91"/>
+<wire x1="190.5" y1="213.36" x2="190.5" y2="152.4" width="0.1524" layer="91"/>
+<wire x1="213.36" y1="213.36" x2="190.5" y2="213.36" width="0.1524" layer="91"/>
+<junction x="190.5" y="213.36"/>
+<pinref part="X1" gate="-2" pin="KL"/>
+</segment>
+</net>
 </nets>
 </sheet>
 </sheets>
 <errors>
-<approved hash="104,1,2.54,342.9,U$1,NEUTRAL,N$31,,,"/>
-<approved hash="104,1,2.54,322.58,U$1,LIVE,N$10,,,"/>
-<approved hash="104,1,68.58,342.9,U$1,+5V,VCC,,,"/>
+<approved hash="104,1,2.54,325.12,U$1,NEUTRAL,N$27,,,"/>
+<approved hash="104,1,2.54,304.8,U$1,LIVE,N$10,,,"/>
+<approved hash="104,1,68.58,325.12,U$1,+5V,VCC,,,"/>
 </errors>
 </schematic>
 </drawing>
