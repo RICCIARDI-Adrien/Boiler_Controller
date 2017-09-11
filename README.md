@@ -7,6 +7,8 @@ Schematics have been drawn using Eagle 8.3.1.
 This board contains the AC/DC converter, the relays and the connector to the wall housing.
   
 ![Power board schematics](https://github.com/RICCIARDI-Adrien/Boiler_Controller/blob/master/Hardware/Power_Board_Schematics.png)
+  
+![Power board schematics](https://github.com/RICCIARDI-Adrien/Boiler_Controller/blob/master/Hardware/Power_Board_PCB.png)
 
 ### Controller board
 This board holds the microcontroller and the WiFi to UART bridge.

@@ -4634,6 +4634,9 @@ Source: http://www.mouser.com/ds/2/392/products_18-2245.pdf</description>
 <classes>
 <class number="0" name="default" width="0" drill="0">
 </class>
+<class number="1" name="power" width="3" drill="1">
+<clearance class="1" value="1"/>
+</class>
 </classes>
 <parts>
 <part name="PAD3" library="wirepad" deviceset="WIREPAD" device="SMD5-2,5"/>
@@ -4978,7 +4981,7 @@ Source: http://www.mouser.com/ds/2/392/products_18-2245.pdf</description>
 <wire x1="30.48" y1="129.54" x2="30.48" y2="170.18" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$3" class="0">
+<net name="N$3" class="1">
 <segment>
 <pinref part="PAD8" gate="G$1" pin="P"/>
 <pinref part="K1" gate="2" pin="S"/>
@@ -4999,7 +5002,7 @@ Source: http://www.mouser.com/ds/2/392/products_18-2245.pdf</description>
 <junction x="22.86" y="215.9"/>
 </segment>
 </net>
-<net name="N$6" class="0">
+<net name="N$6" class="1">
 <segment>
 <pinref part="PAD9" gate="G$1" pin="P"/>
 <pinref part="K2" gate="2" pin="S"/>
@@ -5020,7 +5023,7 @@ Source: http://www.mouser.com/ds/2/392/products_18-2245.pdf</description>
 <junction x="22.86" y="246.38"/>
 </segment>
 </net>
-<net name="N$10" class="0">
+<net name="N$10" class="1">
 <segment>
 <pinref part="K1" gate="2" pin="P"/>
 <wire x1="-5.08" y1="218.44" x2="-5.08" y2="213.36" width="0.1524" layer="91"/>
@@ -5040,7 +5043,7 @@ Source: http://www.mouser.com/ds/2/392/products_18-2245.pdf</description>
 <pinref part="U$1" gate="G$1" pin="LIVE"/>
 </segment>
 </net>
-<net name="N$12" class="0">
+<net name="N$12" class="1">
 <segment>
 <pinref part="K3" gate="2" pin="S"/>
 <wire x1="177.8" y1="226.06" x2="208.28" y2="226.06" width="0.1524" layer="91"/>
@@ -5063,7 +5066,7 @@ Source: http://www.mouser.com/ds/2/392/products_18-2245.pdf</description>
 <junction x="241.3" y="215.9"/>
 </segment>
 </net>
-<net name="N$14" class="0">
+<net name="N$14" class="1">
 <segment>
 <pinref part="K4" gate="2" pin="S"/>
 <pinref part="X2" gate="-1" pin="KL"/>
@@ -5086,7 +5089,7 @@ Source: http://www.mouser.com/ds/2/392/products_18-2245.pdf</description>
 <junction x="241.3" y="246.38"/>
 </segment>
 </net>
-<net name="N$11" class="0">
+<net name="N$11" class="1">
 <segment>
 <pinref part="K5" gate="2" pin="S"/>
 <wire x1="167.64" y1="165.1" x2="208.28" y2="165.1" width="0.1524" layer="91"/>
@@ -5109,7 +5112,7 @@ Source: http://www.mouser.com/ds/2/392/products_18-2245.pdf</description>
 <junction x="241.3" y="154.94"/>
 </segment>
 </net>
-<net name="N$18" class="0">
+<net name="N$18" class="1">
 <segment>
 <pinref part="K6" gate="2" pin="S"/>
 <pinref part="X2" gate="-3" pin="KL"/>
@@ -5218,7 +5221,7 @@ Source: http://www.mouser.com/ds/2/392/products_18-2245.pdf</description>
 <wire x1="292.1" y1="256.54" x2="289.56" y2="256.54" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$25" class="0">
+<net name="N$25" class="1">
 <segment>
 <pinref part="K4" gate="2" pin="P"/>
 <wire x1="195.58" y1="289.56" x2="195.58" y2="243.84" width="0.1524" layer="91"/>
@@ -5232,7 +5235,7 @@ Source: http://www.mouser.com/ds/2/392/products_18-2245.pdf</description>
 <pinref part="X1" gate="-1" pin="KL"/>
 </segment>
 </net>
-<net name="N$27" class="0">
+<net name="N$27" class="1">
 <segment>
 <pinref part="U$1" gate="G$1" pin="NEUTRAL"/>
 <wire x1="-10.16" y1="325.12" x2="2.54" y2="325.12" width="0.1524" layer="91"/>
@@ -5247,7 +5250,7 @@ Source: http://www.mouser.com/ds/2/392/products_18-2245.pdf</description>
 <wire x1="-40.64" y1="294.64" x2="-35.56" y2="294.64" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$28" class="0">
+<net name="N$28" class="1">
 <segment>
 <pinref part="K3" gate="2" pin="P"/>
 <wire x1="213.36" y1="218.44" x2="213.36" y2="213.36" width="0.1524" layer="91"/>
