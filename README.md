@@ -29,7 +29,8 @@ This board holds the microcontroller and the WiFi to UART bridge.
 * [750ohm resistor](http://fr.farnell.com/multicomp/mf12-750r/resistance-0-125w-1-750r/dp/9343512)
 * [1Kohm resistor](http://fr.farnell.com/multicomp/mcf-0-25w-1k/resistance-couche-carbon-1k-0/dp/9339051)
 * [1.3Kohm resistor](http://fr.farnell.com/multicomp/mf12-1k3/resistance-0-125w-1-1k3/dp/9342575)
-* [Fuseholder](http://www.farnell.com/datasheets/2020897.pdf)
+* [Fuseholder](http://fr.farnell.com/littelfuse/64900001039/porte-fusible-cms-20x5mm/dp/1271673)
+* [Fuse](http://fr.farnell.com/littelfuse/0232002-mxp/fuse-cartridge-medium-acting-2a/dp/1707348)
 * [2-pad terminal](http://fr.farnell.com/camdenboss/ctb0708-2/bornier-standard-2-voies-30-12awg/dp/2315273)
 * [4-pad terminal](http://fr.farnell.com/camdenboss/ctb0708-4/bornier-standard-4-voies-30-12awg/dp/2315275)
 * [Atmega328p microcontroller](http://fr.farnell.com/microchip/atmega328p-pu/micro-8-bits-avr-32k-flash-28pdip/dp/1715487)
@@ -48,6 +49,10 @@ This board holds the microcontroller and the WiFi to UART bridge.
 * External thermistor : resistance variation from 340 (+40°C) to 480ohm (-10°C).
   
 Microcontroller uses a 2V precision voltage reference for the ADC module to gain more precision with small variation signals. All voltage dividers must be calculated as the highest variable resistance value results in a 2V maximum voltage on the ADC pin.
+
+### Fuse value calculation
+AC/DC converter inrush current is 40A for less than 500us, so a temporized fuse is needed to allow the board to boot.  
+AC/DC converter maximum input current is 150mA @ 240V, but due to enormous inrush current a big fuse must be used. A 250V/2A fuse has been chosen because this is the fuse used on the VTX-214 demo board (http://www.farnell.com/datasheets/1878969.pdf).
 
 ## Software
 Use avr-gcc to build the microcontroller firmware.
