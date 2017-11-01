@@ -6,7 +6,7 @@
 <setting alwaysvectorfont="no"/>
 <setting verticaltext="up"/>
 </settings>
-<grid distance="50" unitdist="mil" unit="mm" style="dots" multiple="1" display="yes" altdistance="5" altunitdist="mil" altunit="mil"/>
+<grid distance="1.27" unitdist="mm" unit="mm" style="dots" multiple="1" display="yes" altdistance="5" altunitdist="mil" altunit="mil"/>
 <layers>
 <layer number="1" name="Top" color="4" fill="1" visible="yes" active="yes"/>
 <layer number="2" name="Route2" color="1" fill="3" visible="no" active="no"/>
@@ -68,6 +68,10 @@
 <wire x1="20" y1="100" x2="20" y2="95" width="0" layer="20"/>
 <wire x1="20" y1="95" x2="0" y2="95" width="0" layer="20"/>
 <wire x1="0" y1="95" x2="0" y2="5" width="0" layer="20"/>
+<hole x="130" y="95" drill="4"/>
+<hole x="130" y="5" drill="4"/>
+<hole x="40" y="5" drill="4"/>
+<hole x="40" y="95" drill="4"/>
 </plain>
 <libraries>
 <library name="diode">
