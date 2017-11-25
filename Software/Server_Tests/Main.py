@@ -3,6 +3,7 @@
 ## Send commands to the controller board to check if everything is fine.
 ## @author Adrien RICCIARDI
 import socket
+import time
 
 #--------------------------------------------------------------------------------------------------
 # Private constants
@@ -62,6 +63,8 @@ print "Waiting for client..."
 serverSocket.listen(1)
 clientSocket, clientAddress = serverSocket.accept()
 print "Client connected with address", clientAddress
+
+time.sleep(1);
 
 # Get firmware version
 answerPayload = sendCommand([PROTOCOL_COMMAND_GET_FIRMWARE_VERSION], 1)
