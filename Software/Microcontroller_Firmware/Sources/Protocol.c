@@ -7,6 +7,7 @@
 #include <avr/interrupt.h>
 #include <Configuration.h>
 #include <Protocol.h>
+#include <util/delay.h>
 
 //-------------------------------------------------------------------------------------------------
 // Private constants
@@ -236,6 +237,11 @@ void ProtocolInitialize(void)
 	UCSR0A = 0; // Do not double the UART transmission speed (is is useless here and non-doubled speed works better)
 	UCSR0C = 0x06; // Select asynchronous UART, disable parity mode, select 1 stop bit, select 8-bit character size
 	UCSR0B = 0x18; // Enable reception and transmission
+	
+	// Reset the module in case the microcontroller rebooted (due to firmware programming). This reset sequence does not harm if the ESP8266 is powered at the same time the microcontroller is (for instance when powering the board), WiFi will just take some more seconds to connect
+	ProtocolUARTWriteStringNoInterrupt("+++"); // Exit from "transparent bridge mode"
+	_delay_ms(2000); // Wait at least 1 second for the "+++" sequence to be validated (see https://en.wikipedia.org/wiki/Hayes_command_set)
+	ProtocolUARTWriteStringNoInterrupt("AT+RST\r\n"); // Reset module
 	
 	// ESP8266 will send a lot of binary data followed by the string "ready"
 	ProtocolESP8266WaitForAnswer("ready");
