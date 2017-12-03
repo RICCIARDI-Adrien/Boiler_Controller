@@ -96,23 +96,55 @@ static void ProtocolUARTWriteStringNoInterrupt(char *String)
 }
 
 /** Wait for a specific string from the ESP8266 module (terminating "\r\n" are automatically added, no need to provide them in string).
- * @param String_Expected_Answer The expected string.
+ * @param String_Success_Answer The expected string in case of success.
+ * @param String_Error_Answer The expected string in case of error.
+ * @return 0 if the error string was received,
+ * @return 1 if the success string was received.
+ * @warning This function never returns if none of the strings are received.
  */
-static void ProtocolESP8266WaitForAnswer(char *String_Expected_Answer)
+static unsigned char ProtocolESP8266IsCommandSuccessful(char *String_Success_Answer, char *String_Error_Answer)
 {
-	unsigned char Received_Byte, i = 0;
+	unsigned char Received_Byte, Success_String_Index = 0, Error_String_Index = 0, Is_Success_String_Found = 0;
 	
-	// Wait for all string characters
-	while (String_Expected_Answer[i] != 0)
+	// Receive characters until one of the two strings is fully detected
+	while (1)
 	{
 		Received_Byte = ProtocolUARTReadByteNoInterrupt();
-		if (Received_Byte != String_Expected_Answer[i]) i = 0;
-		else i++;
+		
+		// Is this character matching the success string current character ?
+		if (Received_Byte != String_Success_Answer[Success_String_Index]) Success_String_Index = 0;
+		else
+		{
+			Success_String_Index++;
+			
+			// Is the success string fully received ?
+			if (String_Success_Answer[Success_String_Index] == 0)
+			{
+				Is_Success_String_Found = 1;
+				break;
+			}
+		}
+		
+		// Is this character matching the error string current character ?
+		if (Received_Byte != String_Error_Answer[Error_String_Index]) Error_String_Index = 0;
+		else
+		{
+			Error_String_Index++;
+			
+			// Is the error string fully received ?
+			if (String_Error_Answer[Error_String_Index] == 0)
+			{
+				Is_Success_String_Found = 0;
+				break;
+			}
+		}
 	}
 	
 	// Wait for terminating "\r\n"
 	while (ProtocolUARTReadByteNoInterrupt() != '\r');
-	while (ProtocolUARTReadByteNoInterrupt() != '\n');;
+	while (ProtocolUARTReadByteNoInterrupt() != '\n');
+	
+	return Is_Success_String_Found;
 }
 
 /** Execute a fully received command. */
@@ -229,7 +261,7 @@ ISR(USART_TX_vect)
 //-------------------------------------------------------------------------------------------------
 // Public functions
 //-------------------------------------------------------------------------------------------------
-void ProtocolInitialize(void)
+unsigned char ProtocolInitialize(void)
 {
 	// Initialize UART module to 115200bit/s, 8-bit data, no parity
 	UBRR0H = 0;
@@ -243,12 +275,12 @@ void ProtocolInitialize(void)
 	_delay_ms(2000); // Wait at least 1 second for the "+++" sequence to be validated (see https://en.wikipedia.org/wiki/Hayes_command_set)
 	ProtocolUARTWriteStringNoInterrupt("AT+RST\r\n"); // Reset module
 	
-	// ESP8266 will send a lot of binary data followed by the string "ready"
-	ProtocolESP8266WaitForAnswer("ready");
+	// ESP8266 will send a lot of data with a bad baud rate followed by the string "ready"
+	ProtocolESP8266IsCommandSuccessful("ready", "THIS STRING CAN'T BE FOUND");
 	
 	// Set WiFi mode to access point + station, it's mandatory for the transparent mode to work
 	ProtocolUARTWriteStringNoInterrupt("AT+CWMODE_CUR=3\r\n");
-	ProtocolESP8266WaitForAnswer("\r\nOK");
+	if (!ProtocolESP8266IsCommandSuccessful("\r\nOK", "\r\nERROR")) return 0;
 	
 	// Try to connect to access point
 	ProtocolUARTWriteStringNoInterrupt("AT+CWJAP_CUR=\"");
@@ -256,9 +288,7 @@ void ProtocolInitialize(void)
 	ProtocolUARTWriteStringNoInterrupt("\",\"");
 	ProtocolUARTWriteStringNoInterrupt(CONFIGURATION_PROTOCOL_WIFI_ACCESS_POINT_PASSWORD);
 	ProtocolUARTWriteStringNoInterrupt("\"\r\n");
-	ProtocolESP8266WaitForAnswer("WIFI CONNECTED");
-	ProtocolESP8266WaitForAnswer("WIFI GOT IP");
-	ProtocolESP8266WaitForAnswer("\r\nOK");
+	if (!ProtocolESP8266IsCommandSuccessful("\r\n\r\nOK", "\r\n\r\nFAIL")) return 0; // A fully matching string must be provided because the string comparison function does not recheck the current character with the received one when the index has been reset (for the sake of simplicity)
 	
 	// Try to connect to server
 	ProtocolUARTWriteStringNoInterrupt("AT+CIPSTART=\"TCP\",\"");
@@ -266,16 +296,17 @@ void ProtocolInitialize(void)
 	ProtocolUARTWriteStringNoInterrupt("\",");
 	ProtocolUARTWriteStringNoInterrupt(CONFIGURATION_PROTOCOL_WIFI_SERVER_PORT);
 	ProtocolUARTWriteStringNoInterrupt("\r\n");
-	ProtocolESP8266WaitForAnswer("CONNECT");
-	ProtocolESP8266WaitForAnswer("\r\nOK");
+	if (!ProtocolESP8266IsCommandSuccessful("\r\n\r\nOK", "\r\nERROR\r\nCLOSED")) return 0;
 	
 	// Set connection mode to "transparent bridge" to directly transmit what is written to the ESP8266 UART
 	ProtocolUARTWriteStringNoInterrupt("AT+CIPMODE=1\r\n");
-	ProtocolESP8266WaitForAnswer("\r\nOK");
+	if (!ProtocolESP8266IsCommandSuccessful("\r\nOK", "\r\nERROR")) return 0;
 	
 	ProtocolUARTWriteStringNoInterrupt("AT+CIPSEND\r\n");
-	ProtocolESP8266WaitForAnswer("\r\nOK");
+	if (!ProtocolESP8266IsCommandSuccessful("\r\nOK", "\r\nERROR")) return 0;
 	
 	// Enable interrupts now that the WiFi bridge has been initialized
 	PROTOCOL_ENABLE_INTERRUPTS();
+	
+	return 1;
 }

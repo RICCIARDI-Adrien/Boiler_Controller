@@ -25,10 +25,14 @@ FUSES =
 //-------------------------------------------------------------------------------------------------
 int main(void) // Can't use void return type because it triggers a warning
 {
+	unsigned char Is_WiFi_Successfully_Initialized;
+	
 	// Initialize modules
 	ADCInitialize();
-	ProtocolInitialize();
 	RelayInitialize();
+	Is_WiFi_Successfully_Initialized = ProtocolInitialize();
+	
+	// TODO set network error led if WiFi failed to initialize
 	
 	// Enable interrupts now that all modules have been configured
 	sei();
