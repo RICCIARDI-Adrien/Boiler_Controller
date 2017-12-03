@@ -15,8 +15,8 @@
 /** Configure microcontroller fuses. */
 FUSES =
 {
-	FUSE_SUT1 & FUSE_SUT0 & FUSE_CKSEL2 & FUSE_CKSEL1 & FUSE_CKSEL0, // Fuses low byte : use the longest power-on delay to make sure power supply voltage is stabilized when core starts, select a full swing crystal oscillator with brown-out detection enabled
-	FUSE_RSTDISBL & FUSE_DWEN & FUSE_EESAVE & FUSE_BOOTSZ1 & FUSE_BOOTSZ0, // Fuses high byte : disable external reset, enable Serial Program and Data Downloading, keep EEPROM content when erasing the chip, give less room possible to the bootloader (for now)
+	FUSE_CKSEL3, // Fuses low byte : use the longest power-on delay to make sure power supply voltage is stabilized when core starts, select a full swing crystal oscillator with brown-out detection enabled
+	FUSE_SPIEN & FUSE_EESAVE, // Fuses high byte : enable Serial programming and Data Downloading, keep EEPROM content when erasing the chip, give less room possible to the bootloader (for now)
 	FUSE_BODLEVEL2 // Fuses extended byte : set brown-out reset voltage to approximately 4.3V
 };
 

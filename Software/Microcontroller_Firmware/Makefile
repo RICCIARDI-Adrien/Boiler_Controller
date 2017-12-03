@@ -13,9 +13,10 @@ PROGRAMMER_SERIAL_PORT ?= /dev/ttyACM0
 
 all:
 	$(CC) $(CCFLAGS) $(INCLUDES) $(SOURCES) -o $(BINARY)
+	avr-size -C --mcu=atmega328p $(BINARY)
 
 clean:
 	rm -f $(BINARY)
 
 flash:
-	avrdude -p m328p -c avrisp -b 19200 -P $(PROGRAMMER_SERIAL_PORT) -v -e -U flash:w:$(BINARY)
+	avrdude -p m328p -c avrisp -b 19200 -P $(PROGRAMMER_SERIAL_PORT) -v -e -U flash:w:$(BINARY) -U lfuse:w:$(BINARY) -U hfuse:w:$(BINARY) -U efuse:w:$(BINARY)
