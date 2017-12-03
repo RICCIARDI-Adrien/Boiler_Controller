@@ -1,6 +1,6 @@
 CC = avr-gcc
-# Do not enable compiler optimizations to avoid harmful instructions reordering, relocalize code and data to bootloader space (bootloader address is 0x3F00, but this value is an AVR 16-bit word offset which needs to be multiplied by two to become the bytes value expected by the linker), see AVR231 "AES bootloader" application note for some details about bootloader configuration
-CCFLAGS = -W -Wall -mmcu=atmega328p -DF_CPU=3686400UL -Wl,--section-start=.text=0x7E00 -ffunction-sections -fdata-sections -nostartfiles -nodefaultlibs -Wl,-static
+# Do not enable compiler optimizations to avoid harmful instructions reordering, relocalize code and data to bootloader space (bootloader address is 0x3800, but this value is an AVR 16-bit word offset which needs to be multiplied by two to become the bytes value expected by the linker), see AVR231 "AES bootloader" application note for some details about bootloader configuration
+CCFLAGS = -W -Wall -mmcu=atmega328p -DF_CPU=3686400UL -Wl,--section-start=.text=0x7000 -ffunction-sections -fdata-sections -nostartfiles -nodefaultlibs -nostdlib -Wl,-static
 
 PATH_INCLUDES = Includes
 PATH_SOURCES = Sources
