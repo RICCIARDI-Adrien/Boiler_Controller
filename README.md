@@ -60,6 +60,9 @@ AC/DC converter maximum input current is 150mA @ 240V, but due to enormous inrus
 Use avr-gcc to build the microcontroller firmware.
 
 ### Bootloader
-Microcontroller boots from bootloader space. It checks for a flag stored in EEPROM telling if the firmware is valid. If the firmware is valid, bootloader jumps to firmware entry point. If not, bootloader waits for the server to download a valid firmware.  
+Microcontroller boots from bootloader space. Microcontroller boots from bootloader space. It starts by initializing the ESP8266 WiFi module to be able to communicate with the server. Even if the bootloader does not need to download a firmware, this step allows to use directly a classic UART from the firmware point of view (no need to care about ESP8266).  
+Bootloader now checks for a flag stored in EEPROM telling if the firmware is valid. If the firmware is valid, bootloader jumps to firmware entry point. If not, bootloader waits for the server to download a valid firmware.  
 During valid firmware waiting, bootloader can answer one firmware communication protocol command : "get version". Bootloader always answers "0" to this command whereas the firmware answers "1" or greater, this way the server knows when the microcontroller is stuck in bootloader mode and can send a new firmware.  
-Bootloader program contains the microcontroller fuses configuration.
+Bootloader program contains the microcontroller fuses configuration.  
+  
+Bootloader won't wait indefinitely for the WiFi module to connect. If the connection takes too long, WiFi configuration is abandoned and the firmware (if present) is started. This way, boiler will be operational even without WiFi connection.

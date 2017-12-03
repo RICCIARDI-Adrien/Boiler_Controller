@@ -7,7 +7,7 @@ PATH_SOURCES = Sources
 
 BINARY = Boiler_Controller_Bootloader.elf
 INCLUDES = -I$(PATH_INCLUDES)
-SOURCES = $(PATH_SOURCES)/Main.c
+SOURCES = $(PATH_SOURCES)/Main.c $(PATH_SOURCES)/UART.c
 
 PROGRAMMER_SERIAL_PORT ?= /dev/ttyACM0
 
