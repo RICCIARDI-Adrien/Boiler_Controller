@@ -58,3 +58,8 @@ AC/DC converter maximum input current is 150mA @ 240V, but due to enormous inrus
 
 ## Software
 Use avr-gcc to build the microcontroller firmware.
+
+### Bootloader
+Microcontroller boots from bootloader space. It checks for a flag stored in EEPROM telling if the firmware is valid. If the firmware is valid, bootloader jumps to firmware entry point. If not, bootloader waits for the server to download a valid firmware.  
+During valid firmware waiting, bootloader can answer one firmware communication protocol command : "get version". Bootloader always answers "0" to this command whereas the firmware answers "1" or greater, this way the server knows when the microcontroller is stuck in bootloader mode and can send a new firmware.  
+Bootloader program contains the microcontroller fuses configuration.
