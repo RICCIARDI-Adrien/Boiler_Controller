@@ -5,6 +5,7 @@
 #include <ADC.h>
 #include <avr/io.h>
 #include <avr/interrupt.h>
+#include <Led.h>
 #include <Protocol.h>
 #include <Relay.h>
 #include <util/delay.h>
@@ -25,28 +26,20 @@ FUSES =
 //-------------------------------------------------------------------------------------------------
 int main(void) // Can't use void return type because it triggers a warning
 {
-	unsigned char Is_WiFi_Successfully_Initialized;
+	unsigned char Is_WiFi_Successfully_Initialized, a = 1;
 	
 	// Initialize modules
+	LedInitialize();
 	ADCInitialize();
 	RelayInitialize();
 	Is_WiFi_Successfully_Initialized = ProtocolInitialize();
 	
-	// TODO set network error led if WiFi failed to initialize
-	
 	// Enable interrupts now that all modules have been configured
 	sei();
 	
-	// TEST
-	DDRD |= 0x04;
-	/*while (1)
-	{
-		PORTD |= 0x04;
-		_delay_ms(1000);
-		
-		PORTD &= ~0x04;
-		_delay_ms(1000);
-	}*/
+	// Tell whether network is working
+	if (!Is_WiFi_Successfully_Initialized) LedTurnOn(LED_ID_NETWORK_ERROR);
+	
 	while (1)
 	{
 		ADCTask(); // TODO execute this every second but without blocking all other tasks
@@ -55,21 +48,15 @@ int main(void) // Can't use void return type because it triggers a warning
 		_delay_ms(1000);
 		
 		// TEST
-		if (PIND & 0x04) PORTD &= ~0x04;
-		else PORTD |= 0x04;
-		
-		RelayTurnOn(RELAY_ID_MIXING_VALVE_HOTTER);
-		_delay_ms(100);
-		RelayTurnOn(RELAY_ID_MIXING_VALVE_COLDER);
-		_delay_ms(100);
-		RelayTurnOn(RELAY_ID_GAS_BURNER);
-		_delay_ms(100);
-		RelayTurnOn(RELAY_ID_PUMP);
-		_delay_ms(300);
-		
-		RelayTurnOff(RELAY_ID_MIXING_VALVE_HOTTER);
-		RelayTurnOff(RELAY_ID_MIXING_VALVE_COLDER);
-		RelayTurnOff(RELAY_ID_GAS_BURNER);
-		RelayTurnOff(RELAY_ID_PUMP);
+		if (a)
+		{
+			LedTurnOn(LED_ID_STATUS);
+			a = 0;
+		}
+		else
+		{
+			LedTurnOff(LED_ID_STATUS);
+			a = 1;
+		}
 	}
 }
