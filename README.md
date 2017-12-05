@@ -23,21 +23,20 @@ This board holds the microcontroller and the WiFi to UART bridge.
 * [1N4007 rectifier diode](http://fr.farnell.com/multicomp/1n4007/diode-1a-1000v/dp/9565051)
 * [15pF ceramic capacitor](http://fr.farnell.com/multicomp/mc0805n150j101a2-54mm/condensateur-mlcc-c0g-np0-15pf/dp/2112750)
 * [100nF ceramic capacitor](http://fr.farnell.com/multicomp/mc0805b104k500a5-08mm/condensateur-mlcc-0-1uf-50v-x7r/dp/2395773)
-* [470nF ceramic capacitor](http://fr.farnell.com/kemet/c330c474k5r5ta/condensateur-mlcc-x7r-470nf-50v/dp/1457703)
+* [10uF electrolytic capacitor](http://fr.farnell.com/multicomp/mcgpr16v106m5x11/condensateur-elec-alu-10uf-16v/dp/9451056)
+* [10uF tantalum capacitor](http://fr.farnell.com/multicomp/mctar16v106kc/condensateur-tantale-10uf-16v/dp/2395815)
 * [5V 2A AC/DC power supply](http://fr.farnell.com/vigortronix/vtx-214-010-205/alimentation-ac-dc-5v-2a/dp/2464685)
-* [91ohm resistor](http://fr.farnell.com/multicomp/mf12-91r/resistance-0-125w-1-91r/dp/9343652)
-* [160ohm resistor](http://fr.farnell.com/multicomp/mf12-160r/resistance-0-125w-1-160r/dp/9342672)
-* [330ohm resistor](http://fr.farnell.com/multicomp/mcf-0-25w-330r/resistance-couche-carbon-330r/dp/9339418)
-* [750ohm resistor](http://fr.farnell.com/multicomp/mf12-750r/resistance-0-125w-1-750r/dp/9343512)
-* [1Kohm resistor](http://fr.farnell.com/multicomp/mcf-0-25w-1k/resistance-couche-carbon-1k-0/dp/9339051)
-* [1.3Kohm resistor](http://fr.farnell.com/multicomp/mf12-1k3/resistance-0-125w-1-1k3/dp/9342575)
+* [160ohm 1% resistor](http://fr.farnell.com/multicomp/mf12-160r/resistance-0-125w-1-160r/dp/9342672)
+* [470ohm 1% resistor](http://fr.farnell.com/multicomp/mf50-470r/resistance-0-5w-1-470r/dp/9340610)
+* [1Kohm 5% resistor](http://fr.farnell.com/multicomp/mcf-0-25w-1k/resistance-couche-carbon-1k-0/dp/9339051)
+* [1Kohm 1% resistor](http://fr.farnell.com/multicomp/mf50-1k/resistance-1k-0-5w-1/dp/9339779)
 * [Fuseholder](http://fr.farnell.com/littelfuse/64900001039/porte-fusible-cms-20x5mm/dp/1271673)
 * [Fuse](http://fr.farnell.com/littelfuse/0232002-mxp/fuse-cartridge-medium-acting-2a/dp/1707348)
 * [2-pad terminal](http://fr.farnell.com/camdenboss/ctb0708-2/bornier-standard-2-voies-30-12awg/dp/2315273)
 * [4-pad terminal](http://fr.farnell.com/camdenboss/ctb0708-4/bornier-standard-4-voies-30-12awg/dp/2315275)
 * [Atmega328p microcontroller](http://fr.farnell.com/microchip/atmega328p-pu/micro-8-bits-avr-32k-flash-28pdip/dp/1715487)
-* [2.048V precision voltage reference](http://fr.farnell.com/texas-instruments/ref3020aidbzt/ref-de-tension-series-2-048v-sot/dp/1470323)
 * [3.6864MHz crystal](http://fr.farnell.com/iqd-frequency-products/lfxtal003263/quartz-3-686400mhz/dp/9712909)
+* [3.3V LDO](http://fr.farnell.com/texas-instruments/lm1086ct-3-3-nopb/ic-reg-ldo-3-3v-1-5a-to-220/dp/1564628)
 * [WiFi to UART bridge](https://www.gotronic.fr/art-module-wifi-uart-grove-113020010-23827.htm)
 * [4-pin PCB male connector](https://www.gotronic.fr/art-connecteur-s004-5858.htm)
 * [4-pin PCB female connector](https://www.gotronic.fr/art-connecteur-p004-5867.htm)
@@ -61,8 +60,11 @@ Use avr-gcc to build the microcontroller firmware.
 
 ### Bootloader
 Microcontroller boots from bootloader space. Microcontroller boots from bootloader space. It starts by initializing the ESP8266 WiFi module to be able to communicate with the server. Even if the bootloader does not need to download a firmware, this step allows to use directly a classic UART from the firmware point of view (no need to care about ESP8266).  
-Bootloader now checks for a flag stored in EEPROM telling if the firmware is valid. If the firmware is valid, bootloader jumps to firmware entry point. If not, bootloader waits for the server to download a valid firmware.  
-During valid firmware waiting, bootloader can answer one firmware communication protocol command : "get version". Bootloader always answers "0" to this command whereas the firmware answers "1" or greater, this way the server knows when the microcontroller is stuck in bootloader mode and can send a new firmware.  
-Bootloader program contains the microcontroller fuses configuration.  
   
-Bootloader won't wait indefinitely for the WiFi module to connect. If the connection takes too long, WiFi configuration is abandoned and the firmware (if present) is started. This way, boiler will be operational even without WiFi connection.
+Bootloader now checks for a flag stored in EEPROM telling if the firmware is valid. If the firmware is valid, bootloader jumps to firmware entry point. If not, bootloader waits for the server to download a valid firmware.  
+  
+During valid firmware waiting, bootloader can answer one firmware communication protocol command : "get version". Bootloader always answers "0" to this command whereas the firmware answers "1" or greater, this way the server knows when the microcontroller is stuck in bootloader mode and can send a new firmware.  
+  
+Bootloader won't wait indefinitely for the WiFi module to connect. If the connection takes too long, WiFi configuration is abandoned and the firmware (if present) is started. This way, boiler will be operational even without WiFi connection.  
+  
+Bootloader program contains the microcontroller fuses configuration.
