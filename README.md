@@ -27,7 +27,7 @@ This board holds the microcontroller and the WiFi to UART bridge.
 * [10uF tantalum capacitor](http://fr.farnell.com/multicomp/mctar16v106kc/condensateur-tantale-10uf-16v/dp/2395815)
 * [5V 2A AC/DC power supply](http://fr.farnell.com/vigortronix/vtx-214-010-205/alimentation-ac-dc-5v-2a/dp/2464685)
 * [160ohm 1% resistor](http://fr.farnell.com/multicomp/mf12-160r/resistance-0-125w-1-160r/dp/9342672)
-* [330ohm resistor](http://fr.farnell.com/multicomp/mcf-0-25w-330r/resistance-couche-carbon-330r/dp/9339418)
+* [330ohm 5% resistor](http://fr.farnell.com/multicomp/mcf-0-25w-330r/resistance-couche-carbon-330r/dp/9339418)
 * [470ohm 1% resistor](http://fr.farnell.com/multicomp/mf50-470r/resistance-0-5w-1-470r/dp/9340610)
 * [1Kohm 5% resistor](http://fr.farnell.com/multicomp/mcf-0-25w-1k/resistance-couche-carbon-1k-0/dp/9339051)
 * [1Kohm 1% resistor](http://fr.farnell.com/multicomp/mf50-1k/resistance-1k-0-5w-1/dp/9339779)
