@@ -7,6 +7,7 @@
 #include <avr/interrupt.h>
 #include <Configuration.h>
 #include <Protocol.h>
+#include <Temperature.h>
 #include <util/delay.h>
 
 //-------------------------------------------------------------------------------------------------
@@ -16,7 +17,7 @@
 #define PROTOCOL_MAGIC_NUMBER 0xA5
 
 /** The biggest command payload size. */
-#define PROTOCOL_PAYLOAD_MAXIMUM_SIZE 4 // TODO set when all commands are decided
+#define PROTOCOL_PAYLOAD_MAXIMUM_SIZE 6 // TODO set when all commands are decided
 
 //-------------------------------------------------------------------------------------------------
 // Private types
@@ -36,7 +37,8 @@ typedef enum
 typedef enum
 {
 	PROTOCOL_COMMAND_GET_FIRMWARE_VERSION,
-	PROTOCOL_COMMAND_GET_TEMPERATURES,
+	PROTOCOL_COMMAND_GET_RAW_TEMPERATURES,
+	PROTOCOL_COMMAND_GET_CELSIUS_TEMPERATURES,
 	PROTOCOL_COMMANDS_COUNT
 } TProtocolCommand;
 
@@ -159,12 +161,19 @@ static void ProtocolExecuteCommand(void)
 			Protocol_Command_Payload_Size = 1;
 			break;
 			
-		case PROTOCOL_COMMAND_GET_TEMPERATURES:
+		case PROTOCOL_COMMAND_GET_RAW_TEMPERATURES:
 			Pointer_Word = (unsigned short *) Protocol_Command_Payload_Buffer;
 			*Pointer_Word = ADCGetLastSampledValue(ADC_CHANNEL_ID_EXTERNAL_THERMISTOR);
 			Pointer_Word++;
 			*Pointer_Word = ADCGetLastSampledValue(ADC_CHANNEL_ID_INTERNAL_THERMISTOR);
-			Protocol_Command_Payload_Size = 4;
+			Protocol_Command_Payload_Size = 4; // TODO add "retour" temperature
+			break;
+			
+		case PROTOCOL_COMMAND_GET_CELSIUS_TEMPERATURES:
+			Protocol_Command_Payload_Buffer[0] = (unsigned char) TemperatureGetCelsiusValue(TEMPERATURE_ID_OUTSIDE);
+			Protocol_Command_Payload_Buffer[1] = (unsigned char) TemperatureGetCelsiusValue(TEMPERATURE_ID_BURNER_OUTPUT_WATER);
+			Protocol_Command_Payload_Buffer[2] = (unsigned char) TemperatureGetCelsiusValue(TEMPERATURE_ID_BURNER_INPUT_WATER);
+			Protocol_Command_Payload_Size = 3;
 			break;
 			
 		// Unknown command, should not get here
@@ -184,7 +193,8 @@ ISR(USART_RX_vect)
 	static unsigned char Received_Command_Payload[PROTOCOL_COMMANDS_COUNT] =
 	{
 		0, // PROTOCOL_COMMAND_GET_FIRMWARE_VERSION
-		0, // PROTOCOL_COMMAND_GET_TEMPERATURES
+		0, // PROTOCOL_COMMAND_GET_RAW_TEMPERATURES
+		0 // PROTOCOL_COMMAND_GET_CELSIUS_TEMPERATURES
 	};
 	unsigned char Byte;
 	
