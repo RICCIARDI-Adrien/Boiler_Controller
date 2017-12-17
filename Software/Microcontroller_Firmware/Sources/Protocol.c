@@ -6,6 +6,7 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <Configuration.h>
+#include <Mixing_Valve.h>
 #include <Protocol.h>
 #include <Temperature.h>
 #include <util/delay.h>
@@ -39,6 +40,7 @@ typedef enum
 	PROTOCOL_COMMAND_GET_FIRMWARE_VERSION,
 	PROTOCOL_COMMAND_GET_RAW_TEMPERATURES,
 	PROTOCOL_COMMAND_GET_CELSIUS_TEMPERATURES,
+	PROTOCOL_COMMAND_GET_MIXING_VALVE_POSITION,
 	PROTOCOL_COMMANDS_COUNT
 } TProtocolCommand;
 
@@ -176,6 +178,11 @@ static void ProtocolExecuteCommand(void)
 			Protocol_Command_Payload_Size = 3;
 			break;
 			
+		case PROTOCOL_COMMAND_GET_MIXING_VALVE_POSITION:
+			Protocol_Command_Payload_Buffer[0] = MixingValveGetPosition();
+			Protocol_Command_Payload_Size = 1;
+			break;
+			
 		// Unknown command, should not get here
 		default:
 			break;
@@ -194,7 +201,8 @@ ISR(USART_RX_vect)
 	{
 		0, // PROTOCOL_COMMAND_GET_FIRMWARE_VERSION
 		0, // PROTOCOL_COMMAND_GET_RAW_TEMPERATURES
-		0 // PROTOCOL_COMMAND_GET_CELSIUS_TEMPERATURES
+		0, // PROTOCOL_COMMAND_GET_CELSIUS_TEMPERATURES
+		0 // PROTOCOL_COMMAND_GET_MIXING_VALVE_POSITION
 	};
 	unsigned char Byte;
 	
