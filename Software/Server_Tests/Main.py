@@ -20,6 +20,8 @@ PROTOCOL_COMMAND_GET_FIRMWARE_VERSION = 0
 PROTOCOL_COMMAND_GET_RAW_TEMPERATURES = 1
 ## "Get Celsius temperatures" command code.
 PROTOCOL_COMMAND_GET_CELSIUS_TEMPERATURES = 2
+# "Get mixing valve position" command code.
+PROTOCOL_COMMAND_GET_MIXING_VALVE_POSITION = 3
 
 #--------------------------------------------------------------------------------------------------
 # Private functions
@@ -96,5 +98,20 @@ if startTemperature > 127:
 if returnTemperature > 127:
 	returnTemperature = -1 * (256 - returnTemperature)
 print "Celsius external temperature :", externalTemperature, ", Celsius start temperature :", startTemperature, ", Celsius return temperature :", returnTemperature
+
+# Get mixing valve position
+answerPayload = sendCommand([PROTOCOL_COMMAND_GET_MIXING_VALVE_POSITION], 1)
+if answerPayload[0] == 0:
+	valvePosition = "left"
+elif answerPayload[0] == 1:
+	valvePosition = "center"
+elif answerPayload[0] == 2:
+	valvePosition = "right"
+else:
+	valvePosition = "unknown"
+print "Mixing valve position :", valvePosition
+if valvePosition == "unknown":
+	print "Error : unknown valve position."
+	exit(-1)
 
 print "\033[32mAll tests succeeded.\033[0m"
