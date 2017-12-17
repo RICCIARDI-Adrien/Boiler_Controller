@@ -12,8 +12,8 @@
 typedef enum
 {
 	TEMPERATURE_ID_OUTSIDE, //<! External sensor temperature.
-	TEMPERATURE_ID_BURNER_OUTPUT_WATER, //<! The pipe going to the radiator temperature.
-	TEMPERATURE_ID_BURNER_INPUT_WATER, //<! The pipe coming from the radiator temperature.
+	TEMPERATURE_ID_RADIATOR_START, //<! The pipe going to the radiators' temperature.
+	TEMPERATURE_ID_RADIATOR_RETURN, //<! The pipe coming from the radiators' temperature.
 	TEMPERATURE_IDS_COUNT
 } TTemperatureID;
 

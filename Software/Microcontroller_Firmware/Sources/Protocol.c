@@ -163,16 +163,16 @@ static void ProtocolExecuteCommand(void)
 			
 		case PROTOCOL_COMMAND_GET_RAW_TEMPERATURES:
 			Pointer_Word = (unsigned short *) Protocol_Command_Payload_Buffer;
-			*Pointer_Word = ADCGetLastSampledValue(ADC_CHANNEL_ID_EXTERNAL_THERMISTOR);
+			*Pointer_Word = ADCGetLastSampledValue(ADC_CHANNEL_ID_OUTSIDE_THERMISTOR);
 			Pointer_Word++;
-			*Pointer_Word = ADCGetLastSampledValue(ADC_CHANNEL_ID_INTERNAL_THERMISTOR);
+			*Pointer_Word = ADCGetLastSampledValue(ADC_CHANNEL_ID_RADIATOR_START_THERMISTOR);
 			Protocol_Command_Payload_Size = 4; // TODO add "retour" temperature
 			break;
 			
 		case PROTOCOL_COMMAND_GET_CELSIUS_TEMPERATURES:
 			Protocol_Command_Payload_Buffer[0] = (unsigned char) TemperatureGetCelsiusValue(TEMPERATURE_ID_OUTSIDE);
-			Protocol_Command_Payload_Buffer[1] = (unsigned char) TemperatureGetCelsiusValue(TEMPERATURE_ID_BURNER_OUTPUT_WATER);
-			Protocol_Command_Payload_Buffer[2] = (unsigned char) TemperatureGetCelsiusValue(TEMPERATURE_ID_BURNER_INPUT_WATER);
+			Protocol_Command_Payload_Buffer[1] = (unsigned char) TemperatureGetCelsiusValue(TEMPERATURE_ID_RADIATOR_START);
+			Protocol_Command_Payload_Buffer[2] = (unsigned char) TemperatureGetCelsiusValue(TEMPERATURE_ID_RADIATOR_RETURN);
 			Protocol_Command_Payload_Size = 3;
 			break;
 			
