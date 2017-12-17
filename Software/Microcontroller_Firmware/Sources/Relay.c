@@ -10,6 +10,9 @@
 //-------------------------------------------------------------------------------------------------
 void RelayInitialize(void)
 {
+	// Make sure all relays are off before configuring the port pins as output
+	PORTD &= 0x0F;
+	
 	DDRD |= 0xF0;
 }
 
