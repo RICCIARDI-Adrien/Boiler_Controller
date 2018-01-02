@@ -36,6 +36,11 @@ void MixingValveSetPosition(TMixingValvePosition Position);
  */
 TMixingValvePosition MixingValveGetPosition(void);
 
+/** Set the time in seconds needed for the valve to travel from one side to the other.
+ * @param Maximum_Moving_Time The time value in seconds.
+ */
+void MixingValveSetMaximumMovingTime(unsigned short Maximum_Moving_Time);
+
 /** This task must be called each second, it controls the relays that makes the mixing valve move. */
 void MixingValveTask(void);
 

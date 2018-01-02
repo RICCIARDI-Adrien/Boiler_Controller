@@ -2,7 +2,9 @@
  * @see Mixing_Valve.h for description.
  * @author Adrien RICCIARDI
  */
+#include <Configuration.h>
 #include <Mixing_Valve.h>
+#include <Protocol.h>
 #include <Relay.h>
 #include <util/delay.h>
 
@@ -15,7 +17,7 @@ static TMixingValvePosition Mixing_Valve_Current_Position = MIXING_VALVE_POSITIO
 static TMixingValvePosition Mixing_Valve_Target_Position;
 
 /** How many seconds the valve needs to travel from one side to the other. */
-static unsigned short Mixing_Valve_Maximum_Moving_Time = 10; // TODO (test value for now)
+static unsigned short Mixing_Valve_Maximum_Moving_Time = CONFIGURATION_MIXING_VALVE_MAXIMUM_MOVING_TIME;
 /** How many seconds the mixing valve task must wait before stopping the relays. */
 static unsigned short Mixing_Valve_Remaining_Moving_Time = 0;
 
@@ -34,7 +36,7 @@ void MixingValveInitialize(void)
 	}
 }
 
-// No need for mutex, value is one byte wide only (and even if this the previous value just before an update that is read it's not a problem)
+// No need for mutex, value is one byte wide only (and even if this is the previous value just before an update that is read it's not a problem)
 TMixingValvePosition MixingValveGetPosition(void)
 {
 	return Mixing_Valve_Current_Position;
@@ -43,8 +45,15 @@ TMixingValvePosition MixingValveGetPosition(void)
 // No need for mutex because this function is called sequentially with mixing valve task function
 void MixingValveSetPosition(TMixingValvePosition Position)
 {
+	unsigned short Maximum_Moving_Time;
+	
 	// Nothing to do if the valve is in the desired position yet
 	if (Position == Mixing_Valve_Current_Position) return;
+	
+	// Access moving time value through a "mutex" because this value can be changed at any time by the protocol module
+	PROTOCOL_DISABLE_INTERRUPTS();
+	Maximum_Moving_Time = Mixing_Valve_Maximum_Moving_Time;
+	PROTOCOL_ENABLE_INTERRUPTS();
 	
 	// Compute the required moving time and activate the needed relays
 	switch (Position)
@@ -54,8 +63,8 @@ void MixingValveSetPosition(TMixingValvePosition Position)
 			RelayTurnOn(RELAY_ID_MIXING_VALVE_LEFT);
 			Mixing_Valve_Target_Position = MIXING_VALVE_POSITION_LEFT;
 			// Compute the needed moving time
-			if (Mixing_Valve_Current_Position == MIXING_VALVE_POSITION_CENTER) Mixing_Valve_Remaining_Moving_Time = Mixing_Valve_Maximum_Moving_Time / 2; // Go from center to left
-			else Mixing_Valve_Remaining_Moving_Time = Mixing_Valve_Maximum_Moving_Time; // Go from right to left
+			if (Mixing_Valve_Current_Position == MIXING_VALVE_POSITION_CENTER) Mixing_Valve_Remaining_Moving_Time = Maximum_Moving_Time / 2; // Go from center to left
+			else Mixing_Valve_Remaining_Moving_Time = Maximum_Moving_Time; // Go from right to left
 			break;
 			
 		case MIXING_VALVE_POSITION_CENTER:
@@ -71,7 +80,7 @@ void MixingValveSetPosition(TMixingValvePosition Position)
 				RelayTurnOn(RELAY_ID_MIXING_VALVE_LEFT);
 				Mixing_Valve_Target_Position = MIXING_VALVE_POSITION_CENTER;
 			}
-			Mixing_Valve_Remaining_Moving_Time = Mixing_Valve_Maximum_Moving_Time / 2;
+			Mixing_Valve_Remaining_Moving_Time = Maximum_Moving_Time / 2;
 			break;
 			
 		case MIXING_VALVE_POSITION_RIGHT:
@@ -79,14 +88,20 @@ void MixingValveSetPosition(TMixingValvePosition Position)
 			RelayTurnOn(RELAY_ID_MIXING_VALVE_RIGHT);
 			Mixing_Valve_Target_Position = MIXING_VALVE_POSITION_RIGHT;
 			// Compute the needed moving time
-			if (Mixing_Valve_Current_Position == MIXING_VALVE_POSITION_CENTER) Mixing_Valve_Remaining_Moving_Time = Mixing_Valve_Maximum_Moving_Time / 2; // Go from center to right
-			else Mixing_Valve_Remaining_Moving_Time = Mixing_Valve_Maximum_Moving_Time; // Go from left to right
+			if (Mixing_Valve_Current_Position == MIXING_VALVE_POSITION_CENTER) Mixing_Valve_Remaining_Moving_Time = Maximum_Moving_Time / 2; // Go from center to right
+			else Mixing_Valve_Remaining_Moving_Time = Maximum_Moving_Time; // Go from left to right
 			break;
 			
 		// Should not reach this code
 		default:
 			break;
 	}
+}
+
+void MixingValveSetMaximumMovingTime(unsigned short Maximum_Moving_Time)
+{
+	// It is safe to directly set this variable because Mixing_Valve_Remaining_Moving_Time access is protected in the required functions
+	Mixing_Valve_Remaining_Moving_Time = Maximum_Moving_Time;
 }
 
 void MixingValveTask(void)

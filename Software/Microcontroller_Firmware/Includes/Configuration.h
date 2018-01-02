@@ -21,4 +21,7 @@
 /** The current firmware version. */
 #define CONFIGURATION_FIRMWARE_VERSION 1
 
+/** Mixing valve time in seconds to go from one side to the other side. */
+#define CONFIGURATION_MIXING_VALVE_MAXIMUM_MOVING_TIME 10 // TEST value
+
 #endif
