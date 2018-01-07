@@ -24,20 +24,13 @@ FUSES =
 	FUSE_BODLEVEL2 // Fuses extended byte : set brown-out reset voltage to approximately 4.3V
 };
 
-/** External sensor temperature (in °C). */
-static signed char Main_Temperature_Outside = 0;
-/** The pipe going to the radiators' temperature. */
-static signed char Main_Temperature_Radiator_Start = 0;
-/** The pipe coming from the radiators' temperature. */
-static signed char Main_Temperature_Radiator_Return = 0;
-
 //-------------------------------------------------------------------------------------------------
 // Entry point
 //-------------------------------------------------------------------------------------------------
 int main(void) // Can't use void return type because it triggers a warning
 {
 	unsigned char Is_WiFi_Successfully_Initialized, Is_Status_Led_On = 1;
-	signed char Desired_Start_Water_Temperature, Desired_Room_Temperature;
+	signed char Outside_Temperature, Radiator_Water_Start_Temperature, Radiator_Water_Return_Temperature, Desired_Start_Water_Temperature, Desired_Room_Temperature;
 	
 	// Initialize modules
 	LedInitialize();
@@ -62,20 +55,20 @@ int main(void) // Can't use void return type because it triggers a warning
 		ADCTask();
 		
 		// Cache converted temperature values (conversion computations cost a lot of cycles)
-		Main_Temperature_Outside = TemperatureGetSensorValue(TEMPERATURE_SENSOR_ID_OUTSIDE);
-		Main_Temperature_Radiator_Start = TemperatureGetSensorValue(TEMPERATURE_SENSOR_ID_RADIATOR_START);
-		Main_Temperature_Radiator_Return = TemperatureGetSensorValue(TEMPERATURE_SENSOR_ID_RADIATOR_RETURN);
+		Outside_Temperature = TemperatureGetSensorValue(TEMPERATURE_SENSOR_ID_OUTSIDE);
+		Radiator_Water_Start_Temperature = TemperatureGetSensorValue(TEMPERATURE_SENSOR_ID_RADIATOR_START);
+		Radiator_Water_Return_Temperature = TemperatureGetSensorValue(TEMPERATURE_SENSOR_ID_RADIATOR_RETURN);
 		Desired_Room_Temperature = TemperatureGetDesiredRoomTemperature();
 		
 		// Compute required water start temperature
-		Desired_Start_Water_Temperature = (CONFIGURATION_HEATING_CURVE_COEFFICIENT * (Desired_Room_Temperature - Main_Temperature_Outside) + CONFIGURATION_HEATING_CURVE_PARALLEL_SHIFT) / 10L;
+		Desired_Start_Water_Temperature = (CONFIGURATION_HEATING_CURVE_COEFFICIENT * (Desired_Room_Temperature - Outside_Temperature) + CONFIGURATION_HEATING_CURVE_PARALLEL_SHIFT) / 10L;
 		// Make sure output value is in the allowed water temperature range
 		if (Desired_Start_Water_Temperature < CONFIGURATION_HEATING_CURVE_MINIMUM_TEMPERATURE) Desired_Start_Water_Temperature = CONFIGURATION_HEATING_CURVE_MINIMUM_TEMPERATURE;
 		else if (Desired_Start_Water_Temperature > CONFIGURATION_HEATING_CURVE_MAXIMUM_TEMPERATURE) Desired_Start_Water_Temperature = CONFIGURATION_HEATING_CURVE_MAXIMUM_TEMPERATURE;
 		
 		// Gas burner control
-		if (Main_Temperature_Radiator_Start <= Desired_Start_Water_Temperature - CONFIGURATION_GAS_BURNER_TEMPERATURE_HYSTERESIS) RelayTurnOn(RELAY_ID_GAS_BURNER);
-		else if (Main_Temperature_Radiator_Start >= Desired_Start_Water_Temperature + CONFIGURATION_GAS_BURNER_TEMPERATURE_HYSTERESIS) RelayTurnOff(RELAY_ID_GAS_BURNER);
+		if (Radiator_Water_Start_Temperature <= Desired_Start_Water_Temperature - CONFIGURATION_GAS_BURNER_TEMPERATURE_HYSTERESIS) RelayTurnOn(RELAY_ID_GAS_BURNER);
+		else if (Radiator_Water_Start_Temperature >= Desired_Start_Water_Temperature + CONFIGURATION_GAS_BURNER_TEMPERATURE_HYSTERESIS) RelayTurnOff(RELAY_ID_GAS_BURNER);
 		
 		// TODO mixing valve control
 		
