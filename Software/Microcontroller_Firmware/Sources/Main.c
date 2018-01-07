@@ -5,6 +5,7 @@
 #include <ADC.h>
 #include <avr/io.h>
 #include <avr/interrupt.h>
+#include <Configuration.h>
 #include <Led.h>
 #include <Mixing_Valve.h>
 #include <Protocol.h>
@@ -36,6 +37,7 @@ static signed char Main_Temperature_Radiator_Return = 0;
 int main(void) // Can't use void return type because it triggers a warning
 {
 	unsigned char Is_WiFi_Successfully_Initialized, Is_Status_Led_On = 1;
+	signed char Desired_Start_Water_Temperature, Desired_Room_Temperature;
 	
 	// Initialize modules
 	LedInitialize();
@@ -59,10 +61,21 @@ int main(void) // Can't use void return type because it triggers a warning
 		// Sample all analog values
 		ADCTask();
 		
-		// Cache converted temperature values (conversion computations are cost a lot of cycles)
+		// Cache converted temperature values (conversion computations cost a lot of cycles)
 		Main_Temperature_Outside = TemperatureGetSensorValue(TEMPERATURE_SENSOR_ID_OUTSIDE);
 		Main_Temperature_Radiator_Start = TemperatureGetSensorValue(TEMPERATURE_SENSOR_ID_RADIATOR_START);
 		Main_Temperature_Radiator_Return = TemperatureGetSensorValue(TEMPERATURE_SENSOR_ID_RADIATOR_RETURN);
+		Desired_Room_Temperature = TemperatureGetDesiredRoomTemperature();
+		
+		// Compute required water start temperature
+		Desired_Start_Water_Temperature = (CONFIGURATION_HEATING_CURVE_COEFFICIENT * (Desired_Room_Temperature - Main_Temperature_Outside) + CONFIGURATION_HEATING_CURVE_PARALLEL_SHIFT) / 10L;
+		// Make sure output value is in the allowed water temperature range
+		if (Desired_Start_Water_Temperature < CONFIGURATION_HEATING_CURVE_MINIMUM_TEMPERATURE) Desired_Start_Water_Temperature = CONFIGURATION_HEATING_CURVE_MINIMUM_TEMPERATURE;
+		else if (Desired_Start_Water_Temperature > CONFIGURATION_HEATING_CURVE_MAXIMUM_TEMPERATURE) Desired_Start_Water_Temperature = CONFIGURATION_HEATING_CURVE_MAXIMUM_TEMPERATURE;
+		
+		// TODO boiler control
+		
+		// TODO mixing valve control
 		
 		// Make the mixing valve moves
 		MixingValveTask();

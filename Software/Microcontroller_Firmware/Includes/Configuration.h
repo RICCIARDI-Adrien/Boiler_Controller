@@ -27,4 +27,13 @@
 /** The reference temperature (in °C) the trimmers use when they are set to 0. */
 #define CONFIGURATION_TRIMMERS_REFERENCE_TEMPERATURE 20
 
+/** The curve coefficient (in °C) x10 to improve computation results. */
+#define CONFIGURATION_HEATING_CURVE_COEFFICIENT 14L
+/** The curve parallel shift (offset to vertically add to the curve), also x10 to be compatible with the curve coefficient. */
+#define CONFIGURATION_HEATING_CURVE_PARALLEL_SHIFT 150L
+/** Minimum temperature value (clamped after heating curve computation). */
+#define CONFIGURATION_HEATING_CURVE_MINIMUM_TEMPERATURE 10 // TODO determine a good value
+/** Maximum temperature value (clamped after heating curve computation). */
+#define CONFIGURATION_HEATING_CURVE_MAXIMUM_TEMPERATURE 70 // TODO determine a good value
+
 #endif
