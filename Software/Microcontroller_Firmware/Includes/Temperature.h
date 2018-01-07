@@ -32,4 +32,9 @@ signed char TemperatureGetSensorValue(TTemperatureSensorID Temperature_ID);
  */
 signed char TemperatureGetDesiredRoomTemperature(void);
 
+/** Turn on or off night mode (needed do know what trimmer to monitor for temperature change).
+ * @param Is_Night_Mode_Enabled Set to 1 to enable night mode, set to 0 to enable day mode.
+ */
+void TemperatureSetNightMode(unsigned char Is_Night_Mode_Enabled);
+
 #endif

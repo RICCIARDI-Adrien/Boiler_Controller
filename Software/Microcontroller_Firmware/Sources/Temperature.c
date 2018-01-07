@@ -4,7 +4,6 @@
  */
 #include <ADC.h>
 #include <Configuration.h>
-#include <Protocol.h>
 #include <Temperature.h>
 
 //-------------------------------------------------------------------------------------------------
@@ -98,7 +97,7 @@ signed char TemperatureGetDesiredRoomTemperature(void)
 	signed char Current_Trimmer_Temperature;
 	
 	// Change desired temperature if the trimmer corresponding to the current mode (night or day) has been changed
-	if (Temperature_Is_Night_Mode_Enabled)
+	if (Temperature_Is_Night_Mode_Enabled) // No need for mutex because it's a single byte value (so it is atomically accessed)
 	{
 		Current_Trimmer_Temperature = TemperatureGetNightTrimmerTemperature();
 		if (Current_Trimmer_Temperature == Previous_Night_Trimmer_Temperature) return Temperature_Desired_Room_Temperature;
@@ -115,9 +114,12 @@ signed char TemperatureGetDesiredRoomTemperature(void)
 		Previous_Day_Trimmer_Temperature = Current_Trimmer_Temperature;
 	}
 	
-	// Trimmer value changed, atomically set new desired temperature (this value can also be changed by Protocol module)
-	PROTOCOL_DISABLE_INTERRUPTS();
+	// Trimmer value changed, atomically set new desired temperature (this value can also be changed by Protocol module but there is no need for a mutex as this is a single byte value)
 	Temperature_Desired_Room_Temperature = Current_Trimmer_Temperature;
-	PROTOCOL_ENABLE_INTERRUPTS();
 	return Current_Trimmer_Temperature;
+}
+
+void TemperatureSetNightMode(unsigned char Is_Night_Mode_Enabled)
+{
+	Temperature_Is_Night_Mode_Enabled = Is_Night_Mode_Enabled;
 }
