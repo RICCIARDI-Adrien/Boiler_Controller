@@ -3,7 +3,45 @@
  * @author Adrien RICCIARDI
  */
 #include <ADC.h>
+#include <Configuration.h>
 #include <Temperature.h>
+
+//-------------------------------------------------------------------------------------------------
+// Private functions
+//-------------------------------------------------------------------------------------------------
+/** Get day trimmer selected temperature.
+ * @return The absolute temperature (in °C) indicated by the day trimmer.
+ */
+static inline signed char TemperatureGetDayTrimmerTemperature(void)
+{
+	signed long Temperature;
+	
+	Temperature = ADCGetLastSampledValue(ADC_CHANNEL_ID_DAY_TRIMMER);
+	
+	// Use a straight line representation to determine the Celsius temperature
+	// Datasheet tells that temperature is -4°C when trimmer resistance is 60ohm => measured voltage is 900mV => ADC value is 279
+	// We need a second point to determine the line equation : temperature is +4 when trimmer resistance is 100ohm => measured voltage is 1.269V => ADC value is 393
+	// Straight line equation is Celsius_Temperature = 0.070 * ADC_Value - 23.579, use x1000 fixed arithmetic to keep some precision
+	Temperature = ((70L * Temperature) - 23579L) / 1000;
+	return (signed char) (Temperature + CONFIGURATION_TRIMMERS_REFERENCE_TEMPERATURE);
+}
+
+/** Get night trimmer selected temperature.
+ * @return The absolute temperature (in °C) indicated by the night trimmer.
+ */
+static inline signed char TemperatureGetNightTrimmerTemperature(void)
+{
+	signed long Temperature;
+	
+	Temperature = ADCGetLastSampledValue(ADC_CHANNEL_ID_NIGHT_TRIMMER);
+	
+	// Use a straight line representation to determine the Celsius temperature
+	// Datasheet tells that temperature is 0°C when trimmer resistance is 5ohm => measured voltage is 100mV => ADC value is 31
+	// We need a second point to determine the line equation : temperature is +8 when trimmer resistance is 50ohm => measured voltage is 786mV => ADC value is 244
+	// Straight line equation is Celsius_Temperature = 0.038 * ADC_Value - 1.164, use x1000 fixed arithmetic to keep some precision
+	Temperature = ((38L * Temperature) - 1164L) / 1000;
+	return (signed char) (Temperature + CONFIGURATION_TRIMMERS_REFERENCE_TEMPERATURE);
+}
 
 //-------------------------------------------------------------------------------------------------
 // Public functions
