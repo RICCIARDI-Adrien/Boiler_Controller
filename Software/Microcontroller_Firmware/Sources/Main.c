@@ -60,9 +60,9 @@ int main(void) // Can't use void return type because it triggers a warning
 		ADCTask();
 		
 		// Cache converted temperature values (conversion computations are cost a lot of cycles)
-		Main_Temperature_Outside = TemperatureGetCelsiusValue(TEMPERATURE_ID_OUTSIDE);
-		Main_Temperature_Radiator_Start = TemperatureGetCelsiusValue(TEMPERATURE_ID_RADIATOR_START);
-		Main_Temperature_Radiator_Return = TemperatureGetCelsiusValue(TEMPERATURE_ID_RADIATOR_RETURN);
+		Main_Temperature_Outside = TemperatureGetSensorValue(TEMPERATURE_SENSOR_ID_OUTSIDE);
+		Main_Temperature_Radiator_Start = TemperatureGetSensorValue(TEMPERATURE_SENSOR_ID_RADIATOR_START);
+		Main_Temperature_Radiator_Return = TemperatureGetSensorValue(TEMPERATURE_SENSOR_ID_RADIATOR_RETURN);
 		
 		// Make the mixing valve moves
 		MixingValveTask();

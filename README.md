@@ -47,8 +47,8 @@ This board holds the microcontroller and the WiFi to UART bridge.
 ### Analog signals characteristics
 * Day trimmer : resistance variation from 50 to 110ohm.
 * Night trimmer : resistance variation from 0 to 60ohm.
-* Internal thermistor : resistance variation from 580 (+80°C) to 900ohm (-20°C).
-* External thermistor : resistance variation from 340 (+40°C) to 480ohm (-10°C).
+* Radiator water start thermistor : resistance variation from 580 (+80°C) to 900ohm (-20°C).
+* Outside thermistor : resistance variation from 340 (+40°C) to 480ohm (-10°C).
   
 Microcontroller uses a 2V precision voltage reference for the ADC module to gain more precision with small variation signals. All voltage dividers must be calculated as the highest variable resistance value results in a 2V maximum voltage on the ADC pin.
 

@@ -38,8 +38,8 @@ typedef enum
 typedef enum
 {
 	PROTOCOL_COMMAND_GET_FIRMWARE_VERSION,
-	PROTOCOL_COMMAND_GET_RAW_TEMPERATURES,
-	PROTOCOL_COMMAND_GET_CELSIUS_TEMPERATURES,
+	PROTOCOL_COMMAND_GET_SENSORS_RAW_TEMPERATURES,
+	PROTOCOL_COMMAND_GET_SENSORS_CELSIUS_TEMPERATURES,
 	PROTOCOL_COMMAND_GET_MIXING_VALVE_POSITION,
 	PROTOCOL_COMMAND_SET_MIXING_VALVE_MAXIMUM_MOVING_TIME,
 	PROTOCOL_COMMANDS_COUNT
@@ -164,7 +164,7 @@ static void ProtocolExecuteCommand(void)
 			Protocol_Command_Payload_Size = 1;
 			break;
 			
-		case PROTOCOL_COMMAND_GET_RAW_TEMPERATURES:
+		case PROTOCOL_COMMAND_GET_SENSORS_RAW_TEMPERATURES:
 			Pointer_Word = (unsigned short *) Protocol_Command_Payload_Buffer;
 			*Pointer_Word = ADCGetLastSampledValue(ADC_CHANNEL_ID_OUTSIDE_THERMISTOR);
 			Pointer_Word++;
@@ -172,10 +172,10 @@ static void ProtocolExecuteCommand(void)
 			Protocol_Command_Payload_Size = 4; // TODO add "retour" temperature
 			break;
 			
-		case PROTOCOL_COMMAND_GET_CELSIUS_TEMPERATURES:
-			Protocol_Command_Payload_Buffer[0] = (unsigned char) TemperatureGetCelsiusValue(TEMPERATURE_ID_OUTSIDE);
-			Protocol_Command_Payload_Buffer[1] = (unsigned char) TemperatureGetCelsiusValue(TEMPERATURE_ID_RADIATOR_START);
-			Protocol_Command_Payload_Buffer[2] = (unsigned char) TemperatureGetCelsiusValue(TEMPERATURE_ID_RADIATOR_RETURN);
+		case PROTOCOL_COMMAND_GET_SENSORS_CELSIUS_TEMPERATURES:
+			Protocol_Command_Payload_Buffer[0] = (unsigned char) TemperatureGetSensorValue(TEMPERATURE_SENSOR_ID_OUTSIDE);
+			Protocol_Command_Payload_Buffer[1] = (unsigned char) TemperatureGetSensorValue(TEMPERATURE_SENSOR_ID_RADIATOR_START);
+			Protocol_Command_Payload_Buffer[2] = (unsigned char) TemperatureGetSensorValue(TEMPERATURE_SENSOR_ID_RADIATOR_RETURN);
 			Protocol_Command_Payload_Size = 3;
 			break;
 			
@@ -207,8 +207,8 @@ ISR(USART_RX_vect)
 	static unsigned char Received_Command_Payload[PROTOCOL_COMMANDS_COUNT] =
 	{
 		0, // PROTOCOL_COMMAND_GET_FIRMWARE_VERSION
-		0, // PROTOCOL_COMMAND_GET_RAW_TEMPERATURES
-		0, // PROTOCOL_COMMAND_GET_CELSIUS_TEMPERATURES
+		0, // PROTOCOL_COMMAND_GET_SENSORS_RAW_TEMPERATURES
+		0, // PROTOCOL_COMMAND_GET_SENSORS_CELSIUS_TEMPERATURES
 		0 // PROTOCOL_COMMAND_GET_MIXING_VALVE_POSITION
 	};
 	unsigned char Byte;

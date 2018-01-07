@@ -11,20 +11,20 @@
 /** All existing temperature sensors. */
 typedef enum
 {
-	TEMPERATURE_ID_OUTSIDE, //<! External sensor temperature.
-	TEMPERATURE_ID_RADIATOR_START, //<! The pipe going to the radiators' temperature.
-	TEMPERATURE_ID_RADIATOR_RETURN, //<! The pipe coming from the radiators' temperature.
-	TEMPERATURE_IDS_COUNT
-} TTemperatureID;
+	TEMPERATURE_SENSOR_ID_OUTSIDE, //<! External sensor temperature.
+	TEMPERATURE_SENSOR_ID_RADIATOR_START, //<! The pipe going to the radiators' temperature.
+	TEMPERATURE_SENSOR_ID_RADIATOR_RETURN, //<! The pipe coming from the radiators' temperature.
+	TEMPERATURE_SENSOR_IDS_COUNT
+} TTemperatureSensorID;
 
 //-------------------------------------------------------------------------------------------------
 // Functions
 //-------------------------------------------------------------------------------------------------
-/** Convert a specific temperature to Celsius degrees.
- * @param Temperature_ID The temperature to get °C value.
+/** Convert a specific sensor temperature to Celsius degrees.
+ * @param Temperature_ID The sensor to get °C temperature value.
  * @return The temperature converted to °C.
  * @note Function will return -100 if the provided temperature ID is bad (to notify that something is wrong).
  */
-signed char TemperatureGetCelsiusValue(TTemperatureID Temperature_ID);
+signed char TemperatureGetSensorValue(TTemperatureSensorID Temperature_ID);
 
 #endif
