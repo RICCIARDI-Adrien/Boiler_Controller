@@ -24,4 +24,7 @@
 /** Mixing valve time in seconds to go from one side to the other side. */
 #define CONFIGURATION_MIXING_VALVE_MAXIMUM_MOVING_TIME 10 // TEST value
 
+/** The reference temperature (in °C) the trimmers use when they are set to 0. */
+#define CONFIGURATION_TRIMMERS_REFERENCE_TEMPERATURE 20
+
 #endif

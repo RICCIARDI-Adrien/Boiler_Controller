@@ -4,7 +4,17 @@
  */
 #include <ADC.h>
 #include <Configuration.h>
+#include <Protocol.h>
 #include <Temperature.h>
+
+//-------------------------------------------------------------------------------------------------
+// Private variables
+//-------------------------------------------------------------------------------------------------
+/** Tell if this is night or day. */
+static unsigned char Temperature_Is_Night_Mode_Enabled = 0;
+
+/** The current desired temperature (in °C). */
+static signed char Temperature_Desired_Room_Temperature = 0;
 
 //-------------------------------------------------------------------------------------------------
 // Private functions
@@ -80,4 +90,34 @@ signed char TemperatureGetSensorValue(TTemperatureSensorID Temperature_ID)
 	}
 	
 	return (signed char) Temperature;
+}
+
+signed char TemperatureGetDesiredRoomTemperature(void)
+{
+	static signed char Previous_Day_Trimmer_Temperature = 0, Previous_Night_Trimmer_Temperature = 0;
+	signed char Current_Trimmer_Temperature;
+	
+	// Change desired temperature if the trimmer corresponding to the current mode (night or day) has been changed
+	if (Temperature_Is_Night_Mode_Enabled)
+	{
+		Current_Trimmer_Temperature = TemperatureGetNightTrimmerTemperature();
+		if (Current_Trimmer_Temperature == Previous_Night_Trimmer_Temperature) return Temperature_Desired_Room_Temperature;
+		
+		// Keep new trimmer temperature to be able to determine next trimmer value change
+		Previous_Night_Trimmer_Temperature = Current_Trimmer_Temperature;
+	}
+	else
+	{
+		Current_Trimmer_Temperature = TemperatureGetDayTrimmerTemperature();
+		if (Current_Trimmer_Temperature == Previous_Day_Trimmer_Temperature) return Temperature_Desired_Room_Temperature;
+
+		// Keep new trimmer temperature to be able to determine next trimmer value change
+		Previous_Day_Trimmer_Temperature = Current_Trimmer_Temperature;
+	}
+	
+	// Trimmer value changed, atomically set new desired temperature (this value can also be changed by Protocol module)
+	PROTOCOL_DISABLE_INTERRUPTS();
+	Temperature_Desired_Room_Temperature = Current_Trimmer_Temperature;
+	PROTOCOL_ENABLE_INTERRUPTS();
+	return Current_Trimmer_Temperature;
 }

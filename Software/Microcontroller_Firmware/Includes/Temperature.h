@@ -27,4 +27,9 @@ typedef enum
  */
 signed char TemperatureGetSensorValue(TTemperatureSensorID Temperature_ID);
 
+/** Determine the desired room temperature according to trimmers position (taking night and day into account) and protocol command.
+ * @return The desired room temperature in °C.
+ */
+signed char TemperatureGetDesiredRoomTemperature(void);
+
 #endif
