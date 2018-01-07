@@ -43,6 +43,7 @@ typedef enum
 	PROTOCOL_COMMAND_GET_MIXING_VALVE_POSITION,
 	PROTOCOL_COMMAND_SET_MIXING_VALVE_MAXIMUM_MOVING_TIME,
 	PROTOCOL_COMMAND_SET_NIGHT_MODE,
+	PROTOCOL_COMMAND_SET_DESIRED_ROOM_TEMPERATURE,
 	PROTOCOL_COMMANDS_COUNT
 } TProtocolCommand;
 
@@ -193,6 +194,11 @@ static void ProtocolExecuteCommand(void)
 			
 		case PROTOCOL_COMMAND_SET_NIGHT_MODE:
 			TemperatureSetNightMode(Protocol_Command_Payload_Buffer[0]);
+			Protocol_Command_Payload_Size = 0;
+			break;
+			
+		case PROTOCOL_COMMAND_SET_DESIRED_ROOM_TEMPERATURE:
+			TemperatureSetDesiredRoomTemperature((signed char) Protocol_Command_Payload_Buffer[0]);
 			Protocol_Command_Payload_Size = 0;
 			break;
 			

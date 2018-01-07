@@ -32,6 +32,11 @@ signed char TemperatureGetSensorValue(TTemperatureSensorID Temperature_ID);
  */
 signed char TemperatureGetDesiredRoomTemperature(void);
 
+/** Set the desired room temperature. This value can be overwritten by a trimmer position change.
+ * @param Temperature The new desired room temperature.
+ */
+void TemperatureSetDesiredRoomTemperature(signed char Temperature);
+
 /** Turn on or off night mode (needed do know what trimmer to monitor for temperature change).
  * @param Is_Night_Mode_Enabled Set to 1 to enable night mode, set to 0 to enable day mode.
  */

@@ -119,6 +119,11 @@ signed char TemperatureGetDesiredRoomTemperature(void)
 	return Current_Trimmer_Temperature;
 }
 
+void TemperatureSetDesiredRoomTemperature(signed char Temperature)
+{
+	Temperature_Desired_Room_Temperature = Temperature;
+}
+
 void TemperatureSetNightMode(unsigned char Is_Night_Mode_Enabled)
 {
 	Temperature_Is_Night_Mode_Enabled = Is_Night_Mode_Enabled;
