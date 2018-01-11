@@ -13,9 +13,8 @@ typedef enum
 {
 	LED_ID_STATUS,
 	LED_ID_NETWORK_ERROR,
-	LED_ID_GAS_BURNER_ON,
-	LED_ID_PUMP_ON,
-	LED_ID_MIXING_VALVE_MOVING
+	LED_ID_LED_3,
+	LED_ID_LED_4
 } TLedID;
 
 //-------------------------------------------------------------------------------------------------

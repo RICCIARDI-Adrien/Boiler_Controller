@@ -15,7 +15,7 @@ void LedInitialize(void)
 	PORTD &= ~0x0C;
 	
 	// Set led ports as outputs
-	DDRB |= 0x07;
+	DDRB |= 0x03;
 	DDRD |= 0x0C;
 }
 
@@ -31,16 +31,12 @@ void LedTurnOn(TLedID Led_ID)
 			PORTD |= 0x08;
 			break;
 			
-		case LED_ID_GAS_BURNER_ON:
+		case LED_ID_LED_3:
 			PORTB |= 0x01;
 			break;
 			
-		case LED_ID_PUMP_ON:
+		case LED_ID_LED_4:
 			PORTB |= 0x02;
-			break;
-			
-		case LED_ID_MIXING_VALVE_MOVING:
-			PORTB |= 0x04;
 			break;
 			
 		default:
@@ -60,16 +56,12 @@ void LedTurnOff(TLedID Led_ID)
 			PORTD &= ~0x08;
 			break;
 			
-		case LED_ID_GAS_BURNER_ON:
+		case LED_ID_LED_3:
 			PORTB &= ~0x01;
 			break;
 			
-		case LED_ID_PUMP_ON:
+		case LED_ID_LED_4:
 			PORTB &= ~0x02;
-			break;
-			
-		case LED_ID_MIXING_VALVE_MOVING:
-			PORTB &= ~0x04;
 			break;
 			
 		default:
