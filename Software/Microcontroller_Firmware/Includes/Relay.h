@@ -13,8 +13,8 @@ typedef enum
 {
 	RELAY_ID_MIXING_VALVE_LEFT = 4, //!< Connected to PD4 pin.
 	RELAY_ID_MIXING_VALVE_RIGHT = 5, //!< Connected to PD5 pin.
-	RELAY_ID_GAS_BURNER = 6, //!< Connected to PD6 pin.
-	RELAY_ID_PUMP = 7 //!< Connected to PD7 pin.
+	RELAY_ID_PUMP = 6, //!< Connected to PD6 pin.
+	RELAY_ID_GAS_BURNER = 7 //!< Connected to PD7 pin.
 } TRelayID;
 
 //-------------------------------------------------------------------------------------------------
