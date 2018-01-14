@@ -18,9 +18,9 @@ static unsigned short ADC_Sampled_Values[ADC_CHANNEL_IDS_COUNT];
 void ADCInitialize(void)
 {
 	// Configure pins as analog
-	DDRC &= 0xF0; // Set pins as inputs
-	PORTC &= 0xF0; // Put pins in high impedance mode, so digital push-pull stage will not perturb the analog signal even when the pin is not selected as the multiplexer analog input
-	DIDR0 = 0x0F; // Disable digital input buffer for the used analog channels
+	DDRC &= 0xE0; // Set pins as inputs
+	PORTC &= 0xE0; // Put pins in high impedance mode, so digital push-pull stage will not perturb the analog signal even when the pin is not selected as the multiplexer analog input
+	DIDR0 = 0x1F; // Disable digital input buffer for the used analog channels
 	
 	// Configure the ADC module
 	ADMUX = 0; // Select AREF pin as voltage reference, right-adjust conversion result
