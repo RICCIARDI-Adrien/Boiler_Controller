@@ -50,22 +50,27 @@ This board holds the microcontroller and the WiFi to UART bridge.
 * Radiator water start thermistor : resistance variation from 580 (+80°C) to 900ohm (-20°C).
 * Outside thermistor : resistance variation from 340 (+40°C) to 480ohm (-10°C).
   
-Microcontroller uses a 2V precision voltage reference for the ADC module to gain more precision with small variation signals. All voltage dividers must be calculated as the highest variable resistance value results in a 2V maximum voltage on the ADC pin.
+Microcontroller uses a 3.3V precision voltage reference for the ADC module to gain more precision with small variation signals. All voltage dividers must be calculated as the highest variable resistance value results in a 3.3V maximum voltage on the ADC pin.
 
 ### Fuse value calculation
 AC/DC converter inrush current is 40A for less than 500us, so a temporized fuse is needed to allow the board to boot.  
 AC/DC converter maximum input current is 150mA @ 240V, but due to enormous inrush current a big fuse must be used. A 250V/2A fuse has been chosen because this is the fuse used on the VTX-214 demo board (http://www.farnell.com/datasheets/1878969.pdf).
 
 ## Software
-Use avr-gcc to build the microcontroller firmware.
 
-### Bootloader
-Microcontroller boots from bootloader space. Microcontroller boots from bootloader space. It starts by initializing the ESP8266 WiFi module to be able to communicate with the server. Even if the bootloader does not need to download a firmware, this step allows to use directly a classic UART from the firmware point of view (no need to care about ESP8266).  
+### Building
+Install `avr-gcc` to build the microcontroller firmware.
   
-Bootloader now checks for a flag stored in EEPROM telling if the firmware is valid. If the firmware is valid, bootloader jumps to firmware entry point. If not, bootloader waits for the server to download a valid firmware.  
+Go to `Software/Microcontroller_Firmware` and type :
+```
+make
+```
+to build the firmware. File `Boiler_Controller_Firmware.elf` will be created.
+
+### Flashing
+Firmware can be burnt to the microcontroller memory by connecting an AVR ISP programmer to the controller board ISP connector and typing the command :
+```
+make flash
+```
   
-During valid firmware waiting, bootloader can answer one firmware communication protocol command : "get version". Bootloader always answers "0" to this command whereas the firmware answers "1" or greater, this way the server knows when the microcontroller is stuck in bootloader mode and can send a new firmware.  
-  
-Bootloader won't wait indefinitely for the WiFi module to connect. If the connection takes too long, WiFi configuration is abandoned and the firmware (if present) is started. This way, boiler will be operational even without WiFi connection.  
-  
-Bootloader program contains the microcontroller fuses configuration.
+You can override the `PROGRAMMER_SERIAL_PORT` environment variable with the serial port your programmer is connected to.
