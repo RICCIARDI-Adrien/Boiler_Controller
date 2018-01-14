@@ -24,4 +24,10 @@
  */
 unsigned char ProtocolInitialize(void);
 
+/** Tell whether the boiler is running or idle.
+ * @return 0 if the boiler is idle,
+ * @return 1 if the boiler is running.
+ */
+unsigned char ProtocolIsBoilerRunning(void);
+
 #endif

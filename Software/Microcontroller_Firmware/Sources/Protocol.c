@@ -45,6 +45,7 @@ typedef enum
 	PROTOCOL_COMMAND_SET_NIGHT_MODE,
 	PROTOCOL_COMMAND_SET_DESIRED_ROOM_TEMPERATURE,
 	PROTOCOL_COMMAND_GET_TRIMMERS_RAW_VALUES,
+	PROTOCOL_COMMAND_SET_BOILER_RUNNING_MODE,
 	PROTOCOL_COMMANDS_COUNT
 } TProtocolCommand;
 
@@ -62,6 +63,9 @@ static unsigned char Protocol_Command_Payload_Buffer[PROTOCOL_PAYLOAD_MAXIMUM_SI
 static unsigned char Protocol_Command_Payload_Index;
 /** The command payload size in bytes (as well in reception as in transmission mode). */
 static unsigned char Protocol_Command_Payload_Size;
+
+/** Tell whether the boiler is currently running or idle. */
+static unsigned char Protocol_Is_Boiler_Running = 1; // automatically enable the boiler on power on
 
 //-------------------------------------------------------------------------------------------------
 // Private functions
@@ -211,6 +215,11 @@ static void ProtocolExecuteCommand(void)
 			Protocol_Command_Payload_Size = 4;
 			break;
 			
+		case PROTOCOL_COMMAND_SET_BOILER_RUNNING_MODE:
+			Protocol_Is_Boiler_Running = Protocol_Command_Payload_Buffer[0];
+			Protocol_Command_Payload_Size = 0;
+			break;
+			
 		// Unknown command, should not get here
 		default:
 			break;
@@ -355,4 +364,9 @@ unsigned char ProtocolInitialize(void)
 	PROTOCOL_ENABLE_INTERRUPTS();
 	
 	return 1;
+}
+
+unsigned char ProtocolIsBoilerRunning(void)
+{
+	return Protocol_Is_Boiler_Running;
 }
