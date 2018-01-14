@@ -61,11 +61,11 @@ AC/DC converter maximum input current is 150mA @ 240V, but due to enormous inrus
 ### Building
 Install `avr-gcc` to build the microcontroller firmware.
   
-Go to `Software/Microcontroller_Firmware` and type :
+Go to `Software/Microcontroller_Firmware` directory and type the following command to build the firmware :
 ```
 make
 ```
-to build the firmware. File `Boiler_Controller_Firmware.elf` will be created.
+File `Boiler_Controller_Firmware.elf` will be created.
 
 ### Flashing
 Firmware can be burnt to the microcontroller memory by connecting an AVR ISP programmer to the controller board ISP connector and typing the command :
