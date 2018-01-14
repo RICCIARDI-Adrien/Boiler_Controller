@@ -4,14 +4,12 @@
  */
 #include <ADC.h>
 #include <Configuration.h>
+#include <Protocol.h>
 #include <Temperature.h>
 
 //-------------------------------------------------------------------------------------------------
 // Private variables
 //-------------------------------------------------------------------------------------------------
-/** Tell if this is night or day. */
-static unsigned char Temperature_Is_Night_Mode_Enabled = 0;
-
 /** The current desired temperature (in °C). */
 static signed char Temperature_Desired_Room_Temperature = 0;
 
@@ -97,7 +95,7 @@ signed char TemperatureGetDesiredRoomTemperature(void)
 	signed char Current_Trimmer_Temperature;
 	
 	// Change desired temperature if the trimmer corresponding to the current mode (night or day) has been changed
-	if (Temperature_Is_Night_Mode_Enabled) // No need for mutex because it's a single byte value (so it is atomically accessed)
+	if (ProtocolIsNightModeEnabled())
 	{
 		Current_Trimmer_Temperature = TemperatureGetNightTrimmerTemperature();
 		if (Current_Trimmer_Temperature == Previous_Night_Trimmer_Temperature) return Temperature_Desired_Room_Temperature;
@@ -122,9 +120,4 @@ signed char TemperatureGetDesiredRoomTemperature(void)
 void TemperatureSetDesiredRoomTemperature(signed char Temperature)
 {
 	Temperature_Desired_Room_Temperature = Temperature;
-}
-
-void TemperatureSetNightMode(unsigned char Is_Night_Mode_Enabled)
-{
-	Temperature_Is_Night_Mode_Enabled = Is_Night_Mode_Enabled;
 }

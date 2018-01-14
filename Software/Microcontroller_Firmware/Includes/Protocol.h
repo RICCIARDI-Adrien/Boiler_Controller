@@ -30,4 +30,10 @@ unsigned char ProtocolInitialize(void);
  */
 unsigned char ProtocolIsBoilerRunning(void);
 
+/** Tell whether this is night or day. This allows to select different temperature settings according to the time.
+ * @return 0 if this is day,
+ * @return 1 if this is night.
+ */
+unsigned char ProtocolIsNightModeEnabled(void);
+
 #endif

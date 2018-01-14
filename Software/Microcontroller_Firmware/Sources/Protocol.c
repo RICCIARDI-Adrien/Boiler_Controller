@@ -66,6 +66,9 @@ static unsigned char Protocol_Command_Payload_Size;
 /** Tell whether the boiler is currently running or idle. */
 static unsigned char Protocol_Is_Boiler_Running = 1; // automatically enable the boiler on power on
 
+/** Tell if this is night or day. */
+static unsigned char Protocol_Is_Night_Mode_Enabled = 0;
+
 //-------------------------------------------------------------------------------------------------
 // Private functions
 //-------------------------------------------------------------------------------------------------
@@ -191,7 +194,7 @@ static void ProtocolExecuteCommand(void)
 			break;
 			
 		case PROTOCOL_COMMAND_SET_NIGHT_MODE:
-			TemperatureSetNightMode(Protocol_Command_Payload_Buffer[0]);
+			Protocol_Is_Night_Mode_Enabled = Protocol_Command_Payload_Buffer[0];
 			Protocol_Command_Payload_Size = 0;
 			break;
 			
@@ -362,4 +365,9 @@ unsigned char ProtocolInitialize(void)
 unsigned char ProtocolIsBoilerRunning(void)
 {
 	return Protocol_Is_Boiler_Running;
+}
+
+unsigned char ProtocolIsNightModeEnabled(void)
+{
+	return Protocol_Is_Night_Mode_Enabled;
 }
