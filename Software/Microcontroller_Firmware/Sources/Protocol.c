@@ -44,6 +44,7 @@ typedef enum
 	PROTOCOL_COMMAND_SET_MIXING_VALVE_MAXIMUM_MOVING_TIME,
 	PROTOCOL_COMMAND_SET_NIGHT_MODE,
 	PROTOCOL_COMMAND_SET_DESIRED_ROOM_TEMPERATURE,
+	PROTOCOL_COMMAND_GET_TRIMMERS_RAW_VALUES,
 	PROTOCOL_COMMANDS_COUNT
 } TProtocolCommand;
 
@@ -200,6 +201,14 @@ static void ProtocolExecuteCommand(void)
 		case PROTOCOL_COMMAND_SET_DESIRED_ROOM_TEMPERATURE:
 			TemperatureSetDesiredRoomTemperature((signed char) Protocol_Command_Payload_Buffer[0]);
 			Protocol_Command_Payload_Size = 0;
+			break;
+			
+		case PROTOCOL_COMMAND_GET_TRIMMERS_RAW_VALUES:
+			Pointer_Word = (unsigned short *) Protocol_Command_Payload_Buffer;
+			*Pointer_Word = ADCGetLastSampledValue(ADC_CHANNEL_ID_DAY_TRIMMER);
+			Pointer_Word++;
+			*Pointer_Word = ADCGetLastSampledValue(ADC_CHANNEL_ID_NIGHT_TRIMMER);
+			Protocol_Command_Payload_Size = 4;
 			break;
 			
 		// Unknown command, should not get here
