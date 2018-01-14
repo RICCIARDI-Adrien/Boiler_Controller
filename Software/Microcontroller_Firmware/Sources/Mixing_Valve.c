@@ -6,7 +6,6 @@
 #include <Mixing_Valve.h>
 #include <Protocol.h>
 #include <Relay.h>
-#include <util/delay.h>
 
 //-------------------------------------------------------------------------------------------------
 // Private variables
@@ -24,18 +23,6 @@ static unsigned short Mixing_Valve_Remaining_Moving_Time = 0;
 //-------------------------------------------------------------------------------------------------
 // Public functions
 //-------------------------------------------------------------------------------------------------
-void MixingValveInitialize(void)
-{
-	// Make sure the valve is in the right position
-	MixingValveSetPosition(MIXING_VALVE_POSITION_RIGHT);
-	
-	while (Mixing_Valve_Current_Position != MIXING_VALVE_POSITION_RIGHT)
-	{
-		MixingValveTask();
-		_delay_ms(1000);
-	}
-}
-
 // No need for mutex, value is one byte wide only (and even if this is the previous value just before an update that is read it's not a problem)
 TMixingValvePosition MixingValveGetPosition(void)
 {

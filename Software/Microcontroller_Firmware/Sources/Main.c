@@ -37,7 +37,6 @@ int main(void) // Can't use void return type because it triggers a warning
 	LedTurnOn(LED_ID_STATUS); // Turn status led on to tell controller is booting
 	ADCInitialize();
 	RelayInitialize();
-	MixingValveInitialize();
 	Is_WiFi_Successfully_Initialized = ProtocolInitialize();
 	
 	// Enable interrupts now that all modules have been configured
@@ -46,31 +45,43 @@ int main(void) // Can't use void return type because it triggers a warning
 	// Tell whether network is working
 	if (!Is_WiFi_Successfully_Initialized) LedTurnOn(LED_ID_NETWORK_ERROR);
 	
-	// Start pump
-	RelayTurnOn(RELAY_ID_PUMP);
-	
 	while (1)
 	{
 		// Sample all analog values
 		ADCTask();
 		
-		// Cache converted temperature values (conversion computations cost a lot of cycles)
-		Outside_Temperature = TemperatureGetSensorValue(TEMPERATURE_SENSOR_ID_OUTSIDE);
-		Radiator_Water_Start_Temperature = TemperatureGetSensorValue(TEMPERATURE_SENSOR_ID_RADIATOR_START);
-		Radiator_Water_Return_Temperature = TemperatureGetSensorValue(TEMPERATURE_SENSOR_ID_RADIATOR_RETURN);
-		Desired_Room_Temperature = TemperatureGetDesiredRoomTemperature();
-		
-		// Compute required water start temperature
-		Desired_Start_Water_Temperature = (CONFIGURATION_HEATING_CURVE_COEFFICIENT * (Desired_Room_Temperature - Outside_Temperature) + CONFIGURATION_HEATING_CURVE_PARALLEL_SHIFT) / 10L;
-		// Make sure output value is in the allowed water temperature range
-		if (Desired_Start_Water_Temperature < CONFIGURATION_HEATING_CURVE_MINIMUM_TEMPERATURE) Desired_Start_Water_Temperature = CONFIGURATION_HEATING_CURVE_MINIMUM_TEMPERATURE;
-		else if (Desired_Start_Water_Temperature > CONFIGURATION_HEATING_CURVE_MAXIMUM_TEMPERATURE) Desired_Start_Water_Temperature = CONFIGURATION_HEATING_CURVE_MAXIMUM_TEMPERATURE;
-		
-		// Gas burner control
-		if (Radiator_Water_Start_Temperature <= Desired_Start_Water_Temperature - CONFIGURATION_GAS_BURNER_TEMPERATURE_HYSTERESIS) RelayTurnOn(RELAY_ID_GAS_BURNER);
-		else if (Radiator_Water_Start_Temperature >= Desired_Start_Water_Temperature + CONFIGURATION_GAS_BURNER_TEMPERATURE_HYSTERESIS) RelayTurnOff(RELAY_ID_GAS_BURNER);
-		
-		// TODO mixing valve control
+		if (ProtocolIsBoilerRunning())
+		{
+			// Cache converted temperature values (conversion computations cost a lot of cycles)
+			Outside_Temperature = TemperatureGetSensorValue(TEMPERATURE_SENSOR_ID_OUTSIDE);
+			Radiator_Water_Start_Temperature = TemperatureGetSensorValue(TEMPERATURE_SENSOR_ID_RADIATOR_START);
+			Radiator_Water_Return_Temperature = TemperatureGetSensorValue(TEMPERATURE_SENSOR_ID_RADIATOR_RETURN);
+			Desired_Room_Temperature = TemperatureGetDesiredRoomTemperature();
+			
+			// Compute required water start temperature
+			Desired_Start_Water_Temperature = (CONFIGURATION_HEATING_CURVE_COEFFICIENT * (Desired_Room_Temperature - Outside_Temperature) + CONFIGURATION_HEATING_CURVE_PARALLEL_SHIFT) / 10L;
+			// Make sure output value is in the allowed water temperature range
+			if (Desired_Start_Water_Temperature < CONFIGURATION_HEATING_CURVE_MINIMUM_TEMPERATURE) Desired_Start_Water_Temperature = CONFIGURATION_HEATING_CURVE_MINIMUM_TEMPERATURE;
+			else if (Desired_Start_Water_Temperature > CONFIGURATION_HEATING_CURVE_MAXIMUM_TEMPERATURE) Desired_Start_Water_Temperature = CONFIGURATION_HEATING_CURVE_MAXIMUM_TEMPERATURE;
+			
+			// Gas burner control
+			if (Radiator_Water_Start_Temperature <= Desired_Start_Water_Temperature - CONFIGURATION_GAS_BURNER_TEMPERATURE_HYSTERESIS) RelayTurnOn(RELAY_ID_GAS_BURNER);
+			else if (Radiator_Water_Start_Temperature >= Desired_Start_Water_Temperature + CONFIGURATION_GAS_BURNER_TEMPERATURE_HYSTERESIS) RelayTurnOff(RELAY_ID_GAS_BURNER);
+			
+			// Start pump
+			RelayTurnOn(RELAY_ID_PUMP);
+			
+			// Progressively send water to the radiators (assume valve is on the left position, which is set when boiler is stopped)
+			MixingValveSetPosition(MIXING_VALVE_POSITION_RIGHT);
+		}
+		else
+		{
+			// Stop pump
+			RelayTurnOff(RELAY_ID_PUMP);
+			
+			// Close radiators water circuit to send cold water only to the gas burner on next run
+			MixingValveSetPosition(MIXING_VALVE_POSITION_LEFT);
+		}
 		
 		// Make the mixing valve moves
 		MixingValveTask();

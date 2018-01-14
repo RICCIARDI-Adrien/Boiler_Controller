@@ -19,11 +19,6 @@ typedef enum
 //-------------------------------------------------------------------------------------------------
 // Functions
 //-------------------------------------------------------------------------------------------------
-/** Put valve in a known position (controller board has no way to know where the valve is).
- * @note This function takes a fairly amount of time because valve is moving very slowly.
- */
-void MixingValveInitialize(void);
-
 /** Move the mixing valve to the specified position.
  * @param Position The position the mixing valve must reach.
  * @note Function does nothing if the mixing valve is in the expected position yet.
