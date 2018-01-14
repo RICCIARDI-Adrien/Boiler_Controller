@@ -11,7 +11,7 @@
 // Private variables
 //-------------------------------------------------------------------------------------------------
 /** The current position. */
-static TMixingValvePosition Mixing_Valve_Current_Position = MIXING_VALVE_POSITION_LEFT; // Assume valve is located left to use the maximum moving time to put it to right position
+static TMixingValvePosition Mixing_Valve_Current_Position = MIXING_VALVE_POSITION_LEFT; // Assume valve is located left as it should have been left by "idle mode" code
 /** The position the valve must reach. */
 static TMixingValvePosition Mixing_Valve_Target_Position;
 
@@ -83,12 +83,6 @@ void MixingValveSetPosition(TMixingValvePosition Position)
 		default:
 			break;
 	}
-}
-
-void MixingValveSetMaximumMovingTime(unsigned short Maximum_Moving_Time)
-{
-	// It is safe to directly set this variable because Mixing_Valve_Remaining_Moving_Time access is protected in the required functions
-	Mixing_Valve_Remaining_Moving_Time = Maximum_Moving_Time;
 }
 
 void MixingValveTask(void)

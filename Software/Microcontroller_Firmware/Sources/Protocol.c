@@ -41,7 +41,6 @@ typedef enum
 	PROTOCOL_COMMAND_GET_SENSORS_RAW_TEMPERATURES,
 	PROTOCOL_COMMAND_GET_SENSORS_CELSIUS_TEMPERATURES,
 	PROTOCOL_COMMAND_GET_MIXING_VALVE_POSITION,
-	PROTOCOL_COMMAND_SET_MIXING_VALVE_MAXIMUM_MOVING_TIME,
 	PROTOCOL_COMMAND_SET_NIGHT_MODE,
 	PROTOCOL_COMMAND_SET_DESIRED_ROOM_TEMPERATURE,
 	PROTOCOL_COMMAND_GET_TRIMMERS_RAW_VALUES,
@@ -189,12 +188,6 @@ static void ProtocolExecuteCommand(void)
 		case PROTOCOL_COMMAND_GET_MIXING_VALVE_POSITION:
 			Protocol_Command_Payload_Buffer[0] = MixingValveGetPosition();
 			Protocol_Command_Payload_Size = 1;
-			break;
-			
-		case PROTOCOL_COMMAND_SET_MIXING_VALVE_MAXIMUM_MOVING_TIME:
-			Pointer_Word = (unsigned short *) Protocol_Command_Payload_Buffer;
-			MixingValveSetMaximumMovingTime(*Pointer_Word);
-			Protocol_Command_Payload_Size = 0;
 			break;
 			
 		case PROTOCOL_COMMAND_SET_NIGHT_MODE:
