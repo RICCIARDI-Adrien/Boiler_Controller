@@ -47,7 +47,7 @@ static inline signed char TemperatureGetNightTrimmerTemperature(void)
 	// We need a second point to determine the line equation : temperature is +8 when trimmer resistance is 50ohm => measured voltage is 786mV => ADC value is 244
 	// Straight line equation is Celsius_Temperature = 0.038 * ADC_Value - 1.164, use x1000 fixed arithmetic to keep some precision
 	Temperature = ((38L * Temperature) - 1164L) / 1000;
-	return (signed char) (Temperature + CONFIGURATION_TRIMMERS_REFERENCE_TEMPERATURE);
+	return (signed char) (TemperatureGetDayTrimmerTemperature() - Temperature);
 }
 
 //-------------------------------------------------------------------------------------------------
