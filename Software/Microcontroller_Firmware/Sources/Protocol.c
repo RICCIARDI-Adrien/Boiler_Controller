@@ -42,6 +42,7 @@ typedef enum
 	PROTOCOL_COMMAND_GET_SENSORS_CELSIUS_TEMPERATURES,
 	PROTOCOL_COMMAND_GET_MIXING_VALVE_POSITION,
 	PROTOCOL_COMMAND_SET_NIGHT_MODE,
+	PROTOCOL_COMMAND_GET_DESIRED_ROOM_TEMPERATURE,
 	PROTOCOL_COMMAND_SET_DESIRED_ROOM_TEMPERATURE,
 	PROTOCOL_COMMAND_GET_TRIMMERS_RAW_VALUES,
 	PROTOCOL_COMMAND_SET_BOILER_RUNNING_MODE,
@@ -64,7 +65,7 @@ static unsigned char Protocol_Command_Payload_Index;
 static unsigned char Protocol_Command_Payload_Size;
 
 /** Tell whether the boiler is currently running or idle. */
-static unsigned char Protocol_Is_Boiler_Running = 1; // automatically enable the boiler on power on
+static unsigned char Protocol_Is_Boiler_Running = 1; // Automatically enable the boiler on power on
 
 /** Tell if this is night or day. */
 static unsigned char Protocol_Is_Night_Mode_Enabled = 0;
@@ -196,6 +197,11 @@ static void ProtocolExecuteCommand(void)
 		case PROTOCOL_COMMAND_SET_NIGHT_MODE:
 			Protocol_Is_Night_Mode_Enabled = Protocol_Command_Payload_Buffer[0];
 			Protocol_Command_Payload_Size = 0;
+			break;
+			
+		case PROTOCOL_COMMAND_GET_DESIRED_ROOM_TEMPERATURE:
+			Protocol_Command_Payload_Buffer[0] = TemperatureGetDesiredRoomTemperature();
+			Protocol_Command_Payload_Size = 1;
 			break;
 			
 		case PROTOCOL_COMMAND_SET_DESIRED_ROOM_TEMPERATURE:
