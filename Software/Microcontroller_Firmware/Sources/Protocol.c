@@ -185,8 +185,7 @@ static void ProtocolExecuteCommand(void)
 		case PROTOCOL_COMMAND_GET_SENSORS_CELSIUS_TEMPERATURES:
 			Protocol_Command_Payload_Buffer[0] = (unsigned char) TemperatureGetSensorValue(TEMPERATURE_SENSOR_ID_OUTSIDE);
 			Protocol_Command_Payload_Buffer[1] = (unsigned char) TemperatureGetSensorValue(TEMPERATURE_SENSOR_ID_RADIATOR_START);
-			Protocol_Command_Payload_Buffer[2] = (unsigned char) TemperatureGetSensorValue(TEMPERATURE_SENSOR_ID_RADIATOR_RETURN);
-			Protocol_Command_Payload_Size = 3;
+			Protocol_Command_Payload_Size = 2;
 			break;
 			
 		case PROTOCOL_COMMAND_GET_MIXING_VALVE_POSITION:
