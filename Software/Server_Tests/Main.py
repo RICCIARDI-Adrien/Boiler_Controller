@@ -35,14 +35,18 @@ while True:
 			# Display Celsius temperatures
 			externalTemperature, waterStartTemperature = BoilerController.getSensorsCelsiusTemperatures()
 			print "Celsius external temperature :", externalTemperature, ", Celsius water start temperature :", waterStartTemperature
-
-			# Display mixing valve current position
-			valvePosition = BoilerController.getMixingValvePosition()
-			print "Mixing valve current position :", valvePosition
 			
 			# Display desired temperature
 			temperature = BoilerController.getDesiredRoomTemperature()
 			print "Desired room temperature :", temperature
+			
+			# Display target start water temperature (the temperature to reach)
+			temperature = BoilerController.getTargetStartWaterTemperature()
+			print "Target start water temperature :", temperature
+
+			# Display mixing valve current position
+			valvePosition = BoilerController.getMixingValvePosition()
+			print "Mixing valve current position :", valvePosition
 			
 			dayTrimmerValue, nightTrimmerValue = BoilerController.getTrimmersRawValues()
 			print "Raw day trimmer value :", hex(dayTrimmerValue), ", raw night trimmer value :", hex(nightTrimmerValue)
