@@ -80,7 +80,7 @@ def getSensorsCelsiusTemperatures():
 	# Python is so shitty that it does not even know how to do a cast as simple as unsigned char to char
 	if externalTemperature > 127:
 		externalTemperature = -1 * (256 - externalTemperature)
-	if startTemperature > 127:
+	if waterStartTemperature > 127:
 		waterStartTemperature = -1 * (256 - waterStartTemperature)
 	return externalTemperature, waterStartTemperature
 	
