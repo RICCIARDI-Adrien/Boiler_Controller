@@ -42,10 +42,13 @@ while True:
 			
 			# Display desired temperature
 			temperature = BoilerController.getDesiredRoomTemperature()
-			print "Desired room temperature :", valvePosition
+			print "Desired room temperature :", temperature
 			
 			dayTrimmerValue, nightTrimmerValue = BoilerController.getTrimmersRawValues()
 			print "Raw day trimmer value :", hex(dayTrimmerValue), ", raw night trimmer value :", hex(nightTrimmerValue)
+			
+			print "-----------------------------------------------------------"
+			time.sleep(2)
 	except:
 		print "Controller board disconnected."
 	
