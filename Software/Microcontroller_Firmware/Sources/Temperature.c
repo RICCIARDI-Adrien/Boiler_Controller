@@ -13,6 +13,9 @@
 /** The current desired temperature (in °C). */
 static signed char Temperature_Desired_Room_Temperature = 0;
 
+/** The start water temperature to reach (in °C). */
+static signed char Temperature_Target_Start_Water_Temperature = 0;
+
 //-------------------------------------------------------------------------------------------------
 // Private functions
 //-------------------------------------------------------------------------------------------------
@@ -120,4 +123,28 @@ signed char TemperatureGetDesiredRoomTemperature(void)
 void TemperatureSetDesiredRoomTemperature(signed char Temperature)
 {
 	Temperature_Desired_Room_Temperature = Temperature;
+}
+
+signed char TemperatureGetTargetStartWaterTemperature(void)
+{
+	return Temperature_Target_Start_Water_Temperature;
+}
+
+void TemperatureTask(void)
+{
+	signed char Outside_Temperature, Desired_Room_Temperature, Target_Start_Water_Temperature;
+	
+	// Use some more variables to make the heating curve computation easier to understand
+	Outside_Temperature = TemperatureGetSensorValue(TEMPERATURE_SENSOR_ID_OUTSIDE);
+	Desired_Room_Temperature = TemperatureGetDesiredRoomTemperature();
+	
+	// Compute target water start temperature
+	Target_Start_Water_Temperature = (CONFIGURATION_HEATING_CURVE_COEFFICIENT * (Desired_Room_Temperature - Outside_Temperature) + CONFIGURATION_HEATING_CURVE_PARALLEL_SHIFT) / 10L;
+	
+	// Make sure output value is in the allowed water temperature range
+	if (Target_Start_Water_Temperature < CONFIGURATION_HEATING_CURVE_MINIMUM_TEMPERATURE) Target_Start_Water_Temperature = CONFIGURATION_HEATING_CURVE_MINIMUM_TEMPERATURE;
+	else if (Target_Start_Water_Temperature > CONFIGURATION_HEATING_CURVE_MAXIMUM_TEMPERATURE) Target_Start_Water_Temperature = CONFIGURATION_HEATING_CURVE_MAXIMUM_TEMPERATURE;
+	
+	// Update the shared variable now that its value is fully computed
+	Temperature_Target_Start_Water_Temperature = Target_Start_Water_Temperature;
 }

@@ -42,4 +42,12 @@ void TemperatureSetDesiredRoomTemperature(signed char Temperature);
  */
 void TemperatureSetNightMode(unsigned char Is_Night_Mode_Enabled);
 
+/** Get the last computed start water temperature to reach.
+ * @return The target start water temperature.
+ */
+signed char TemperatureGetTargetStartWaterTemperature(void);
+
+/** Compute the target start water temperature using the heating curve. Must be called periodically. */
+void TemperatureTask(void);
+
 #endif
