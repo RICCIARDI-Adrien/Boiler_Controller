@@ -278,13 +278,12 @@ ISR(USART_RX_vect)
 			break;
 			
 		case PROTOCOL_STATE_RECEIVE_PAYLOAD:
+			// Receive next byte
+			Protocol_Command_Payload_Buffer[Protocol_Command_Payload_Index] = Byte;
+			Protocol_Command_Payload_Index++;
+			
 			// Execute command if the payload is fully received
 			if (Protocol_Command_Payload_Index == Protocol_Command_Payload_Size) ProtocolExecuteCommand();
-			else
-			{
-				Protocol_Command_Payload_Buffer[Protocol_Command_Payload_Index] = UDR0;
-				Protocol_Command_Payload_Index++;
-			}
 			break;
 		
 		// Unknown state, do nothing
