@@ -28,9 +28,9 @@
 #define CONFIGURATION_TRIMMERS_REFERENCE_TEMPERATURE 20
 
 /** The curve coefficient (in °C) x10 to improve computation results. */
-#define CONFIGURATION_HEATING_CURVE_COEFFICIENT 14L
+#define CONFIGURATION_HEATING_CURVE_COEFFICIENT 18L
 /** The curve parallel shift (offset to vertically add to the curve), also x10 to be compatible with the curve coefficient. */
-#define CONFIGURATION_HEATING_CURVE_PARALLEL_SHIFT 150L
+#define CONFIGURATION_HEATING_CURVE_PARALLEL_SHIFT 200L
 /** Minimum temperature value (clamped after heating curve computation). */
 #define CONFIGURATION_HEATING_CURVE_MINIMUM_TEMPERATURE 10 // TODO determine a good value
 /** Maximum temperature value (clamped after heating curve computation). */
@@ -38,5 +38,8 @@
 
 /** Add or subtract this amount of degrees to the gas burner temperature to reach to avoid turning the gas burner on or off too often. */
 #define CONFIGURATION_GAS_BURNER_TEMPERATURE_HYSTERESIS 5
+
+/** How many ADC samples to use to compute the moving average value. */
+#define CONFIGURATION_ADC_MOVING_AVERAGE_SAMPLES_COUNT 5
 
 #endif
