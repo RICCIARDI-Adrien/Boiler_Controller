@@ -1,6 +1,5 @@
-#!/usr/bin/python
 ## @file BoilerController.py
-## Allow to send command though WiFi to the boiler controller microcontroller.
+## Allow to send command through WiFi to the boiler controller microcontroller.
 ## @author Adrien RICCIARDI
 import socket
 import struct
