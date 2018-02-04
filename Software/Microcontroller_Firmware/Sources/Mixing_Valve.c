@@ -4,7 +4,6 @@
  */
 #include <Configuration.h>
 #include <Mixing_Valve.h>
-#include <Protocol.h>
 #include <Relay.h>
 
 //-------------------------------------------------------------------------------------------------
@@ -15,8 +14,6 @@ static TMixingValvePosition Mixing_Valve_Current_Position = MIXING_VALVE_POSITIO
 /** The position the valve must reach. */
 static TMixingValvePosition Mixing_Valve_Target_Position;
 
-/** How many seconds the valve needs to travel from one side to the other. */
-static unsigned short Mixing_Valve_Maximum_Moving_Time = CONFIGURATION_MIXING_VALVE_MAXIMUM_MOVING_TIME;
 /** How many seconds the mixing valve task must wait before stopping the relays. */
 static unsigned short Mixing_Valve_Remaining_Moving_Time = 0;
 
@@ -32,15 +29,8 @@ TMixingValvePosition MixingValveGetPosition(void)
 // No need for mutex because this function is called sequentially with mixing valve task function
 void MixingValveSetPosition(TMixingValvePosition Position)
 {
-	unsigned short Maximum_Moving_Time;
-	
 	// Nothing to do if the valve is in the desired position yet
 	if (Position == Mixing_Valve_Current_Position) return;
-	
-	// Access moving time value through a "mutex" because this value can be changed at any time by the protocol module
-	PROTOCOL_DISABLE_INTERRUPTS();
-	Maximum_Moving_Time = Mixing_Valve_Maximum_Moving_Time;
-	PROTOCOL_ENABLE_INTERRUPTS();
 	
 	// Compute the required moving time and activate the needed relays
 	switch (Position)
@@ -50,8 +40,8 @@ void MixingValveSetPosition(TMixingValvePosition Position)
 			RelayTurnOn(RELAY_ID_MIXING_VALVE_LEFT);
 			Mixing_Valve_Target_Position = MIXING_VALVE_POSITION_LEFT;
 			// Compute the needed moving time
-			if (Mixing_Valve_Current_Position == MIXING_VALVE_POSITION_CENTER) Mixing_Valve_Remaining_Moving_Time = Maximum_Moving_Time / 2; // Go from center to left
-			else Mixing_Valve_Remaining_Moving_Time = Maximum_Moving_Time; // Go from right to left
+			if (Mixing_Valve_Current_Position == MIXING_VALVE_POSITION_CENTER) Mixing_Valve_Remaining_Moving_Time = CONFIGURATION_MIXING_VALVE_MAXIMUM_MOVING_TIME / 2; // Go from center to left
+			else Mixing_Valve_Remaining_Moving_Time = CONFIGURATION_MIXING_VALVE_MAXIMUM_MOVING_TIME; // Go from right to left
 			break;
 			
 		case MIXING_VALVE_POSITION_CENTER:
@@ -67,7 +57,7 @@ void MixingValveSetPosition(TMixingValvePosition Position)
 				RelayTurnOn(RELAY_ID_MIXING_VALVE_LEFT);
 				Mixing_Valve_Target_Position = MIXING_VALVE_POSITION_CENTER;
 			}
-			Mixing_Valve_Remaining_Moving_Time = Maximum_Moving_Time / 2;
+			Mixing_Valve_Remaining_Moving_Time = CONFIGURATION_MIXING_VALVE_MAXIMUM_MOVING_TIME / 2;
 			break;
 			
 		case MIXING_VALVE_POSITION_RIGHT:
@@ -75,8 +65,8 @@ void MixingValveSetPosition(TMixingValvePosition Position)
 			RelayTurnOn(RELAY_ID_MIXING_VALVE_RIGHT);
 			Mixing_Valve_Target_Position = MIXING_VALVE_POSITION_RIGHT;
 			// Compute the needed moving time
-			if (Mixing_Valve_Current_Position == MIXING_VALVE_POSITION_CENTER) Mixing_Valve_Remaining_Moving_Time = Maximum_Moving_Time / 2; // Go from center to right
-			else Mixing_Valve_Remaining_Moving_Time = Maximum_Moving_Time; // Go from left to right
+			if (Mixing_Valve_Current_Position == MIXING_VALVE_POSITION_CENTER) Mixing_Valve_Remaining_Moving_Time = CONFIGURATION_MIXING_VALVE_MAXIMUM_MOVING_TIME / 2; // Go from center to right
+			else Mixing_Valve_Remaining_Moving_Time = CONFIGURATION_MIXING_VALVE_MAXIMUM_MOVING_TIME; // Go from left to right
 			break;
 			
 		// Should not reach this code
