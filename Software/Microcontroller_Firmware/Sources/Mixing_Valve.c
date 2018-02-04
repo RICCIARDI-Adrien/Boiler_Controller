@@ -46,17 +46,10 @@ void MixingValveSetPosition(TMixingValvePosition Position)
 			
 		case MIXING_VALVE_POSITION_CENTER:
 			// Go from left to center
-			if (Mixing_Valve_Current_Position == MIXING_VALVE_POSITION_LEFT)
-			{
-				RelayTurnOn(RELAY_ID_MIXING_VALVE_RIGHT);
-				Mixing_Valve_Target_Position = MIXING_VALVE_POSITION_CENTER;
-			}
+			if (Mixing_Valve_Current_Position == MIXING_VALVE_POSITION_LEFT) RelayTurnOn(RELAY_ID_MIXING_VALVE_RIGHT);
 			// Go from right to center
-			else
-			{
-				RelayTurnOn(RELAY_ID_MIXING_VALVE_LEFT);
-				Mixing_Valve_Target_Position = MIXING_VALVE_POSITION_CENTER;
-			}
+			else RelayTurnOn(RELAY_ID_MIXING_VALVE_LEFT);
+			Mixing_Valve_Target_Position = MIXING_VALVE_POSITION_CENTER;
 			Mixing_Valve_Remaining_Moving_Time = CONFIGURATION_MIXING_VALVE_MAXIMUM_MOVING_TIME / 2;
 			break;
 			
