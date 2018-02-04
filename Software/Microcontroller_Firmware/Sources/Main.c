@@ -73,6 +73,9 @@ int main(void) // Can't use void return type because it triggers a warning
 			
 			// Progressively send water to the radiators (assume valve is on the left position, which is set when boiler is stopped)
 			MixingValveSetPosition(MIXING_VALVE_POSITION_RIGHT);
+			
+			// Tell user boiler is running
+			LedTurnOff(LED_ID_BOILER_RUNNING_MODE);
 		}
 		else
 		{
@@ -84,6 +87,9 @@ int main(void) // Can't use void return type because it triggers a warning
 			
 			// Close radiators water circuit to send cold water only to the gas burner on next run
 			MixingValveSetPosition(MIXING_VALVE_POSITION_LEFT);
+			
+			// Tell user boiler is idle
+			LedTurnOn(LED_ID_BOILER_RUNNING_MODE);
 		}
 		
 		// Make the mixing valve moves

@@ -31,7 +31,7 @@ void LedTurnOn(TLedID Led_ID)
 			PORTD |= 0x08;
 			break;
 			
-		case LED_ID_LED_3:
+		case LED_ID_BOILER_RUNNING_MODE:
 			PORTB |= 0x01;
 			break;
 			
@@ -56,7 +56,7 @@ void LedTurnOff(TLedID Led_ID)
 			PORTD &= ~0x08;
 			break;
 			
-		case LED_ID_LED_3:
+		case LED_ID_BOILER_RUNNING_MODE:
 			PORTB &= ~0x01;
 			break;
 			
