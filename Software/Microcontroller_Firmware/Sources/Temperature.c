@@ -138,7 +138,7 @@ void TemperatureTask(void)
 	Outside_Temperature = TemperatureGetSensorValue(TEMPERATURE_SENSOR_ID_OUTSIDE);
 	Desired_Room_Temperature = TemperatureGetDesiredRoomTemperature();
 	
-	// Compute target water start temperature
+	// Compute target start water temperature
 	Target_Start_Water_Temperature = (CONFIGURATION_HEATING_CURVE_COEFFICIENT * (Desired_Room_Temperature - Outside_Temperature) + CONFIGURATION_HEATING_CURVE_PARALLEL_SHIFT) / 10L;
 	
 	// Make sure output value is in the allowed water temperature range

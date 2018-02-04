@@ -46,6 +46,7 @@ typedef enum
 	PROTOCOL_COMMAND_SET_DESIRED_ROOM_TEMPERATURE,
 	PROTOCOL_COMMAND_GET_TRIMMERS_RAW_VALUES,
 	PROTOCOL_COMMAND_SET_BOILER_RUNNING_MODE,
+	PROTOCOL_COMMAND_GET_TARGET_START_WATER_TEMPERATURE,
 	PROTOCOL_COMMANDS_COUNT
 } TProtocolCommand;
 
@@ -179,7 +180,7 @@ static void ProtocolExecuteCommand(void)
 			*Pointer_Word = ADCGetLastSampledValue(ADC_CHANNEL_ID_OUTSIDE_THERMISTOR);
 			Pointer_Word++;
 			*Pointer_Word = ADCGetLastSampledValue(ADC_CHANNEL_ID_RADIATOR_START_THERMISTOR);
-			Protocol_Command_Payload_Size = 4; // TODO add "retour" temperature
+			Protocol_Command_Payload_Size = 4;
 			break;
 			
 		case PROTOCOL_COMMAND_GET_SENSORS_CELSIUS_TEMPERATURES:
@@ -221,6 +222,11 @@ static void ProtocolExecuteCommand(void)
 			Protocol_Command_Payload_Size = 0;
 			break;
 			
+		case PROTOCOL_COMMAND_GET_TARGET_START_WATER_TEMPERATURE:
+			Protocol_Command_Payload_Buffer[0] = TemperatureGetTargetStartWaterTemperature();
+			Protocol_Command_Payload_Size = 1;
+			break;
+			
 		// Unknown command, should not get here
 		default:
 			break;
@@ -245,7 +251,8 @@ ISR(USART_RX_vect)
 		0, // PROTOCOL_COMMAND_GET_DESIRED_ROOM_TEMPERATURE
 		1, // PROTOCOL_COMMAND_SET_DESIRED_ROOM_TEMPERATURE
 		0, // PROTOCOL_COMMAND_GET_TRIMMERS_RAW_VALUES
-		1 // PROTOCOL_COMMAND_SET_BOILER_RUNNING_MODE
+		1, // PROTOCOL_COMMAND_SET_BOILER_RUNNING_MODE
+		0 // PROTOCOL_COMMAND_GET_TARGET_START_WATER_TEMPERATURE
 	};
 	unsigned char Byte;
 	
