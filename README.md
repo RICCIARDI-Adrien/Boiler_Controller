@@ -68,6 +68,7 @@ make
 File `Boiler_Controller_Firmware.elf` will be created.
 
 ### Flashing
+You need to install `avrdude` to access to the programmer.  
 Firmware can be burnt to the microcontroller memory by connecting an AVR ISP programmer to the controller board ISP connector and typing the command :
 ```
 make flash
