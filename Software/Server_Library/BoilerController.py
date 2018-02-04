@@ -120,3 +120,7 @@ def setBoilerRunningMode(isRunning):
 		_sendCommand([8, 1], 0)
 	else:
 		_sendCommand([8, 0], 0)
+
+def getTargetStartWaterTemperature():
+	answerPayload = _sendCommand([9], 1)
+	return answerPayload[0]
