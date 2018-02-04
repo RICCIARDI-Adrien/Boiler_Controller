@@ -36,8 +36,10 @@
 /** Maximum temperature value (clamped after heating curve computation). */
 #define CONFIGURATION_HEATING_CURVE_MAXIMUM_TEMPERATURE 70 // TODO determine a good value
 
-/** Add or subtract this amount of degrees to the gas burner temperature to reach to avoid turning the gas burner on or off too often. */
-#define CONFIGURATION_GAS_BURNER_TEMPERATURE_HYSTERESIS 5
+/** Add this amount of degrees to the gas burner temperature to reach to avoid turning the gas burner off too often. */
+#define CONFIGURATION_GAS_BURNER_TEMPERATURE_HYSTERESIS_HIGH 5
+/** Subtract this amount of degrees to the gas burner temperature to reach to avoid turning the gas burner on too often. */
+#define CONFIGURATION_GAS_BURNER_TEMPERATURE_HYSTERESIS_LOW 8
 
 /** How many ADC samples to use to compute the moving average value. */
 #define CONFIGURATION_ADC_MOVING_AVERAGE_SAMPLES_COUNT 5

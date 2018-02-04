@@ -65,8 +65,8 @@ int main(void) // Can't use void return type because it triggers a warning
 			else if (Desired_Start_Water_Temperature > CONFIGURATION_HEATING_CURVE_MAXIMUM_TEMPERATURE) Desired_Start_Water_Temperature = CONFIGURATION_HEATING_CURVE_MAXIMUM_TEMPERATURE;
 			
 			// Gas burner control
-			if (Radiator_Water_Start_Temperature <= Desired_Start_Water_Temperature - CONFIGURATION_GAS_BURNER_TEMPERATURE_HYSTERESIS) RelayTurnOn(RELAY_ID_GAS_BURNER);
-			else if (Radiator_Water_Start_Temperature >= Desired_Start_Water_Temperature + CONFIGURATION_GAS_BURNER_TEMPERATURE_HYSTERESIS) RelayTurnOff(RELAY_ID_GAS_BURNER);
+			if (Radiator_Water_Start_Temperature <= Desired_Start_Water_Temperature - CONFIGURATION_GAS_BURNER_TEMPERATURE_HYSTERESIS_LOW) RelayTurnOn(RELAY_ID_GAS_BURNER);
+			else if (Radiator_Water_Start_Temperature >= Desired_Start_Water_Temperature + CONFIGURATION_GAS_BURNER_TEMPERATURE_HYSTERESIS_HIGH) RelayTurnOff(RELAY_ID_GAS_BURNER);
 			
 			// Start pump
 			RelayTurnOn(RELAY_ID_PUMP);
