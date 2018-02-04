@@ -76,6 +76,9 @@ int main(void) // Can't use void return type because it triggers a warning
 		}
 		else
 		{
+			// Make sure burner is stopped
+			RelayTurnOff(RELAY_ID_GAS_BURNER);
+			
 			// Stop pump
 			RelayTurnOff(RELAY_ID_PUMP);
 			
