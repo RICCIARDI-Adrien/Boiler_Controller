@@ -127,7 +127,7 @@ def getDesiredRoomTemperature():
 # @param temperature The desired temperature (in Celsius units).
 # @note This temperature value is overwritten when using the trimmers.
 def setDesiredRoomTemperature(temperature):
-	desiredTemperature = bytearray(temperature)
+	desiredTemperature = bytearray([temperature])
 	_sendCommand([6, desiredTemperature])
 
 ## Get the trimmers raw ADC values (but averaged through a moving average).
@@ -153,3 +153,11 @@ def setBoilerRunningMode(isRunning):
 def getTargetStartWaterTemperature():
 	answerPayload = _sendCommand([9], 1)
 	return answerPayload[0]
+
+## Retrieve heating curve settings.
+# @return First value is coefficient, second value is parallel shift.
+def getHeatingCurveParameters():
+	answerPayload = _sendCommand([10], 4)
+	heatingCurveCoefficient = ((answerPayload[1] << 8) | answerPayload[0]) / 10.0 # Values are multiplied by ten to improve microcontroller firmware computations, so divide them by ten to get the original value (and cast to float in the same time)
+	heatingCurveParallelShift = ((answerPayload[3] << 8) | answerPayload[2]) / 10.0
+	return heatingCurveCoefficient, heatingCurveParallelShift
