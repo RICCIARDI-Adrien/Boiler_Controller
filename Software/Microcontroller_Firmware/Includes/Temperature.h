@@ -47,6 +47,12 @@ void TemperatureSetNightMode(unsigned char Is_Night_Mode_Enabled);
  */
 signed char TemperatureGetTargetStartWaterTemperature(void);
 
+/** Retrieve heating curve current settings.
+ * @param Pointer_Coefficient On output, contain the coefficient multiplied by ten.
+ * @param Pointer_Parallel_Shift On output, contain the parallel shift multiplied by ten.
+ */
+void TemperatureGetHeatingCurveParameters(unsigned short *Pointer_Coefficient, unsigned short *Pointer_Parallel_Shift);
+
 /** Compute the target start water temperature using the heating curve. Must be called periodically. */
 void TemperatureTask(void);
 

@@ -16,6 +16,11 @@ static signed char Temperature_Desired_Room_Temperature = 0;
 /** The start water temperature to reach (in °C). */
 static signed char Temperature_Target_Start_Water_Temperature = 0;
 
+/** Heating curve coefficient (multiplied by ten to make more precise computations). */
+static unsigned short Temperature_Heating_Curve_Coefficient = CONFIGURATION_HEATING_CURVE_COEFFICIENT;
+/** Heating curve parallel shift (also multiplied by ten to improve results precision). */
+static unsigned short Temperature_Heating_Curve_Parallel_Shift = CONFIGURATION_HEATING_CURVE_PARALLEL_SHIFT;
+
 //-------------------------------------------------------------------------------------------------
 // Private functions
 //-------------------------------------------------------------------------------------------------
@@ -130,16 +135,30 @@ signed char TemperatureGetTargetStartWaterTemperature(void)
 	return Temperature_Target_Start_Water_Temperature;
 }
 
+// Values can only be set by a protocol command, and this function is used exclusively by another protocol command, so there is no need to use a mutex
+void TemperatureGetHeatingCurveParameters(unsigned short *Pointer_Coefficient, unsigned short *Pointer_Parallel_Shift)
+{
+	*Pointer_Coefficient = Temperature_Heating_Curve_Coefficient;
+	*Pointer_Parallel_Shift = Temperature_Heating_Curve_Parallel_Shift;
+}
+
 void TemperatureTask(void)
 {
 	signed char Outside_Temperature, Desired_Room_Temperature, Target_Start_Water_Temperature;
+	signed long Heating_Curve_Coefficient, Heating_Curve_Parallel_Shift; // Promote unsigned short values to long to force the heating curve computation to be done on long variables
 	
 	// Use some more variables to make the heating curve computation easier to understand
 	Outside_Temperature = TemperatureGetSensorValue(TEMPERATURE_SENSOR_ID_OUTSIDE);
 	Desired_Room_Temperature = TemperatureGetDesiredRoomTemperature();
 	
+	// Atomically retrieve values that can be set by Protocol module
+	PROTOCOL_DISABLE_INTERRUPTS();
+	Heating_Curve_Coefficient = Temperature_Heating_Curve_Coefficient;
+	Heating_Curve_Parallel_Shift = Temperature_Heating_Curve_Parallel_Shift;
+	PROTOCOL_ENABLE_INTERRUPTS();
+	
 	// Compute target start water temperature
-	Target_Start_Water_Temperature = (CONFIGURATION_HEATING_CURVE_COEFFICIENT * (Desired_Room_Temperature - Outside_Temperature) + CONFIGURATION_HEATING_CURVE_PARALLEL_SHIFT) / 10L;
+	Target_Start_Water_Temperature = (Heating_Curve_Coefficient * (Desired_Room_Temperature - Outside_Temperature) + Heating_Curve_Parallel_Shift) / 10L;
 	
 	// Make sure output value is in the allowed water temperature range
 	if (Target_Start_Water_Temperature < CONFIGURATION_HEATING_CURVE_MINIMUM_TEMPERATURE) Target_Start_Water_Temperature = CONFIGURATION_HEATING_CURVE_MINIMUM_TEMPERATURE;
