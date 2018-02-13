@@ -53,6 +53,12 @@ signed char TemperatureGetTargetStartWaterTemperature(void);
  */
 void TemperatureGetHeatingCurveParameters(unsigned short *Pointer_Coefficient, unsigned short *Pointer_Parallel_Shift);
 
+/** Set heating curve settings. They will be used on next TemperatureTask() call.
+ * @param Coefficient The heating curve coefficient, it must be multiplied by ten.
+ * @param Parallel_Shift The heating curve parallel shift, it must be multiplied by ten.
+ */
+void TemperatureSetHeatingCurveParameters(unsigned short Coefficient, unsigned short Parallel_Shift);
+
 /** Compute the target start water temperature using the heating curve. Must be called periodically. */
 void TemperatureTask(void);
 

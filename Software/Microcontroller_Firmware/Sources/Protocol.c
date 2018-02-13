@@ -48,6 +48,7 @@ typedef enum
 	PROTOCOL_COMMAND_SET_BOILER_RUNNING_MODE,
 	PROTOCOL_COMMAND_GET_TARGET_START_WATER_TEMPERATURE,
 	PROTOCOL_COMMAND_GET_HEATING_CURVE_PARAMETERS,
+	PROTOCOL_COMMAND_SET_HEATING_CURVE_PARAMETERS,
 	PROTOCOL_COMMANDS_COUNT
 } TProtocolCommand;
 
@@ -231,6 +232,12 @@ static void ProtocolExecuteCommand(void)
 		case PROTOCOL_COMMAND_GET_HEATING_CURVE_PARAMETERS:
 			TemperatureGetHeatingCurveParameters((unsigned short *) &Protocol_Command_Payload_Buffer[0], (unsigned short *) &Protocol_Command_Payload_Buffer[2]);
 			Protocol_Command_Payload_Size = 4;
+			break;
+			
+		case PROTOCOL_COMMAND_SET_HEATING_CURVE_PARAMETERS:
+			Pointer_Word = (unsigned short *) Protocol_Command_Payload_Buffer;
+			TemperatureSetHeatingCurveParameters(Pointer_Word[0], Pointer_Word[1]);
+			Protocol_Command_Payload_Size = 0;
 			break;
 			
 		// Unknown command, should not get here

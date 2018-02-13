@@ -142,6 +142,13 @@ void TemperatureGetHeatingCurveParameters(unsigned short *Pointer_Coefficient, u
 	*Pointer_Parallel_Shift = Temperature_Heating_Curve_Parallel_Shift;
 }
 
+// No need for mutex because this function is called exclusively by a protocol command (so this function call interrupts everything else), and all accesses to heating curve variables from main task are secured
+void TemperatureSetHeatingCurveParameters(unsigned short Coefficient, unsigned short Parallel_Shift)
+{
+	Temperature_Heating_Curve_Coefficient = Coefficient;
+	Temperature_Heating_Curve_Parallel_Shift = Parallel_Shift;
+}
+
 void TemperatureTask(void)
 {
 	signed char Outside_Temperature, Desired_Room_Temperature, Target_Start_Water_Temperature;
