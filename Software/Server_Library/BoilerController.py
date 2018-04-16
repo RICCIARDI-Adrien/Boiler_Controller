@@ -25,13 +25,13 @@ def _sendCommand(commandAndPayload, answerPayloadSize):
 	# Get the answer
 	receivedByte = bytearray(_clientSocket.recv(1))
 	if receivedByte[0] != fullCommand[0]:
-		print "Error : received bad magic number (", hex(receivedByte[0]), ")."
+		print("Error : received bad magic number (", hex(receivedByte[0]), ").")
 		exit(-1)
 		
 	# Get the command
 	receivedByte = bytearray(_clientSocket.recv(1))
 	if receivedByte[0] != fullCommand[1]:
-		print "Error : received bad command (", hex(receivedByte[0]), ")."
+		print("Error : received bad command (", hex(receivedByte[0]), ").")
 		exit(-1)
 		
 	# Get the payload (if any)
