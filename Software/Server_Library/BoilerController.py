@@ -161,3 +161,12 @@ def getHeatingCurveParameters():
 	heatingCurveCoefficient = ((answerPayload[1] << 8) | answerPayload[0]) / 10.0 # Values are multiplied by ten to improve microcontroller firmware computations, so divide them by ten to get the original value (and cast to float in the same time)
 	heatingCurveParallelShift = ((answerPayload[3] << 8) | answerPayload[2]) / 10.0
 	return heatingCurveCoefficient, heatingCurveParallelShift
+
+## Set heating curve settings.
+# @param coefficient The heating curve coefficient, for instance 1.8.
+# @param parallelShift The heating curve parallel shift, for instance 20.
+def setHeatingCurveParameters(coefficient, parallelShift):
+	convertedCoefficient = int(coefficient * 10.0)
+	convertedParallelShift = int(parallelShift * 10.0)
+	payload = struct.pack("<BHH", 11, convertedCoefficient, convertedParallelShift)
+	_sendCommand(payload, 0)
