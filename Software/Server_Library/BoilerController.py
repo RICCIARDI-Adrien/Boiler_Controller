@@ -68,42 +68,34 @@ def waitForControllerConnection():
 ## Retrieve the version of the currently running firmware.
 # @return An integer value corresponding to the firmware version.
 def getFirmwareVersion():
-	answerPayload = _sendCommand([0], 1)
-	return answerPayload[0]
+	payload = _sendCommand([0], 1)
+	return payload[0]
 
 ## Retrieve the ADC raw values (but averaged through a moving average) corresponding to external thermistor and start water thermistor.
 # @return First value is the external thermistor raw value, second value is the start water thermistor raw value.
 # @note This function is dedicated to debug purposes.
 def getSensorsRawTemperatures():
-	answerPayload = _sendCommand([1], 4)
-	externalTemperature = (answerPayload[1] << 8) | answerPayload[0] # Data are sent in little endian
-	waterStartTemperature = (answerPayload[3] << 8) | answerPayload[2]
+	payload = _sendCommand([1], 4)
+	externalTemperature, waterStartTemperature = struct.unpack("<HH", payload)
 	return externalTemperature, waterStartTemperature
 
 ## Retrieve the external and start water thermistors temperatures converted to Celsius units.
 # @return First value is the external temperature, second value is the start water temperature.
 def getSensorsCelsiusTemperatures():
-	answerPayload = _sendCommand([2], 2)
-	externalTemperature = answerPayload[0]
-	waterStartTemperature = answerPayload[1]
-	
-	# Python is so shitty that it does not even know how to do a cast as simple as unsigned char to char
-	if externalTemperature > 127:
-		externalTemperature = -1 * (256 - externalTemperature)
-	if waterStartTemperature > 127:
-		waterStartTemperature = -1 * (256 - waterStartTemperature)
+	payload = _sendCommand([2], 2)
+	externalTemperature, waterStartTemperature = struct.unpack("bb", payload)
 	return externalTemperature, waterStartTemperature
 
 ## Retrieve the mixing valve current position.
 # @return A string telling the current position.
 # @note Valve position is updated only when it stops moving, so the last known position is reported while the valve is moving.
 def getMixingValvePosition():
-	answerPayload = _sendCommand([3], 1)
-	if answerPayload[0] == 0:
+	payload = _sendCommand([3], 1)
+	if payload[0] == 0:
 		valvePosition = "left"
-	elif answerPayload[0] == 1:
+	elif payload[0] == 1:
 		valvePosition = "center"
-	elif answerPayload[0] == 2:
+	elif payload[0] == 2:
 		valvePosition = "right"
 	else:
 		valvePosition = "unknown"
@@ -120,23 +112,22 @@ def setNightMode(isNightModeEnabled):
 ## Retrieve the configured room temperature to reach in the house. This value can be configured using the trimmers or the setDesiredRoomTemperature() command.
 # @return An integer number corresponding to the temperature converted to Celsius units.
 def getDesiredRoomTemperature():
-	answerPayload = _sendCommand([5], 1)
-	return answerPayload[0]
+	payload = _sendCommand([5], 1)
+	return payload[0]
 
 ## Set the room temperature to reach in the house. Using this function overrides the previously set desired temperature and the temperature specified by the trimmers.
 # @param temperature The desired temperature (in Celsius units).
 # @note This temperature value is overwritten when using the trimmers.
 def setDesiredRoomTemperature(temperature):
-	desiredTemperature = bytearray([temperature])
-	_sendCommand([6, desiredTemperature])
+	payload = struct.pack("Bb", 6, temperature)
+	_sendCommand(payload, 0)
 
 ## Get the trimmers raw ADC values (but averaged through a moving average).
 # @return First value is day trimmer value, second value is night trimmer value.
 # @note This function is dedicated to debug purposes.
 def getTrimmersRawValues():
-	answerPayload = _sendCommand([7], 4)
-	dayTrimmerValue = (answerPayload[1] << 8) | answerPayload[0] # Data are sent in little endian
-	nightTrimmerValue = (answerPayload[3] << 8) | answerPayload[2]
+	payload = _sendCommand([7], 4)
+	dayTrimmerValue, nightTrimmerValue = struct.unpack("<HH", payload)
 	return dayTrimmerValue, nightTrimmerValue
 
 ## Turn the boiler on or off.
@@ -151,16 +142,15 @@ def setBoilerRunningMode(isRunning):
 # @return The target start water temperature in Celsius units.
 # @note This function is dedicated to debug purposes.
 def getTargetStartWaterTemperature():
-	answerPayload = _sendCommand([9], 1)
-	return answerPayload[0]
+	payload = _sendCommand([9], 1)
+	return payload[0]
 
 ## Retrieve heating curve settings.
 # @return First value is coefficient, second value is parallel shift.
 def getHeatingCurveParameters():
-	answerPayload = _sendCommand([10], 4)
-	heatingCurveCoefficient = ((answerPayload[1] << 8) | answerPayload[0]) / 10.0 # Values are multiplied by ten to improve microcontroller firmware computations, so divide them by ten to get the original value (and cast to float in the same time)
-	heatingCurveParallelShift = ((answerPayload[3] << 8) | answerPayload[2]) / 10.0
-	return heatingCurveCoefficient, heatingCurveParallelShift
+	payload = _sendCommand([10], 4)
+	heatingCurveCoefficient, heatingCurveParallelShift = struct.unpack("<HH", payload)
+	return heatingCurveCoefficient / 10.0, heatingCurveParallelShift / 10.0 # Values are multiplied by ten to improve microcontroller firmware computations, so divide them by ten to get the original value (and cast them to float in the same time)
 
 ## Set heating curve settings.
 # @param coefficient The heating curve coefficient, for instance 1.8.
