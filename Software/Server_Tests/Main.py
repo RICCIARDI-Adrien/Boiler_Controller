@@ -51,6 +51,9 @@ while True:
 			dayTrimmerValue, nightTrimmerValue = BoilerController.getTrimmersRawValues()
 			print("Raw day trimmer value :", hex(dayTrimmerValue), ", raw night trimmer value :", hex(nightTrimmerValue))
 			
+			heatingCurveCoefficient, heatingCurveParallelShift = BoilerController.getHeatingCurveParameters()
+			print("Heating curve coefficient :", heatingCurveCoefficient, ", parallel shift :", heatingCurveParallelShift)
+			
 			print("-----------------------------------------------------------")
 			time.sleep(2)
 	except:
