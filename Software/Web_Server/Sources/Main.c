@@ -25,7 +25,26 @@ static char Main_String_Response[10 * 1024];
  */
 static int MainPrepareIndexPageResponse(const char *Pointer_String_Values)
 {
-	sprintf(Main_String_Response,
+	int Day_Temperature, Night_Temperature, Has_Error_Occurred = 0;
+	
+	// Read all needed values from the board
+	if (BoilerGetDesiredRoomTemperatures(&Day_Temperature, &Night_Temperature) != 0) Has_Error_Occurred = 1;
+	
+	if (Has_Error_Occurred) strcpy(Main_String_Response,
+		"<html>\n"
+		"	<head>\n"
+		"		<title>Chaudi&egrave;re</title>\n"
+		"		<meta charset=\"utf-8\" />\n"
+		"	</head>\n"
+		"\n"
+		"	<body>\n"
+		"		<center>\n"
+		"		<h1>Chaudi&egrave;re</h1>\n"
+		"\n"
+		"		<p><b>Erreur de communication avec la carte. Veuillez recharger la page.</b></p>\n"
+		"	</body>\n"
+		"</html>\n");
+	else sprintf(Main_String_Response,
 		"<html>\n"
 		"	<head>\n"
 		"		<title>Chaudi&egrave;re</title>\n"
@@ -75,7 +94,7 @@ static int MainPrepareIndexPageResponse(const char *Pointer_String_Values)
 		"			}\n"
 		"		</script>\n"
 		"	</body>\n"
-		"</html>\n", 23, 23, 27, 27);
+		"</html>\n", Day_Temperature, Day_Temperature, Night_Temperature, Night_Temperature);
 	
 	return 0;
 }
@@ -96,8 +115,6 @@ static int MainWebServerAccessHandlerCallback(void __attribute__((unused)) *Poin
 {
 	struct MHD_Response *Pointer_Response;
 	int Return_Value;
-	
-	printf("Pointer_String_URL=%s Pointer_Persistent_Connection_Custom_Data=%p\n", Pointer_String_URL, *Pointer_Persistent_Connection_Custom_Data);
 	
 	// Handle only GET methods
 	if (strcmp(Pointer_String_Method, "GET") != 0) return MHD_NO;

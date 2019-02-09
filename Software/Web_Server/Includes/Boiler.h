@@ -28,11 +28,19 @@ int BoilerInitializeServer(void);
 /** Gracefully release all resources. */
 void BoilerUninitializeServer(void);
 
-/** TODO */
+/** Wait for the board to connect to the server.
+ * @return -1 if an error occurred,
+ * @return 0 on success.
+ */
 int BoilerRunServer(void);
 
-/** TODO */
-int BoilerGetSensorsCelciusTemperatures(int *Pointer_Outside_Temperature, int *Pointer_Radiator_Start_Water_Temperature);
+/** Read temperature sensors values.
+ * @param Pointer_Outside_Temperature On output, contain the outside temperature in Celsius degrees.
+ * @param Pointer_Radiator_Start_Water_Temperature On output, contain the start water temperature in Celsius degrees.
+ * @return -1 if an error occurred,
+ * @return 0 on success.
+ */
+int BoilerGetSensorsCelsiusTemperatures(int *Pointer_Outside_Temperature, int *Pointer_Radiator_Start_Water_Temperature);
 
 /** TODO */
 int BoilerGetMixingValvePosition(TBoilerMixingValvePosition *Pointer_Position);
@@ -40,8 +48,13 @@ int BoilerGetMixingValvePosition(TBoilerMixingValvePosition *Pointer_Position);
 /** TODO */
 int BoilerSetNightMode(int Is_Night_Mode_Enabled);
 
-/** TODO */
-int BoilerGetDesiredRoomTemperature(int *Pointer_Temperature);
+/** Read the desired room temperatures.
+ * @param Pointer_Day_Temperature On output, contain the desired temperature during the day.
+ * @param Pointer_Night_Temperature On output, contain the desired temperature during the night.
+ * @return -1 if an error occurred,
+ * @return 0 on success.
+ */
+int BoilerGetDesiredRoomTemperatures(int *Pointer_Day_Temperature, int *Pointer_Night_Temperature);
 
 /** TODO */
 int BoilerSetDesiredRoomTemperature(int Temperature);

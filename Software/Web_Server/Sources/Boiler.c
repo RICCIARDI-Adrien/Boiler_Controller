@@ -14,12 +14,83 @@
 #include <unistd.h>
 
 //-------------------------------------------------------------------------------------------------
+// Private constants
+//-------------------------------------------------------------------------------------------------
+/** The magic number preceding all received and sent commands. */
+#define BOILER_PROTOCOL_MAGIC_NUMBER 0xA5
+
+//-------------------------------------------------------------------------------------------------
+// Private types
+//-------------------------------------------------------------------------------------------------
+/** All known commands. */
+typedef enum
+{
+	BOILER_COMMAND_GET_FIRMWARE_VERSION,
+	BOILER_COMMAND_GET_SENSORS_RAW_TEMPERATURES,
+	BOILER_COMMAND_GET_SENSORS_CELSIUS_TEMPERATURES,
+	BOILER_COMMAND_GET_MIXING_VALVE_POSITION,
+	BOILER_COMMAND_SET_NIGHT_MODE,
+	BOILER_COMMAND_GET_DESIRED_ROOM_TEMPERATURES,
+	BOILER_COMMAND_SET_DESIRED_ROOM_TEMPERATURES,
+	BOILER_COMMAND_GET_TRIMMERS_RAW_VALUES,
+	BOILER_COMMAND_SET_BOILER_RUNNING_MODE,
+	BOILER_COMMAND_GET_TARGET_START_WATER_TEMPERATURE,
+	BOILER_COMMAND_GET_HEATING_CURVE_PARAMETERS,
+	BOILER_COMMAND_SET_HEATING_CURVE_PARAMETERS,
+	BOILER_COMMANDS_COUNT
+} TBoilerCommand;
+
+//-------------------------------------------------------------------------------------------------
 // Private variables
 //-------------------------------------------------------------------------------------------------
 /** The server socket. */
 static int Boiler_Server_Socket = -1;
 /** The board socket. */
 static int Boiler_Board_Socket = -1;
+
+//-------------------------------------------------------------------------------------------------
+// Private functions
+//-------------------------------------------------------------------------------------------------
+/** Send a command and its payload and wait for the answer.
+ * @param Command The command code.
+ * @param Command_Payload_Size How may bytes of payload to send (set to 0 if the command has no payload).
+ * @param Answer_Payload_Size How many bytes of payload to wait for (set to 0 for a command providing no answer other than magic number and command code).
+ * @param Pointer_Payload_Buffer The payload (if any). Make sure the buffer is big enough for answer.
+ * @return -1 if an error occurred (board connection is automatically closed in this case),
+ * @return 0 on success.
+ */
+static int BoilerSendCommand(TBoilerCommand Command, int Command_Payload_Size, int Answer_Payload_Size, void *Pointer_Payload_Buffer)
+{
+	unsigned char Buffer[16];
+	
+	// Create the full command
+	Buffer[0] = BOILER_PROTOCOL_MAGIC_NUMBER;
+	Buffer[1] = Command;
+	memcpy(&Buffer[2], Pointer_Payload_Buffer, Command_Payload_Size);
+	Command_Payload_Size += 2; // Adjust command size to take all fields into account
+	
+	// Send command
+	if (write(Boiler_Board_Socket, Buffer, Command_Payload_Size) != Command_Payload_Size)
+	{
+		close(Boiler_Board_Socket);
+		syslog(LOG_ERR, "Failed to send command (command code : %d, command size : %d, %s).", Command, Command_Payload_Size, strerror(errno));
+		return -1;
+	}
+	
+	// Wait for the answer
+	Answer_Payload_Size += 2; // Adjust answer size to take all fields into account
+	if (read(Boiler_Board_Socket, Buffer, Answer_Payload_Size) != Answer_Payload_Size)
+	{
+		close(Boiler_Board_Socket);
+		syslog(LOG_ERR, "Failed to receive answer (command code : %d, command size : %d, %s).", Command, Answer_Payload_Size, strerror(errno));
+		return -1;
+	}
+	
+	// Copy answer to buffer
+	memcpy(Pointer_Payload_Buffer, &Buffer[2], Answer_Payload_Size - 2);
+	
+	return 0;
+}
 
 //-------------------------------------------------------------------------------------------------
 // Public functions
@@ -82,6 +153,28 @@ int BoilerRunServer(void)
 		return -1;
 	}
 	syslog(LOG_INFO, "Board connected with address %s:%d.", inet_ntoa(Address.sin_addr), ntohs(Address.sin_port));
+	
+	return 0;
+}
+
+int BoilerGetSensorsCelsiusTemperatures(int *Pointer_Outside_Temperature, int *Pointer_Radiator_Start_Water_Temperature)
+{
+	char Temperatures[2];
+	
+	if (BoilerSendCommand(BOILER_COMMAND_GET_SENSORS_CELSIUS_TEMPERATURES, 0, 2, Temperatures) != 0) return -1;
+	*Pointer_Outside_Temperature = Temperatures[0];
+	*Pointer_Radiator_Start_Water_Temperature = Temperatures[1];
+	
+	return 0;
+}
+
+int BoilerGetDesiredRoomTemperatures(int *Pointer_Day_Temperature, int *Pointer_Night_Temperature)
+{
+	char Temperatures[2];
+	
+	if (BoilerSendCommand(BOILER_COMMAND_GET_DESIRED_ROOM_TEMPERATURES, 0, 2, Temperatures) != 0) return -1;
+	*Pointer_Day_Temperature = Temperatures[0];
+	*Pointer_Night_Temperature = Temperatures[1];
 	
 	return 0;
 }
