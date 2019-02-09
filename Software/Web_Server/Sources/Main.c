@@ -25,9 +25,10 @@ static char Main_String_Response[10 * 1024];
  */
 static int MainPrepareIndexPageResponse(const char *Pointer_String_Values)
 {
-	int Day_Temperature, Night_Temperature, Has_Error_Occurred = 0;
+	int Day_Temperature, Night_Temperature, Has_Error_Occurred = 0, Is_Boiler_Running;
 	
 	// Read all needed values from the board
+	if (BoilerGetBoilerRunningMode(&Is_Boiler_Running) != 0) Has_Error_Occurred = 1;
 	if (BoilerGetDesiredRoomTemperatures(&Day_Temperature, &Night_Temperature) != 0) Has_Error_Occurred = 1;
 	
 	if (Has_Error_Occurred) strcpy(Main_String_Response,
@@ -57,7 +58,7 @@ static int MainPrepareIndexPageResponse(const char *Pointer_String_Values)
 		"\n"
 		"		<form action=\"index.html\">\n"
 		"			<p>\n"
-		"				<input type=\"radio\" name=\"power_state\" value=\"1\"> Activ&eacute;e <input type=\"radio\" name=\"power_state\" value=\"0\"> Veille\n"
+		"				<input type=\"radio\" name=\"power_state\" value=\"1\" %s> Activ&eacute;e <input type=\"radio\" name=\"power_state\" value=\"0\" %s> Veille\n"
 		"			</p>\n"
 		"			<table>\n"
 		"			<tr>\n"
@@ -94,7 +95,7 @@ static int MainPrepareIndexPageResponse(const char *Pointer_String_Values)
 		"			}\n"
 		"		</script>\n"
 		"	</body>\n"
-		"</html>\n", Day_Temperature, Day_Temperature, Night_Temperature, Night_Temperature);
+		"</html>\n", Is_Boiler_Running ? "checked" : "", Is_Boiler_Running ? "" : "checked", Day_Temperature, Day_Temperature, Night_Temperature, Night_Temperature);
 	
 	return 0;
 }

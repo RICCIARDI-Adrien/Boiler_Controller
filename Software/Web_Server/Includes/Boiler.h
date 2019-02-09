@@ -59,10 +59,18 @@ int BoilerGetDesiredRoomTemperatures(int *Pointer_Day_Temperature, int *Pointer_
 /** TODO */
 int BoilerSetDesiredRoomTemperature(int Temperature);
 
-/** TODO */
-int BoilerGetBoilerRunningMode(int *Pointer_Is_Boiler_Runnning);
+/** Tell whether boiler is running or is idle.
+ * @param Pointer_Is_Boiler_Running On output, is equal to 1 if the boiler is running or is equal to 0 if the boiler is idle.
+ * @return -1 if an error occurred,
+ * @return 0 on success.
+ */
+int BoilerGetBoilerRunningMode(int *Pointer_Is_Boiler_Running);
 
-/** TODO */
+/** Put boiler in running or idle mode.
+ * @param Is_Boiler_Running Set to 1 to put boiler in running mode, set to 0 to put boiler in idle mode.
+ * @return -1 if an error occurred,
+ * @return 0 on success.
+ */
 int BoilerSetBoilerRunningMode(int Is_Boiler_Running);
 
 /** TODO */

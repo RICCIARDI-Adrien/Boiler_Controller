@@ -33,6 +33,7 @@ typedef enum
 	BOILER_COMMAND_GET_DESIRED_ROOM_TEMPERATURES,
 	BOILER_COMMAND_SET_DESIRED_ROOM_TEMPERATURES,
 	BOILER_COMMAND_GET_TRIMMERS_RAW_VALUES,
+	BOILER_COMMAND_GET_BOILER_RUNNING_MODE,
 	BOILER_COMMAND_SET_BOILER_RUNNING_MODE,
 	BOILER_COMMAND_GET_TARGET_START_WATER_TEMPERATURE,
 	BOILER_COMMAND_GET_HEATING_CURVE_PARAMETERS,
@@ -175,6 +176,17 @@ int BoilerGetDesiredRoomTemperatures(int *Pointer_Day_Temperature, int *Pointer_
 	if (BoilerSendCommand(BOILER_COMMAND_GET_DESIRED_ROOM_TEMPERATURES, 0, 2, Temperatures) != 0) return -1;
 	*Pointer_Day_Temperature = Temperatures[0];
 	*Pointer_Night_Temperature = Temperatures[1];
+	
+	return 0;
+}
+
+int BoilerGetBoilerRunningMode(int *Pointer_Is_Boiler_Running)
+{
+	unsigned char Is_Running;
+	
+	if (BoilerSendCommand(BOILER_COMMAND_GET_BOILER_RUNNING_MODE, 0, 1, &Is_Running) != 0) return -1;
+	if (Is_Running) *Pointer_Is_Boiler_Running = 1;
+	else *Pointer_Is_Boiler_Running = 0;
 	
 	return 0;
 }
