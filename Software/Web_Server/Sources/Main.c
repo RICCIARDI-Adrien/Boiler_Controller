@@ -10,6 +10,19 @@
 #include <syslog.h>
 
 //-------------------------------------------------------------------------------------------------
+// Private constants and macros
+//-------------------------------------------------------------------------------------------------
+/** Minimum allowed day or night temperature in Celsius degrees. */
+#define MAIN_TEMPERATURE_MINIMUM_VALUE 15
+/** Maximum allowed day or night temperature in Celsius degrees. */
+#define MAIN_TEMPERATURE_MAXIMUM_VALUE 25
+
+/** Convert the macro identifier to a C string. */
+#define MAIN_CONVERT_MACRO_NAME_TO_STRING(X) #X
+/** Convert the macro value to a C string. The preprocessor needs two passes to do the conversion, so the MAIN_CONVERT_MACRO_NAME_TO_STRING() is needed. */
+#define MAIN_CONVERT_MACRO_VALUE_TO_STRING(X) MAIN_CONVERT_MACRO_NAME_TO_STRING(X)
+
+//-------------------------------------------------------------------------------------------------
 // Private variables
 //-------------------------------------------------------------------------------------------------
 /** Store the HTML page to send as response. */
@@ -19,14 +32,50 @@ static char Main_String_Response[10 * 1024];
 // Private functions
 //-------------------------------------------------------------------------------------------------
 /** Create the "index.html" page response.
- * @param Pointer_String_Values TODO
+ * @param Pointer_Connection The connection object.
  * @return -1 if an error occurred,
  * @return 0 on success.
  */
-static int MainPrepareIndexPageResponse(const char *Pointer_String_Values)
+static int MainPrepareIndexPageResponse(struct MHD_Connection *Pointer_Connection)
 {
 	int Day_Temperature, Night_Temperature, Has_Error_Occurred = 0, Is_Boiler_Running;
+	const char *Pointer_String_Argument_Value;
 	
+	// Extract values (if any) from the URL
+	// Power state
+	Pointer_String_Argument_Value = MHD_lookup_connection_value(Pointer_Connection, MHD_GET_ARGUMENT_KIND, "power_state");
+	if (Pointer_String_Argument_Value != NULL)
+	{
+		if ((sscanf(Pointer_String_Argument_Value, "%d", &Is_Boiler_Running) != 1) || (Is_Boiler_Running < 0) || (Is_Boiler_Running > 1))
+		{
+			syslog(LOG_ERR, "Bad 'power_state' argument value (%s), no data will be sent to the board.", Pointer_String_Argument_Value);
+			goto Read_Board_Values;
+		}
+	}
+	// Day temperature
+	Pointer_String_Argument_Value = MHD_lookup_connection_value(Pointer_Connection, MHD_GET_ARGUMENT_KIND, "day_temperature");
+	if (Pointer_String_Argument_Value != NULL)
+	{
+		if ((sscanf(Pointer_String_Argument_Value, "%d", &Day_Temperature) != 1) || (Day_Temperature < MAIN_TEMPERATURE_MINIMUM_VALUE) || (Day_Temperature > MAIN_TEMPERATURE_MAXIMUM_VALUE))
+		{
+			syslog(LOG_ERR, "Bad 'day_temperature' argument value (%s), no data will be sent to the board.", Pointer_String_Argument_Value);
+			goto Read_Board_Values;
+		}
+	}
+	// Night temperature
+	Pointer_String_Argument_Value = MHD_lookup_connection_value(Pointer_Connection, MHD_GET_ARGUMENT_KIND, "night_temperature");
+	if (Pointer_String_Argument_Value != NULL)
+	{
+		if ((sscanf(Pointer_String_Argument_Value, "%d", &Night_Temperature) != 1) || (Night_Temperature < MAIN_TEMPERATURE_MINIMUM_VALUE) || (Night_Temperature > MAIN_TEMPERATURE_MAXIMUM_VALUE))
+		{
+			syslog(LOG_ERR, "Bad 'night_temperature' argument value (%s), no data will be sent to the board.", Pointer_String_Argument_Value);
+			goto Read_Board_Values;
+		}
+	}
+	
+	// TODO set new values
+	
+Read_Board_Values:
 	// Read all needed values from the board
 	if (BoilerGetBoilerRunningMode(&Is_Boiler_Running) != 0) Has_Error_Occurred = 1;
 	if (BoilerGetDesiredRoomTemperatures(&Day_Temperature, &Night_Temperature) != 0) Has_Error_Occurred = 1;
@@ -63,12 +112,12 @@ static int MainPrepareIndexPageResponse(const char *Pointer_String_Values)
 		"			<table>\n"
 		"			<tr>\n"
 		"				<td>Jour</td>\n"
-		"				<td><input type=\"range\" min=\"16\" max=\"24\" step=\"1\" name=\"day_temperature\" onchange=\"updateDesiredDayTemperature()\" id=\"id_day_temperature\" value=\"%d\"></td>\n"
+		"				<td><input type=\"range\" min=\"" MAIN_CONVERT_MACRO_VALUE_TO_STRING(MAIN_TEMPERATURE_MINIMUM_VALUE) "\" max=\"" MAIN_CONVERT_MACRO_VALUE_TO_STRING(MAIN_TEMPERATURE_MAXIMUM_VALUE) "\" step=\"1\" name=\"day_temperature\" onchange=\"updateDesiredDayTemperature()\" id=\"id_day_temperature\" value=\"%d\"></td>\n"
 		"				<td id=\"id_desired_day_temperature\">%d&deg;C</td>\n"
 		"			</tr>\n"
 		"			<tr>\n"
 		"				<td>Nuit</td>\n"
-		"				<td><input type=\"range\" min=\"19\" max=\"27\" step=\"1\" name=\"night_temperature\" onchange=\"updateDesiredNightTemperature()\" id=\"id_night_temperature\" value=\"%d\"></td>\n"
+		"				<td><input type=\"range\" min=\"" MAIN_CONVERT_MACRO_VALUE_TO_STRING(MAIN_TEMPERATURE_MINIMUM_VALUE) "\" max=\"" MAIN_CONVERT_MACRO_VALUE_TO_STRING(MAIN_TEMPERATURE_MAXIMUM_VALUE) "\" step=\"1\" name=\"night_temperature\" onchange=\"updateDesiredNightTemperature()\" id=\"id_night_temperature\" value=\"%d\"></td>\n"
 		"				<td id=\"id_desired_night_temperature\">%d&deg;C</td>\n"
 		"			</tr>\n"
 		"			</table>\n"
@@ -130,7 +179,7 @@ static int MainWebServerAccessHandlerCallback(void __attribute__((unused)) *Poin
 	// Create the page to send as the response
 	if ((strncmp(Pointer_String_URL, "/", 1) == 0) || (strncmp(Pointer_String_URL, "/index.html", 11)))
 	{
-		if (MainPrepareIndexPageResponse(Pointer_String_URL) != 0) return MHD_NO;
+		if (MainPrepareIndexPageResponse(Pointer_Connection) != 0) return MHD_NO;
 	}
 	else return MHD_NO;
 	
