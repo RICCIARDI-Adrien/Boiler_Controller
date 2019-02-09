@@ -27,15 +27,17 @@ typedef enum
  */
 signed char TemperatureGetSensorValue(TTemperatureSensorID Temperature_ID);
 
-/** Determine the desired room temperature according to trimmers position (taking night and day into account) and protocol command.
- * @return The desired room temperature in °C.
+/** Determine the desired room temperatures according to trimmers position and protocol command.
+ * @param Pointer_Day_Temperature On output, contain the desired day room temperature in °C.
+ * @param Pointer_Night_Temperature On output, contain the desired night room temperature in °C.
  */
-signed char TemperatureGetDesiredRoomTemperature(void);
+void TemperatureGetDesiredRoomTemperatures(signed char *Pointer_Day_Temperature, signed char *Pointer_Night_Temperature);
 
-/** Set the desired room temperature. This value can be overwritten by a trimmer position change.
- * @param Temperature The new desired room temperature.
+/** Set the desired room temperature for day and night. These values can be overwritten by a trimmer position change.
+ * @param Day_Temperature The desired room temperature during the day.
+ * @param Night_Temperature The desired room temperature during the night.
  */
-void TemperatureSetDesiredRoomTemperature(signed char Temperature);
+void TemperatureSetDesiredRoomTemperatures(signed char Day_Temperature, signed char Night_Temperature);
 
 /** Turn on or off night mode (needed do know what trimmer to monitor for temperature change).
  * @param Is_Night_Mode_Enabled Set to 1 to enable night mode, set to 0 to enable day mode.

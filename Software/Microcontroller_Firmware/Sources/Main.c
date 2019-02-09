@@ -3,8 +3,8 @@
  * @author Adrien RICCIARDI
  */
 #include <ADC.h>
-#include <avr/io.h>
 #include <avr/interrupt.h>
+#include <avr/io.h>
 #include <Configuration.h>
 #include <Led.h>
 #include <Mixing_Valve.h>

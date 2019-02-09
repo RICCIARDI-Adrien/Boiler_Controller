@@ -22,7 +22,7 @@
 #define CONFIGURATION_FIRMWARE_VERSION 1
 
 /** Mixing valve time in seconds to go from one side to the other side. */
-#define CONFIGURATION_MIXING_VALVE_MAXIMUM_MOVING_TIME (20 * 60) // Valve needs about 18 minutes to travel from one side to the other, set 20 minutes to get some margin (valves has internal limit switches)
+#define CONFIGURATION_MIXING_VALVE_MAXIMUM_MOVING_TIME (20 * 60) // Valve needs about 18 minutes to travel from one side to the other, set 20 minutes to get some margin (valve has internal limit switches)
 
 /** The reference temperature (in °C) the trimmers use when they are set to 0. */
 #define CONFIGURATION_TRIMMERS_REFERENCE_TEMPERATURE 20

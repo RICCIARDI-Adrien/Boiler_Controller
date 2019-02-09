@@ -10,8 +10,10 @@
 //-------------------------------------------------------------------------------------------------
 // Private variables
 //-------------------------------------------------------------------------------------------------
-/** The current desired temperature (in °C). */
-static signed char Temperature_Desired_Room_Temperature = 0;
+/** The current desired temperature (in °C), this value is used only when night mode is disabled. */
+static signed char Temperature_Desired_Day_Room_Temperature = 0;
+/** The current desired temperature (in °C), this value is used only when night mode is enabled. */
+static signed char Temperature_Desired_Night_Room_Temperature = 0;
 
 /** The start water temperature to reach (in °C). */
 static signed char Temperature_Target_Start_Water_Temperature = 0;
@@ -97,37 +99,35 @@ signed char TemperatureGetSensorValue(TTemperatureSensorID Temperature_ID)
 	return (signed char) Temperature;
 }
 
-signed char TemperatureGetDesiredRoomTemperature(void)
+void TemperatureGetDesiredRoomTemperatures(signed char *Pointer_Day_Temperature, signed char *Pointer_Night_Temperature)
 {
 	static signed char Previous_Day_Trimmer_Temperature = 0, Previous_Night_Trimmer_Temperature = 0;
 	signed char Current_Trimmer_Temperature;
 	
-	// Change desired temperature if the trimmer corresponding to the current mode (night or day) has been changed
-	if (ProtocolIsNightModeEnabled())
+	// Change desired day temperature if the day trimmer has been changed
+	Current_Trimmer_Temperature = TemperatureGetDayTrimmerTemperature();
+	if (Current_Trimmer_Temperature != Previous_Day_Trimmer_Temperature)
 	{
-		Current_Trimmer_Temperature = TemperatureGetNightTrimmerTemperature();
-		if (Current_Trimmer_Temperature == Previous_Night_Trimmer_Temperature) return Temperature_Desired_Room_Temperature;
-		
-		// Keep new trimmer temperature to be able to determine next trimmer value change
-		Previous_Night_Trimmer_Temperature = Current_Trimmer_Temperature;
-	}
-	else
-	{
-		Current_Trimmer_Temperature = TemperatureGetDayTrimmerTemperature();
-		if (Current_Trimmer_Temperature == Previous_Day_Trimmer_Temperature) return Temperature_Desired_Room_Temperature;
-
-		// Keep new trimmer temperature to be able to determine next trimmer value change
-		Previous_Day_Trimmer_Temperature = Current_Trimmer_Temperature;
+		Temperature_Desired_Day_Room_Temperature = Current_Trimmer_Temperature;
+		Previous_Day_Trimmer_Temperature = Current_Trimmer_Temperature; // Keep new trimmer temperature to be able to determine next trimmer value change
 	}
 	
-	// Trimmer value changed, atomically set new desired temperature (this value can also be changed by Protocol module but there is no need for a mutex as this is a single byte value)
-	Temperature_Desired_Room_Temperature = Current_Trimmer_Temperature;
-	return Current_Trimmer_Temperature;
+	// Change desired night temperature if the night trimmer has been changed
+	Current_Trimmer_Temperature = TemperatureGetNightTrimmerTemperature();
+	if (Current_Trimmer_Temperature != Previous_Night_Trimmer_Temperature)
+	{
+		Temperature_Desired_Night_Room_Temperature = Current_Trimmer_Temperature;
+		Previous_Night_Trimmer_Temperature = Current_Trimmer_Temperature; // Keep new trimmer temperature to be able to determine next trimmer value change
+	}
+	
+	*Pointer_Day_Temperature = Temperature_Desired_Day_Room_Temperature;
+	*Pointer_Night_Temperature = Temperature_Desired_Night_Room_Temperature;
 }
 
-void TemperatureSetDesiredRoomTemperature(signed char Temperature)
+void TemperatureSetDesiredRoomTemperatures(signed char Day_Temperature, signed char Night_Temperature)
 {
-	Temperature_Desired_Room_Temperature = Temperature;
+	Temperature_Desired_Day_Room_Temperature = Day_Temperature;
+	Temperature_Desired_Night_Room_Temperature = Night_Temperature;
 }
 
 signed char TemperatureGetTargetStartWaterTemperature(void)
@@ -151,12 +151,15 @@ void TemperatureSetHeatingCurveParameters(unsigned short Coefficient, unsigned s
 
 void TemperatureTask(void)
 {
-	signed char Outside_Temperature, Desired_Room_Temperature, Target_Start_Water_Temperature;
+	signed char Outside_Temperature, Desired_Room_Temperature, Target_Start_Water_Temperature, Day_Temperature, Night_Temperature;
 	signed long Heating_Curve_Coefficient, Heating_Curve_Parallel_Shift; // Promote unsigned short values to long to force the heating curve computation to be done on long variables
 	
 	// Use some more variables to make the heating curve computation easier to understand
 	Outside_Temperature = TemperatureGetSensorValue(TEMPERATURE_SENSOR_ID_OUTSIDE);
-	Desired_Room_Temperature = TemperatureGetDesiredRoomTemperature();
+	// Determine the desired room temperature according to current mode
+	TemperatureGetDesiredRoomTemperatures(&Day_Temperature, &Night_Temperature);
+	if (ProtocolIsNightModeEnabled()) Desired_Room_Temperature = Night_Temperature;
+	else Desired_Room_Temperature = Day_Temperature;
 	
 	// Atomically retrieve values that can be set by Protocol module
 	PROTOCOL_DISABLE_INTERRUPTS();
