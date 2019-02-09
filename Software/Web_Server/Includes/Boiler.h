@@ -56,8 +56,13 @@ int BoilerSetNightMode(int Is_Night_Mode_Enabled);
  */
 int BoilerGetDesiredRoomTemperatures(int *Pointer_Day_Temperature, int *Pointer_Night_Temperature);
 
-/** TODO */
-int BoilerSetDesiredRoomTemperature(int Temperature);
+/** Write the desired room temperatures.
+ * @param Day_Temperature The desired temperature during the day.
+ * @param Night_Temperature The desired temperature during the night.
+ * @return -1 if an error occurred,
+ * @return 0 on success.
+ */
+int BoilerSetDesiredRoomTemperatures(int Day_Temperature, int Night_Temperature);
 
 /** Tell whether boiler is running or is idle.
  * @param Pointer_Is_Boiler_Running On output, is equal to 1 if the boiler is running or is equal to 0 if the boiler is idle.

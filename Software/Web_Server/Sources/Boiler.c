@@ -180,6 +180,17 @@ int BoilerGetDesiredRoomTemperatures(int *Pointer_Day_Temperature, int *Pointer_
 	return 0;
 }
 
+int BoilerSetDesiredRoomTemperatures(int Day_Temperature, int Night_Temperature)
+{
+	char Payload[2];
+	
+	Payload[0] = (char) Day_Temperature;
+	Payload[1] = (char) Night_Temperature;
+	if (BoilerSendCommand(BOILER_COMMAND_SET_DESIRED_ROOM_TEMPERATURES, 2, 0, Payload) != 0) return -1;
+	
+	return 0;
+}
+
 int BoilerGetBoilerRunningMode(int *Pointer_Is_Boiler_Running)
 {
 	unsigned char Is_Running;
@@ -187,6 +198,15 @@ int BoilerGetBoilerRunningMode(int *Pointer_Is_Boiler_Running)
 	if (BoilerSendCommand(BOILER_COMMAND_GET_BOILER_RUNNING_MODE, 0, 1, &Is_Running) != 0) return -1;
 	if (Is_Running) *Pointer_Is_Boiler_Running = 1;
 	else *Pointer_Is_Boiler_Running = 0;
+	
+	return 0;
+}
+
+int BoilerSetBoilerRunningMode(int Is_Boiler_Running)
+{
+	unsigned char Payload = (unsigned char) Is_Boiler_Running;
+	
+	if (BoilerSendCommand(BOILER_COMMAND_SET_BOILER_RUNNING_MODE, 1, 0, &Payload) != 0) return -1;
 	
 	return 0;
 }

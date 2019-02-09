@@ -73,13 +73,36 @@ static int MainPrepareIndexPageResponse(struct MHD_Connection *Pointer_Connectio
 		}
 	}
 	
-	// TODO set new values
+	// Set new values
+	// Power mode
+	if (BoilerSetBoilerRunningMode(Is_Boiler_Running) != 0)
+	{
+		syslog(LOG_ERR, "Failed to set boiler running mode.");
+		Has_Error_Occurred = 1;
+	}
+	// Desired temperatures
+	if (BoilerSetDesiredRoomTemperatures(Day_Temperature, Night_Temperature) != 0)
+	{
+		syslog(LOG_ERR, "Failed to set desired room temperatures.");
+		Has_Error_Occurred = 1;
+	}
 	
 Read_Board_Values:
 	// Read all needed values from the board
-	if (BoilerGetBoilerRunningMode(&Is_Boiler_Running) != 0) Has_Error_Occurred = 1;
-	if (BoilerGetDesiredRoomTemperatures(&Day_Temperature, &Night_Temperature) != 0) Has_Error_Occurred = 1;
+	// Power mode
+	if (BoilerGetBoilerRunningMode(&Is_Boiler_Running) != 0)
+	{
+		syslog(LOG_ERR, "Failed to read boiler running mode from board.");
+		Has_Error_Occurred = 1;
+	}
+	// Desired temperatures
+	if (BoilerGetDesiredRoomTemperatures(&Day_Temperature, &Night_Temperature) != 0)
+	{
+		syslog(LOG_ERR, "Failed to read desired temperatures from board.");
+		Has_Error_Occurred = 1;
+	}
 	
+	// Generate the right page
 	if (Has_Error_Occurred) strcpy(Main_String_Response,
 		"<html>\n"
 		"	<head>\n"
