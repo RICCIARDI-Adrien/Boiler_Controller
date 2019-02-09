@@ -2,6 +2,7 @@
  * An HTTP front-end for the boiler controller board.
  * @author Adrien RICCIARDI
  */
+#include <Boiler.h>
 #include <microhttpd.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -140,21 +141,31 @@ int main(int argc, char *argv[])
 	// Check parameters
 	if (argc != 2)
 	{
-		syslog(LOG_ERR, "Bad parameters. Usage : %s Server_Port", argv[0]);
-		printf("Bad parameters. Usage : %s Server_Port\n", argv[0]);
+		syslog(LOG_ERR, "Bad parameters. Usage : %s Web_Server_Port", argv[0]);
+		printf("Bad parameters. Usage : %s Web_Server_Port\n", argv[0]);
 		return EXIT_FAILURE;
 	}
 	Web_Server_Port = atoi(argv[1]);
+	
+	// Start boiler server first, so board gets a chance to connect before the first web request comes
+	if (BoilerInitializeServer() != 0)
+	{
+		syslog(LOG_ERR, "Failed to initialize boiler server, exiting.");
+		return EXIT_FAILURE;
+	}
 	
 	// Start web server
 	Pointer_Web_Server = MHD_start_daemon(MHD_USE_THREAD_PER_CONNECTION, Web_Server_Port, NULL, NULL, MainWebServerAccessHandlerCallback, NULL, MHD_OPTION_END);
 	if (Pointer_Web_Server == NULL)
 	{
-		syslog(LOG_ERR, "Failed to start web server daemon, exiting.\n");
+		BoilerUninitializeServer();
+		syslog(LOG_ERR, "Failed to start web server daemon, exiting.");
 		return EXIT_FAILURE;
 	}
+	syslog(LOG_INFO, "Server started and ready.");
 	
-	while (1);
+	// Run board server
+	while (1) BoilerRunServer();
 	
 	return 0;
 }
