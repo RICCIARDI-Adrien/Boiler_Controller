@@ -29,15 +29,13 @@ TMixingValvePosition MixingValveGetPosition(void)
 // No need for mutex because this function is called sequentially with mixing valve task function
 void MixingValveSetPosition(TMixingValvePosition Position)
 {
-	// Nothing to do if the valve is in the desired position yet
-	if (Position == Mixing_Valve_Current_Position) return;
-	
 	// Compute the required moving time and activate the needed relays
 	switch (Position)
 	{
 		case MIXING_VALVE_POSITION_LEFT:
 			// Make the valve moves
 			RelayTurnOn(RELAY_ID_MIXING_VALVE_LEFT);
+			RelayTurnOff(RELAY_ID_MIXING_VALVE_RIGHT);
 			Mixing_Valve_Target_Position = MIXING_VALVE_POSITION_LEFT;
 			// Compute the needed moving time
 			if (Mixing_Valve_Current_Position == MIXING_VALVE_POSITION_CENTER) Mixing_Valve_Remaining_Moving_Time = CONFIGURATION_MIXING_VALVE_MAXIMUM_MOVING_TIME / 2; // Go from center to left
@@ -46,15 +44,24 @@ void MixingValveSetPosition(TMixingValvePosition Position)
 			
 		case MIXING_VALVE_POSITION_CENTER:
 			// Go from left to center
-			if (Mixing_Valve_Current_Position == MIXING_VALVE_POSITION_LEFT) RelayTurnOn(RELAY_ID_MIXING_VALVE_RIGHT);
+			if (Mixing_Valve_Current_Position == MIXING_VALVE_POSITION_LEFT)
+			{
+				RelayTurnOff(RELAY_ID_MIXING_VALVE_LEFT);
+				RelayTurnOn(RELAY_ID_MIXING_VALVE_RIGHT);
+			}
 			// Go from right to center
-			else RelayTurnOn(RELAY_ID_MIXING_VALVE_LEFT);
+			else
+			{
+				RelayTurnOn(RELAY_ID_MIXING_VALVE_LEFT);
+				RelayTurnOff(RELAY_ID_MIXING_VALVE_RIGHT);
+			}
 			Mixing_Valve_Target_Position = MIXING_VALVE_POSITION_CENTER;
 			Mixing_Valve_Remaining_Moving_Time = CONFIGURATION_MIXING_VALVE_MAXIMUM_MOVING_TIME / 2;
 			break;
 			
 		case MIXING_VALVE_POSITION_RIGHT:
 			// Make the valve moves
+			RelayTurnOff(RELAY_ID_MIXING_VALVE_LEFT);
 			RelayTurnOn(RELAY_ID_MIXING_VALVE_RIGHT);
 			Mixing_Valve_Target_Position = MIXING_VALVE_POSITION_RIGHT;
 			// Compute the needed moving time
