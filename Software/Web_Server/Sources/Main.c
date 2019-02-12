@@ -47,33 +47,27 @@ static int MainPrepareIndexPageResponse(struct MHD_Connection *Pointer_Connectio
 	if (Pointer_String_Argument_Value == NULL) goto Read_Board_Values;
 	if ((sscanf(Pointer_String_Argument_Value, "%d", &Is_Boiler_Running) != 1) || (Is_Boiler_Running < 0) || (Is_Boiler_Running > 1))
 	{
-		free(Pointer_String_Argument_Value);
 		syslog(LOG_ERR, "Bad 'power_state' argument value (%s), no data will be sent to the board.", Pointer_String_Argument_Value);
 		goto Read_Board_Values;
 	}
-	free(Pointer_String_Argument_Value);
 	
 	// Day temperature
 	Pointer_String_Argument_Value = MHD_lookup_connection_value(Pointer_Connection, MHD_GET_ARGUMENT_KIND, "day_temperature");
 	if (Pointer_String_Argument_Value == NULL) goto Read_Board_Values;
 	if ((sscanf(Pointer_String_Argument_Value, "%d", &Day_Temperature) != 1) || (Day_Temperature < MAIN_TEMPERATURE_MINIMUM_VALUE) || (Day_Temperature > MAIN_TEMPERATURE_MAXIMUM_VALUE))
 	{
-		free(Pointer_String_Argument_Value);
 		syslog(LOG_ERR, "Bad 'day_temperature' argument value (%s), no data will be sent to the board.", Pointer_String_Argument_Value);
 		goto Read_Board_Values;
 	}
-	free(Pointer_String_Argument_Value);
 	
 	// Night temperature
 	Pointer_String_Argument_Value = MHD_lookup_connection_value(Pointer_Connection, MHD_GET_ARGUMENT_KIND, "night_temperature");
 	if (Pointer_String_Argument_Value == NULL) goto Read_Board_Values;
 	if ((sscanf(Pointer_String_Argument_Value, "%d", &Night_Temperature) != 1) || (Night_Temperature < MAIN_TEMPERATURE_MINIMUM_VALUE) || (Night_Temperature > MAIN_TEMPERATURE_MAXIMUM_VALUE))
 	{
-		free(Pointer_String_Argument_Value);
 		syslog(LOG_ERR, "Bad 'night_temperature' argument value (%s), no data will be sent to the board.", Pointer_String_Argument_Value);
 		goto Read_Board_Values;
 	}
-	free(Pointer_String_Argument_Value);
 	
 	// Set new values
 	// Power mode
