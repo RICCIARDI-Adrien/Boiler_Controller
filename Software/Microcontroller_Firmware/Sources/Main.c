@@ -29,7 +29,7 @@ FUSES =
 //-------------------------------------------------------------------------------------------------
 int main(void) // Can't use void return type because it triggers a warning
 {
-	unsigned char Is_WiFi_Successfully_Initialized, Is_Status_Led_On = 1;
+	unsigned char Is_WiFi_Successfully_Initialized, Is_Status_Led_On = 1, Is_Boiler_Running_Before = 1, Is_Boiler_Running_Now;
 	signed char Radiator_Water_Start_Temperature, Target_Start_Water_Temperature;
 	
 	// Initialize modules
@@ -53,7 +53,11 @@ int main(void) // Can't use void return type because it triggers a warning
 		// Compute target temperature to reach (compute it even when boiler is not running in order to report a good value through protocol commands)
 		TemperatureTask();
 		
-		if (ProtocolIsBoilerRunning())
+		// Cache current running state as it is used several times
+		Is_Boiler_Running_Now = ProtocolIsBoilerRunning();
+		
+		// Handle gas burner
+		if (Is_Boiler_Running_Now)
 		{
 			// Cache converted temperature values (conversion computations cost a lot of cycles)
 			Radiator_Water_Start_Temperature = TemperatureGetSensorValue(TEMPERATURE_SENSOR_ID_RADIATOR_START);
@@ -62,30 +66,38 @@ int main(void) // Can't use void return type because it triggers a warning
 			// Gas burner control
 			if (Radiator_Water_Start_Temperature <= Target_Start_Water_Temperature - CONFIGURATION_GAS_BURNER_TEMPERATURE_HYSTERESIS_LOW) RelayTurnOn(RELAY_ID_GAS_BURNER);
 			else if (Radiator_Water_Start_Temperature >= Target_Start_Water_Temperature + CONFIGURATION_GAS_BURNER_TEMPERATURE_HYSTERESIS_HIGH) RelayTurnOff(RELAY_ID_GAS_BURNER);
-			
-			// Start pump
-			RelayTurnOn(RELAY_ID_PUMP);
-			
-			// Progressively send water to the radiators (assume valve is on the left position, which is set when boiler is stopped)
-			MixingValveSetPosition(MIXING_VALVE_POSITION_RIGHT);
-			
-			// Tell user boiler is running
-			LedTurnOff(LED_ID_BOILER_RUNNING_MODE);
 		}
-		else
+		
+		// Execute the following actions only once when running state changes
+		if (Is_Boiler_Running_Now != Is_Boiler_Running_Before)
 		{
-			// Make sure burner is stopped
-			RelayTurnOff(RELAY_ID_GAS_BURNER);
-			
-			// Stop pump
-			RelayTurnOff(RELAY_ID_PUMP);
-			
-			// Close radiators water circuit to send cold water only to the gas burner on next run
-			MixingValveSetPosition(MIXING_VALVE_POSITION_LEFT);
-			
-			// Tell user boiler is idle
-			LedTurnOn(LED_ID_BOILER_RUNNING_MODE);
+			if (Is_Boiler_Running_Now)
+			{
+				// Start pump
+				RelayTurnOn(RELAY_ID_PUMP);
+				
+				// Progressively send water to the radiators (assume valve is on the left position, which is set when boiler is stopped)
+				MixingValveSetPosition(MIXING_VALVE_POSITION_RIGHT);
+				
+				// Tell user boiler is running
+				LedTurnOff(LED_ID_BOILER_RUNNING_MODE);
+			}
+			else
+			{
+				// Make sure burner is stopped
+				RelayTurnOff(RELAY_ID_GAS_BURNER);
+				
+				// Stop pump
+				RelayTurnOff(RELAY_ID_PUMP);
+				
+				// Close radiators water circuit to send cold water only to the gas burner on next run
+				MixingValveSetPosition(MIXING_VALVE_POSITION_LEFT);
+				
+				// Tell user boiler is idle
+				LedTurnOn(LED_ID_BOILER_RUNNING_MODE);
+			}
 		}
+		Is_Boiler_Running_Before = Is_Boiler_Running_Now;
 		
 		// Make the mixing valve moves
 		MixingValveTask();
