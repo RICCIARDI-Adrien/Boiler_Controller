@@ -35,7 +35,7 @@ void LedTurnOn(TLedID Led_ID)
 			PORTB |= 0x01;
 			break;
 			
-		case LED_ID_LED_4:
+		case LED_ID_MIXING_VALVE_MOVING:
 			PORTB |= 0x02;
 			break;
 			
@@ -60,7 +60,7 @@ void LedTurnOff(TLedID Led_ID)
 			PORTB &= ~0x01;
 			break;
 			
-		case LED_ID_LED_4:
+		case LED_ID_MIXING_VALVE_MOVING:
 			PORTB &= ~0x02;
 			break;
 			

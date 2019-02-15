@@ -14,7 +14,7 @@ typedef enum
 	LED_ID_STATUS,
 	LED_ID_NETWORK_ERROR,
 	LED_ID_BOILER_RUNNING_MODE,
-	LED_ID_LED_4
+	LED_ID_MIXING_VALVE_MOVING
 } TLedID;
 
 //-------------------------------------------------------------------------------------------------

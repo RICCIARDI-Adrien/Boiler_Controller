@@ -3,6 +3,7 @@
  * @author Adrien RICCIARDI
  */
 #include <Configuration.h>
+#include <Led.h>
 #include <Mixing_Valve.h>
 #include <Relay.h>
 
@@ -73,6 +74,9 @@ void MixingValveSetPosition(TMixingValvePosition Position)
 		default:
 			break;
 	}
+	
+	// Tell user that mixing valve is moving
+	LedTurnOn(LED_ID_MIXING_VALVE_MOVING); // The led will never turn off if an invalid position is specified but this should never happen
 }
 
 void MixingValveTask(void)
@@ -91,5 +95,8 @@ void MixingValveTask(void)
 		
 		// Valve has reached the target position
 		Mixing_Valve_Current_Position = Mixing_Valve_Target_Position;
+		
+		// Tell user that mixing valve finished moving
+		LedTurnOff(LED_ID_MIXING_VALVE_MOVING);
 	}
 }
