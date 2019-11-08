@@ -4,6 +4,7 @@
  */
 #include <ADC.h>
 #include <Configuration.h>
+#include <EEPROM.h>
 #include <Protocol.h>
 #include <Temperature.h>
 
@@ -19,9 +20,9 @@ static signed char Temperature_Desired_Night_Room_Temperature = 0;
 static signed char Temperature_Target_Start_Water_Temperature = 0;
 
 /** Heating curve coefficient (multiplied by ten to make more precise computations). */
-static unsigned short Temperature_Heating_Curve_Coefficient = CONFIGURATION_HEATING_CURVE_COEFFICIENT;
+static unsigned short Temperature_Heating_Curve_Coefficient;
 /** Heating curve parallel shift (also multiplied by ten to improve results precision). */
-static unsigned short Temperature_Heating_Curve_Parallel_Shift = CONFIGURATION_HEATING_CURVE_PARALLEL_SHIFT;
+static unsigned short Temperature_Heating_Curve_Parallel_Shift;
 
 //-------------------------------------------------------------------------------------------------
 // Private functions
@@ -63,6 +64,17 @@ static inline signed char TemperatureGetNightTrimmerTemperature(void)
 //-------------------------------------------------------------------------------------------------
 // Public functions
 //-------------------------------------------------------------------------------------------------
+void TemperatureInitialize(void)
+{
+	// Load heating curve coefficient
+	Temperature_Heating_Curve_Coefficient = EEPROMReadByte(CONFIGURATION_EEPROM_ADDRESS_HEATING_CURVE_COEFFICIENT_HIGH_BYTE) << 8;
+	Temperature_Heating_Curve_Coefficient |= EEPROMReadByte(CONFIGURATION_EEPROM_ADDRESS_HEATING_CURVE_COEFFICIENT_LOW_BYTE);
+	
+	// Load heating curve parallel shift
+	Temperature_Heating_Curve_Parallel_Shift = EEPROMReadByte(CONFIGURATION_EEPROM_ADDRESS_HEATING_CURVE_PARALLEL_SHIFT_HIGH_BYTE) << 8;
+	Temperature_Heating_Curve_Parallel_Shift |= EEPROMReadByte(CONFIGURATION_EEPROM_ADDRESS_HEATING_CURVE_PARALLEL_SHIFT_LOW_BYTE);
+}
+
 signed char TemperatureGetSensorValue(TTemperatureSensorID Temperature_ID)
 {
 	signed long Temperature;
@@ -145,6 +157,15 @@ void TemperatureGetHeatingCurveParameters(unsigned short *Pointer_Coefficient, u
 // No need for mutex because this function is called exclusively by a protocol command (so this function call interrupts everything else), and all accesses to heating curve variables from main task are secured
 void TemperatureSetHeatingCurveParameters(unsigned short Coefficient, unsigned short Parallel_Shift)
 {
+	// Store coefficient to EEPROM
+	EEPROMWriteByte(CONFIGURATION_EEPROM_ADDRESS_HEATING_CURVE_COEFFICIENT_HIGH_BYTE, Coefficient >> 8);
+	EEPROMWriteByte(CONFIGURATION_EEPROM_ADDRESS_HEATING_CURVE_COEFFICIENT_LOW_BYTE, (unsigned char) Coefficient);
+	
+	// Store parallel shift to EEPROM
+	EEPROMWriteByte(CONFIGURATION_EEPROM_ADDRESS_HEATING_CURVE_PARALLEL_SHIFT_HIGH_BYTE, Parallel_Shift >> 8);
+	EEPROMWriteByte(CONFIGURATION_EEPROM_ADDRESS_HEATING_CURVE_PARALLEL_SHIFT_LOW_BYTE, (unsigned char) Parallel_Shift);
+	
+	// Update variables
 	Temperature_Heating_Curve_Coefficient = Coefficient;
 	Temperature_Heating_Curve_Parallel_Shift = Parallel_Shift;
 }

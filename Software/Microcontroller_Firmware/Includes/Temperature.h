@@ -20,6 +20,9 @@ typedef enum
 //-------------------------------------------------------------------------------------------------
 // Functions
 //-------------------------------------------------------------------------------------------------
+/** Load settings from internal EEPROM. */
+void TemperatureInitialize(void);
+
 /** Convert a specific sensor temperature to Celsius degrees.
  * @param Temperature_ID The sensor to get °C temperature value.
  * @return The temperature converted to °C.

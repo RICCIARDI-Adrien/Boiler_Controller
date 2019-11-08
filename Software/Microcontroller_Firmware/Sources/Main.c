@@ -37,6 +37,7 @@ int main(void) // Can't use void return type because it triggers a warning
 	LedTurnOn(LED_ID_STATUS); // Turn status led on to tell controller is booting
 	ADCInitialize();
 	RelayInitialize();
+	TemperatureInitialize();
 	Is_WiFi_Successfully_Initialized = ProtocolInitialize();
 	
 	// Enable interrupts now that all modules have been configured

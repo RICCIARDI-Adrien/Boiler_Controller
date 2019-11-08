@@ -27,10 +27,6 @@
 /** The reference temperature (in °C) the trimmers use when they are set to 0. */
 #define CONFIGURATION_TRIMMERS_REFERENCE_TEMPERATURE 20
 
-/** The curve coefficient (in °C) x10 to improve computation results. */
-#define CONFIGURATION_HEATING_CURVE_COEFFICIENT 18L
-/** The curve parallel shift (offset to vertically add to the curve), also x10 to be compatible with the curve coefficient. */
-#define CONFIGURATION_HEATING_CURVE_PARALLEL_SHIFT 200L
 /** Minimum temperature value (clamped after heating curve computation). */
 #define CONFIGURATION_HEATING_CURVE_MINIMUM_TEMPERATURE 10 // TODO determine a good value
 /** Maximum temperature value (clamped after heating curve computation). */
@@ -43,5 +39,14 @@
 
 /** How many ADC samples to use to compute the moving average value. */
 #define CONFIGURATION_ADC_MOVING_AVERAGE_SAMPLES_COUNT 5
+
+/** Heating curve coefficient least significant byte address in internal EEPROM. */
+#define CONFIGURATION_EEPROM_ADDRESS_HEATING_CURVE_COEFFICIENT_LOW_BYTE 0
+/** Heating curve coefficient most significant byte address in internal EEPROM. */
+#define CONFIGURATION_EEPROM_ADDRESS_HEATING_CURVE_COEFFICIENT_HIGH_BYTE 1
+/** Heating curve parallel shift least significant byte address in internal EEPROM. */
+#define CONFIGURATION_EEPROM_ADDRESS_HEATING_CURVE_PARALLEL_SHIFT_LOW_BYTE 2
+/** Heating curve parallel shift most significant byte address in internal EEPROM. */
+#define CONFIGURATION_EEPROM_ADDRESS_HEATING_CURVE_PARALLEL_SHIFT_HIGH_BYTE 3
 
 #endif
