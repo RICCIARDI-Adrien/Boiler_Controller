@@ -14,4 +14,10 @@
  */
 unsigned char EEPROMReadByte(unsigned short Address);
 
+/** Write an EEPROM byte value.
+ * @param Address The byte address in range [0..1023].
+ * @param Data The byte value.
+ */
+void EEPROMWriteByte(unsigned short Address, unsigned char Data);
+
 #endif
