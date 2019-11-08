@@ -145,7 +145,7 @@ Read_Board_Values:
 		"			<td>%d°C</td>\n"
 		"		</tr>\n"
 		"		<tr>\n"
-		"			<td>Temp&eacute;rature de consigne :</td>\n"
+		"			<td>Temp&eacute;rature d'eau sortie chaudi&egrave;re :</td>\n"
 		"			<td>%d°C</td>\n"
 		"		</tr>\n"
 		"		</table>\n"
@@ -167,7 +167,7 @@ Read_Board_Values:
 		"			}\n"
 		"		</script>\n"
 		"	</body>\n"
-		"</html>\n", Is_Boiler_Running ? "checked" : "", Is_Boiler_Running ? "" : "checked", Day_Temperature, Day_Temperature, Night_Temperature, Night_Temperature, Outside_Temperature, Target_Radiator_Start_Water_Temperature, Radiator_Start_Water_Temperature);
+		"</html>\n", Is_Boiler_Running ? "checked" : "", Is_Boiler_Running ? "" : "checked", Day_Temperature, Day_Temperature, Night_Temperature, Night_Temperature, Outside_Temperature, Radiator_Start_Water_Temperature, Target_Radiator_Start_Water_Temperature);
 	
 	return 0;
 }
