@@ -7,7 +7,7 @@ PATH_SOURCES = Sources
 
 BINARY = Boiler_Controller_Firmware.elf
 INCLUDES = -I$(PATH_INCLUDES)
-SOURCES = $(PATH_SOURCES)/ADC.c $(PATH_SOURCES)/Led.c $(PATH_SOURCES)/Main.c $(PATH_SOURCES)/Mixing_Valve.c $(PATH_SOURCES)/Protocol.c $(PATH_SOURCES)/Relay.c $(PATH_SOURCES)/Temperature.c
+SOURCES = $(PATH_SOURCES)/ADC.c $(PATH_SOURCES)/EEPROM.c $(PATH_SOURCES)/Led.c $(PATH_SOURCES)/Main.c $(PATH_SOURCES)/Mixing_Valve.c $(PATH_SOURCES)/Protocol.c $(PATH_SOURCES)/Relay.c $(PATH_SOURCES)/Temperature.c
 
 PROGRAMMER_SERIAL_PORT ?= /dev/ttyACM0
 
