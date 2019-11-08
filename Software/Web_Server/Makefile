@@ -5,7 +5,7 @@ BINARY = boiler-controller-web-server
 SYSTEMD_SERVICE = boiler-controller-web-server.service
 
 all:
-	$(CC) $(CCFLAGS) -IIncludes Sources/Boiler.c Sources/Main.c -lmicrohttpd -o $(BINARY)
+	$(CC) $(CCFLAGS) -IIncludes Sources/Boiler.c Sources/Main.c Sources/Page_Index.c -lmicrohttpd -o $(BINARY)
 
 clean:
 	rm -f $(BINARY)
