@@ -210,3 +210,10 @@ int BoilerSetBoilerRunningMode(int Is_Boiler_Running)
 	
 	return 0;
 }
+
+int BoilerGetTargetRadiatorStartWaterTemperature(int *Pointer_Temperature)
+{
+	if (BoilerSendCommand(BOILER_COMMAND_GET_TARGET_START_WATER_TEMPERATURE, 0, 1, Pointer_Temperature) != 0) return -1;
+	
+	return 0;
+}

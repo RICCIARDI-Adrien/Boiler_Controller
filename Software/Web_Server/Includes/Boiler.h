@@ -78,7 +78,11 @@ int BoilerGetBoilerRunningMode(int *Pointer_Is_Boiler_Running);
  */
 int BoilerSetBoilerRunningMode(int Is_Boiler_Running);
 
-/** TODO */
+/** Read target radiator start water temperature.
+ * @param Pointer_Temperature On output, contain the retrieved temperature.
+ * @return -1 if an error occurred,
+ * @return 0 on success.
+ */
 int BoilerGetTargetRadiatorStartWaterTemperature(int *Pointer_Temperature);
 
 #endif
