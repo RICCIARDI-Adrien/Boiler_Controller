@@ -112,7 +112,7 @@ Read_Board_Values:
 		"	<head>\n"
 		"		<title>Chaudi&egrave;re</title>\n"
 		"		<meta charset=\"utf-8\" />\n"
-		"		<meta http-equiv=\"refresh\" content=\"1\">\n"
+		"		<meta http-equiv=\"refresh\" content=\"10\">\n"
 		"	</head>\n"
 		"\n"
 		"	<body>\n"
