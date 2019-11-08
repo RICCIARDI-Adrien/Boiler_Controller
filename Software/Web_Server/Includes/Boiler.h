@@ -85,4 +85,12 @@ int BoilerSetBoilerRunningMode(int Is_Boiler_Running);
  */
 int BoilerGetTargetRadiatorStartWaterTemperature(int *Pointer_Temperature);
 
+/** Read heating curve parameters.
+ * @param Pointer_Coefficient On output, contain the coefficient multiplied by ten.
+ * @param Pointer_Parallel_Shift On output, contain the parallel shift multiplied by ten.
+ * @return -1 if an error occurred,
+ * @return 0 on success.
+ */
+int BoilerGetHeatingCurveParameters(int *Pointer_Coefficient, int *Pointer_Parallel_Shift);
+
 #endif

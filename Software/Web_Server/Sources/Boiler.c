@@ -217,3 +217,14 @@ int BoilerGetTargetRadiatorStartWaterTemperature(int *Pointer_Temperature)
 	
 	return 0;
 }
+
+int BoilerGetHeatingCurveParameters(int *Pointer_Coefficient, int *Pointer_Parallel_Shift)
+{
+	unsigned short Parameters[2];
+	
+	if (BoilerSendCommand(BOILER_COMMAND_GET_HEATING_CURVE_PARAMETERS, 0, 4, Parameters) != 0) return -1;
+	*Pointer_Coefficient = Parameters[0];
+	*Pointer_Parallel_Shift = Parameters[1];
+	
+	return 0;
+}

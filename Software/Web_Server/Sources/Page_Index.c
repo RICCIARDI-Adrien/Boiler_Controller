@@ -14,7 +14,7 @@
 //-------------------------------------------------------------------------------------------------
 int PageIndex(struct MHD_Connection *Pointer_Connection, char *Pointer_String_Response)
 {
-	int Day_Temperature, Night_Temperature, Has_Error_Occurred = 0, Is_Boiler_Running, Outside_Temperature, Radiator_Start_Water_Temperature, Target_Radiator_Start_Water_Temperature;
+	int Day_Temperature, Night_Temperature, Has_Error_Occurred = 0, Is_Boiler_Running, Outside_Temperature, Radiator_Start_Water_Temperature, Target_Radiator_Start_Water_Temperature, Heating_Curve_Coefficient, Heating_Curve_Parallel_Shift;
 	const char *Pointer_String_Argument_Value;
 	
 	// Extract values from the URL (all values must always be present)
@@ -85,6 +85,12 @@ Read_Board_Values:
 		syslog(LOG_ERR, "Failed to read target radiator start water temperature from board.");
 		Has_Error_Occurred = 1;
 	}
+	// Heating curve parameters
+	if (BoilerGetHeatingCurveParameters(&Heating_Curve_Coefficient, &Heating_Curve_Parallel_Shift) != 0)
+	{
+		syslog(LOG_ERR, "Failed to read heating curve parameters from board.");
+		Has_Error_Occurred = 1;
+	}
 	
 	// Generate the right page
 	if (Has_Error_Occurred) strcpy(Pointer_String_Response,
@@ -148,6 +154,14 @@ Read_Board_Values:
 		"			<td>Temp&eacute;rature d'eau sortie chaudi&egrave;re :</td>\n"
 		"			<td>%d°C</td>\n"
 		"		</tr>\n"
+		"		<tr>\n"
+		"			<td>Coefficient de la courbe de chauffe :</td>\n"
+		"			<td>%0.1f</td>\n"
+		"		</tr>\n"
+		"		<tr>\n"
+		"			<td>D&eacute;placement parall&egrave;le de la courbe de chauffe :</td>\n"
+		"			<td>%d</td>\n"
+		"		</tr>\n"
 		"		</table>\n"
 		"		</center>\n"
 		"\n"
@@ -167,7 +181,7 @@ Read_Board_Values:
 		"			}\n"
 		"		</script>\n"
 		"	</body>\n"
-		"</html>\n", Is_Boiler_Running ? "checked" : "", Is_Boiler_Running ? "" : "checked", Day_Temperature, Day_Temperature, Night_Temperature, Night_Temperature, Outside_Temperature, Radiator_Start_Water_Temperature, Target_Radiator_Start_Water_Temperature);
+		"</html>\n", Is_Boiler_Running ? "checked" : "", Is_Boiler_Running ? "" : "checked", Day_Temperature, Day_Temperature, Night_Temperature, Night_Temperature, Outside_Temperature, Radiator_Start_Water_Temperature, Target_Radiator_Start_Water_Temperature, Heating_Curve_Coefficient / 10.f, Heating_Curve_Parallel_Shift / 10);
 	
 	return 0;
 }
