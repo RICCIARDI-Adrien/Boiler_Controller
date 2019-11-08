@@ -58,7 +58,7 @@ AC/DC converter maximum input current is 150mA @ 240V, but due to enormous inrus
 
 ## Software
 
-### Building
+### Building microcontroller firmware
 Install `avr-gcc` to build the microcontroller firmware.
   
 Go to `Software/Microcontroller_Firmware` directory and type the following command to build the firmware :
@@ -67,7 +67,7 @@ make
 ```
 File `Boiler_Controller_Firmware.elf` will be created.
 
-### Flashing
+### Flashing microcontroller firmware
 You need to install `avrdude` to access to the programmer.  
 Firmware can be burnt to the microcontroller memory by connecting an AVR ISP programmer to the controller board ISP connector and typing the command :
 ```
@@ -75,3 +75,13 @@ make flash
 ```
   
 You can override the `PROGRAMMER_SERIAL_PORT` environment variable with the serial port your programmer is connected to.
+
+### Building web server
+You need to install `libmicrohttpd` library before building.  
+On Debian/Ubuntu system, use the command `sudo apt install libmicrohttpd-dev`.  
+
+To build the web server, go to `Software/Web_Server` directory and type `make`.
+
+### Installing web server
+Go to `Software/Web_Server` directory, build web server then type `sudo make install` to install server and init script.  
+You can use `sudo make uninstall` command to uninstall the server and all related files.
