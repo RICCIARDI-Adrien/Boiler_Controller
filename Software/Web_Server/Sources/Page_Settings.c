@@ -14,7 +14,17 @@
 //-------------------------------------------------------------------------------------------------
 int PageSettings(struct MHD_Connection *Pointer_Connection, char *Pointer_String_Response)
 {
-	strcpy(Pointer_String_Response,
+	int Has_Error_Occurred = 0, Heating_Curve_Coefficient, Heating_Curve_Parallel_Shift;
+	
+	// Read heating curve current parameters
+	if (BoilerGetHeatingCurveParameters(&Heating_Curve_Coefficient, &Heating_Curve_Parallel_Shift) != 0)
+	{
+		syslog(LOG_ERR, "Failed to read heating curve parameters from board in settings page.");
+		Has_Error_Occurred = 1;
+	}
+	
+	// Generate the right page
+	if (Has_Error_Occurred) strcpy(Pointer_String_Response,
 		"<html>\n"
 		"	<head>\n"
 		"		<title>Chaudi&egrave;re - Configuration</title>\n"
@@ -25,9 +35,44 @@ int PageSettings(struct MHD_Connection *Pointer_Connection, char *Pointer_String
 		"		<center>\n"
 		"		<h1>Configuration de la courbe de chauffe</h1>\n"
 		"\n"
-		"		<p><b>TEST</p>\n"
+		"		<p><b>Erreur de communication avec la carte. Veuillez recharger la page.</b></p>\n"
 		"	</body>\n"
 		"</html>\n");
+	else sprintf(Pointer_String_Response,
+		"<html>\n"
+		"	<head>\n"
+		"		<title>Chaudi&egrave;re - Configuration</title>\n"
+		"		<meta charset=\"utf-8\" />\n"
+		"	</head>\n"
+		"\n"
+		"	<body>\n"
+		"		<h1>Configuration de la courbe de chauffe</h1>\n"
+		"\n"
+		"		<h3>Param&egrave;tres de la courbe actuellement utilis&eacute;e</h2>\n"
+		"		<p>\n"
+		"			Coefficient : %0.1f<br />\n"
+		"			D&eacute;placement parall&egrave;le : %d\n"
+		"		</p>\n"
+		"\n"
+		"		<h3>D&eacute;finir la nouvelle courbe</h3>\n"
+		"		<form action=\"settings.html\">\n"
+		"			<input type=\"radio\" id=\"0\" name=\"settings\" value=\"0\">\n"
+		"			<label for=\"0\">Mi-saison (coefficient : 1.4, d&eacute;placement parall&egrave;le : 15)</label><br>\n"
+		"			<input type=\"radio\" id=\"1\" name=\"settings\" value=\"1\">\n"
+		"			<label for=\"0\">Hiver (coefficient : 1.8, d&eacute;placement parall&egrave;le : 20)</label><br>\n"
+		"\n"
+		"			<p>\n"
+		"				<input type=\"submit\" value=\"Valider\" />\n"
+		"			</p>\n"
+		"		</form>\n"
+		"\n"
+		"		<center>\n"
+		"			<p>\n"
+		"				<a href=\"/index.html\">Retour</a>\n"
+		"			</p>\n"
+		"		</center>\n"
+		"	</body>\n"
+		"</html>\n", Heating_Curve_Coefficient / 10.f, Heating_Curve_Parallel_Shift / 10);
 	
 	return 0;
 }
