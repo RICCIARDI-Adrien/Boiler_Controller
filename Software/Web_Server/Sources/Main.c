@@ -55,6 +55,10 @@ static int MainWebServerAccessHandlerCallback(void __attribute__((unused)) *Poin
 	{
 		if (PageSettings(Pointer_Connection, Main_String_Response) != 0) return MHD_NO;
 	}
+	else if (strncmp(Pointer_String_URL, "/monitoring.html", 16) == 0)
+	{
+		if (PageMonitoring(Pointer_Connection, Main_String_Response) != 0) return MHD_NO;
+	}
 	// Unknown page
 	else return MHD_NO;
 	

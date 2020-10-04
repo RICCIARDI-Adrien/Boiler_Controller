@@ -34,4 +34,12 @@ int PageIndex(struct MHD_Connection *Pointer_Connection, char *Pointer_String_Re
  */
 int PageSettings(struct MHD_Connection *Pointer_Connection, char *Pointer_String_Response);
 
+/** Create the monitoring page response.
+ * @param Pointer_Connection The connection object.
+ * @param Pointer_String_Response On output, contain the HTML page code.
+ * @return -1 if an error occurred,
+ * @return 0 on success.
+ */
+int PageMonitoring(struct MHD_Connection *Pointer_Connection, char *Pointer_String_Response);
+
 #endif
