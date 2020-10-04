@@ -232,3 +232,14 @@ int BoilerGetHeatingCurveParameters(int *Pointer_Coefficient, int *Pointer_Paral
 	
 	return 0;
 }
+
+int BoilerSetHeatingCurveParameters(int Coefficient, int Parallel_Shift)
+{
+	unsigned short Parameters[2];
+	
+	Parameters[0] = (unsigned short) Coefficient;
+	Parameters[1] = (unsigned short) Parallel_Shift;
+	if (BoilerSendCommand(BOILER_COMMAND_SET_HEATING_CURVE_PARAMETERS, 4, 0, Parameters) != 0) return -1;
+	
+	return 0;
+}

@@ -93,4 +93,12 @@ int BoilerGetTargetRadiatorStartWaterTemperature(int *Pointer_Temperature);
  */
 int BoilerGetHeatingCurveParameters(int *Pointer_Coefficient, int *Pointer_Parallel_Shift);
 
+/** Write heating curve parameters to board EEPROM.
+ * @param Coefficient The coefficient multiplied by ten.
+ * @param Parallel_Shift The parallel shift multiplied by ten.
+ * @return -1 if an error occurred,
+ * @return 0 on success.
+ */
+int BoilerSetHeatingCurveParameters(int Coefficient, int Parallel_Shift);
+
 #endif
