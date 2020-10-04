@@ -19,7 +19,7 @@
 #define CONFIGURATION_PROTOCOL_WIFI_SERVER_PORT "1234"
 
 /** The current firmware version. */
-#define CONFIGURATION_FIRMWARE_VERSION 1
+#define CONFIGURATION_FIRMWARE_VERSION 2
 
 /** Mixing valve time in seconds to go from one side to the other side. */
 #define CONFIGURATION_MIXING_VALVE_MAXIMUM_MOVING_TIME (20 * 60) // Valve needs about 18 minutes to travel from one side to the other, set 20 minutes to get some margin (valve has internal limit switches)
