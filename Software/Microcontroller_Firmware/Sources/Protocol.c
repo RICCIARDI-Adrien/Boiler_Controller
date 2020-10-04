@@ -69,7 +69,7 @@ static unsigned char Protocol_Command_Payload_Index;
 static unsigned char Protocol_Command_Payload_Size;
 
 /** Tell whether the boiler is currently running or idle. */
-static unsigned char Protocol_Is_Boiler_Running = 0; // Do not enable the boiler at power on, user must enable it manually
+static unsigned char Protocol_Is_Boiler_Running = 1; // Automatically enable the boiler on power on
 
 /** Tell if this is night or day. */
 static unsigned char Protocol_Is_Night_Mode_Enabled = 0;
