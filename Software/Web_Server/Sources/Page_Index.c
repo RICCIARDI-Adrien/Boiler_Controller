@@ -163,6 +163,8 @@ Read_Board_Values:
 		"			<td>%d</td>\n"
 		"		</tr>\n"
 		"		</table>\n"
+		"\n"
+		"		<a href=\"/settings.html\">Configuration</a>\n"
 		"		</center>\n"
 		"\n"
 		"		<script>\n"

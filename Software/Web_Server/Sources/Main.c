@@ -47,10 +47,15 @@ static int MainWebServerAccessHandlerCallback(void __attribute__((unused)) *Poin
 	}
 	
 	// Create the page to send as the response
-	if ((strncmp(Pointer_String_URL, "/", 1) == 0) || (strncmp(Pointer_String_URL, "/index.html", 11)))
+	if ((strcmp(Pointer_String_URL, "/") == 0) || (strncmp(Pointer_String_URL, "/index.html", 11) == 0))
 	{
 		if (PageIndex(Pointer_Connection, Main_String_Response) != 0) return MHD_NO;
 	}
+	else if (strncmp(Pointer_String_URL, "/settings.html", 14) == 0)
+	{
+		if (PageSettings(Pointer_Connection, Main_String_Response) != 0) return MHD_NO;
+	}
+	// Unknown page
 	else return MHD_NO;
 	
 	// Create the response to send
