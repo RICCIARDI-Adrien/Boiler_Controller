@@ -14,8 +14,45 @@
 //-------------------------------------------------------------------------------------------------
 int PageSettings(struct MHD_Connection *Pointer_Connection, char *Pointer_String_Response)
 {
-	int Has_Error_Occurred = 0, Heating_Curve_Coefficient, Heating_Curve_Parallel_Shift;
+	int Has_Error_Occurred = 0, Heating_Curve_Coefficient, Heating_Curve_Parallel_Shift, Heating_Curve_ID;
+	const char *Pointer_String_Argument_Value;
 	
+	// Extract selected heating curve ID from the URL
+	Pointer_String_Argument_Value = MHD_lookup_connection_value(Pointer_Connection, MHD_GET_ARGUMENT_KIND, "heating_curve");
+	if (Pointer_String_Argument_Value == NULL) goto Read_Board_Values;
+	if (sscanf(Pointer_String_Argument_Value, "%d", &Heating_Curve_ID) != 1)
+	{
+		syslog(LOG_ERR, "Could not retrieve heating curve ID selected by user (arguments list : \"%s\").", Pointer_String_Argument_Value);
+		goto Read_Board_Values;
+	}
+	
+	// Determine heating curve values
+	switch (Heating_Curve_ID)
+	{
+		case 0:
+			Heating_Curve_Coefficient = 14;
+			Heating_Curve_Parallel_Shift = 150;
+			break;
+			
+		case 1:
+			Heating_Curve_Coefficient = 18;
+			Heating_Curve_Parallel_Shift = 200;
+			break;
+			
+		default:
+			syslog(LOG_ERR, "Unknown heating curve ID (%d), aborting new heating curve configuration.", Heating_Curve_ID);
+			Has_Error_Occurred = 1;
+			goto Read_Board_Values;
+	}
+	
+	// Set new heating curve
+	if (BoilerSetHeatingCurveParameters(Heating_Curve_Coefficient, Heating_Curve_Parallel_Shift) != 0)
+	{
+		syslog(LOG_ERR, "Failed to set new heating curve with coefficient = %d and parallel shift = %d.", Heating_Curve_Coefficient, Heating_Curve_Parallel_Shift);
+		Has_Error_Occurred = 1;
+	}
+	
+Read_Board_Values:
 	// Read heating curve current parameters
 	if (BoilerGetHeatingCurveParameters(&Heating_Curve_Coefficient, &Heating_Curve_Parallel_Shift) != 0)
 	{
