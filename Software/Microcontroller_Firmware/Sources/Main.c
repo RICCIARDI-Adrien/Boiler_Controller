@@ -46,6 +46,9 @@ int main(void) // Can't use void return type because it triggers a warning
 	// Tell whether network is working
 	if (!Is_WiFi_Successfully_Initialized) LedTurnOn(LED_ID_NETWORK_ERROR);
 	
+	// Tell user boiler is in idle mode
+	LedTurnOn(LED_ID_BOILER_RUNNING_MODE);
+	
 	while (1)
 	{
 		// Sample all analog values
