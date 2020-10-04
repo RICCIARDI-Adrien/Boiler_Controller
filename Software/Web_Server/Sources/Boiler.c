@@ -144,6 +144,7 @@ int BoilerRunServer(void)
 {
 	struct sockaddr_in Address;
 	socklen_t Address_Size;
+	int Is_Enabled = 1;
 	
 	// Wait for a client to connect
 	Address_Size = sizeof(Address);
@@ -154,6 +155,9 @@ int BoilerRunServer(void)
 		return -1;
 	}
 	syslog(LOG_INFO, "Board connected with address %s:%d.", inet_ntoa(Address.sin_addr), ntohs(Address.sin_port));
+	
+	// Enable keep alive to keep connection with board open
+	setsockopt(Boiler_Board_Socket, SOL_SOCKET, SO_KEEPALIVE, &Is_Enabled, sizeof(Is_Enabled));
 	
 	return 0;
 }
