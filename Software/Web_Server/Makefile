@@ -19,6 +19,8 @@ install: all
 	
 	@# Create init script
 	echo "[Unit]" > /lib/systemd/system/$(SYSTEMD_SERVICE)
+	echo "Wants=network-online.target" >> /lib/systemd/system/$(SYSTEMD_SERVICE)
+	echo "After=network-online.target" >> /lib/systemd/system/$(SYSTEMD_SERVICE)
 	echo "Description=Boiler controller web server" >> /lib/systemd/system/$(SYSTEMD_SERVICE)
 	echo "[Service]" >> /lib/systemd/system/$(SYSTEMD_SERVICE)
 	echo "Type=simple" >> /lib/systemd/system/$(SYSTEMD_SERVICE)
