@@ -29,7 +29,7 @@ FUSES =
 //-------------------------------------------------------------------------------------------------
 int main(void) // Can't use void return type because it triggers a warning
 {
-	unsigned char Is_WiFi_Successfully_Initialized, Is_Status_Led_On = 1, Is_Boiler_Running_Before = 1, Is_Boiler_Running_Now;
+	unsigned char Is_WiFi_Successfully_Initialized, Is_Status_Led_On = 1, Is_Boiler_Running_Before = 0, Is_Boiler_Running_Now; // Consider boiler as stopped on boot
 	signed char Radiator_Water_Start_Temperature, Target_Start_Water_Temperature;
 	
 	// Initialize modules
